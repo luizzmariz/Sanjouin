@@ -6,26 +6,25 @@ public class EnemyStateMachine : StateMachine
 {
     //States
     [HideInInspector] public EnemyIdleState idleState;
-    // [HideInInspector] public ChaseState chaseState;
+    [HideInInspector] public EnemyChaseState chaseState;
     // [HideInInspector] public HitState hitState;
     [HideInInspector] public EnemyAttackState attackState;
 
     // //Global information
-    // [HideInInspector] public PathRequestManager pathRequestManager;
+    [HideInInspector] public PathRequestManager pathRequestManager;
     [HideInInspector] public GameObject playerGameObject;
     
     //GameObject information
     [Header("Holder Components")]
-    public Rigidbody rigidBody;
-    public Animator animator;
-    public SpriteRenderer spriteRenderer;
+    [HideInInspector] public Rigidbody2D rigidBody;
+    // public Animator animator;
+    [HideInInspector] public SpriteRenderer spriteRenderer;
     // public CharacterOrientation characterOrientation;
     // public EnemyDamageable enemyDamageable;
-    public Animator attackAnimator;
+    // public Animator attackAnimator;
 
     [Header("Bool variables")]
     public bool canMove;
-    public bool canDash;
     public bool canAttack;
     
     [Header("Attributes")]
@@ -42,37 +41,42 @@ public class EnemyStateMachine : StateMachine
     // public string typeOfAttack;
 
     private void Awake() {
-        GetInfo();
+        rigidBody = GetComponent<Rigidbody2D>();
+        // animator = GetComponent<Animator>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        // characterOrientation = GetComponent<CharacterOrientation>();
+        // enemyDamageable = GetComponent<EnemyDamageable>();
+
+        playerGameObject = GameObject.Find("Player");
+        pathRequestManager = GameObject.Find("PathfindingManager").GetComponent<PathRequestManager>();
 
         idleState = new EnemyIdleState(this);
-        // chaseState = new ChaseState(this);
+        chaseState = new EnemyChaseState(this);
         // hitState = new HitState(this);
         attackState = new EnemyAttackState(this);
     }
 
-    public void GetInfo()
-    {
-        rigidBody = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        // characterOrientation = GetComponent<CharacterOrientation>();
-        // enemyDamageable = GetComponent<EnemyDamageable>();
 
-        // playerGameObject = GameObject.Find("Player");
-        // pathRequestManager = GameObject.Find("PathfindingManager").GetComponent<PathRequestManager>();
+    protected override BaseState GetInitialState() {
+        return idleState;
     }
 
-    // protected override BaseState GetInitialState() {
-    //     return idleState;
-    // }
+    private void OnGUI()
+    {
+        GUILayout.BeginArea(new Rect(250, 125, 200f, 150f));
+        string content = currentState != null ? currentState.name : "(no current state)";
+        GUILayout.Label($"<color='red'><size=40>{content}</size></color>");
+        GUILayout.EndArea();
+    }
 
-    // private void OnGUI()
-    // {
-    //     GUILayout.BeginArea(new Rect(10f, 10f, 200f, 100f));
-    //     string content = currentState != null ? currentState.name : "(no current state)";
-    //     GUILayout.Label($"<color='red'><size=40>{content}</size></color>");
-    //     GUILayout.EndArea();
-    // }
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, rangeOfView);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, rangeOfAttack);
+    }
 
     // public void ChargingAttackSucessfull()
     // {

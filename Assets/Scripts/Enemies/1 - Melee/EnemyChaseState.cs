@@ -9,8 +9,8 @@ public class EnemyChaseState : BaseState
     
     public Vector3 holderPosition;
     public Vector3 playerPosition;
-    public bool hasAskedPath = false;
-    public bool followingPath = false;
+    public bool hasAskedPath;
+    public bool followingPath;
 
     int targetIndex;
     Vector3[] path;
@@ -36,14 +36,17 @@ public class EnemyChaseState : BaseState
         if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfView)
         {
             enemyStateMachine.rigidBody.velocity = Vector3.zero;
-            //enemyStateMachine.animator.SetBool("isMoving", false);
+            followingPath = false;
+            path = null;
 
             stateMachine.ChangeState(enemyStateMachine.idleState);
         }
-        else if(Vector3.Distance(holderPosition, playerPosition) < enemyStateMachine.rangeOfAttack)
+        else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
         {
             enemyStateMachine.rigidBody.velocity = Vector3.zero;
-            enemyStateMachine.animator.SetBool("isMoving", false);
+            //enemyStateMachine.animator.SetBool("isMoving", false);
+            followingPath = false;
+            path = null;
 
             if(enemyStateMachine.canAttack)
             {
@@ -66,7 +69,7 @@ public class EnemyChaseState : BaseState
         if(!hasAskedPath && !followingPath)
         {
             hasAskedPath = true;
-            // enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound); <----------------------
+            enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound); 
         }
         else if(followingPath)
         {
@@ -75,7 +78,9 @@ public class EnemyChaseState : BaseState
     }
 
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful) {
-		if (pathSuccessful) {
+		if (pathSuccessful && enemyStateMachine.currentState == this)
+        {
+            Debug.Log("ok");
             // for(int i = 0; i < newPath.Length; i++)
             // {
             //     //newPath[i].y = 5;
@@ -94,7 +99,7 @@ public class EnemyChaseState : BaseState
 
     public void FollowPath() 
     {
-        enemyStateMachine.animator.SetBool("isMoving", true);
+        //enemyStateMachine.animator.SetBool("isMoving", true);
 		Vector3 currentWaypoint = path[0];
         
 		if (Vector3.Distance(holderPosition, currentWaypoint) <= 0.1) 

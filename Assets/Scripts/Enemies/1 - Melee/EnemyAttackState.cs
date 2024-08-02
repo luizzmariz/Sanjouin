@@ -17,7 +17,8 @@ public class EnemyAttackState : BaseState
     public override void Enter() {
         base.Enter();
 
-        enemyStateMachine.animator.SetBool("chargingAttack", true);
+        enemyStateMachine.rigidBody.velocity = Vector3.zero;
+        //enemyStateMachine.animator.SetBool("chargingAttack", true);
         
     }
 
@@ -27,8 +28,15 @@ public class EnemyAttackState : BaseState
 
         if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfAttack)
         {
-            stateMachine.ChangeState(enemyStateMachine.idleState);
-            enemyStateMachine.animator.SetBool("chargingAttack", false);
+            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
+            {
+                stateMachine.ChangeState(enemyStateMachine.chaseState);
+            }
+            else
+            {
+                stateMachine.ChangeState(enemyStateMachine.idleState);
+            }
+            //enemyStateMachine.animator.SetBool("chargingAttack", false);
         }
     }
 
@@ -38,14 +46,14 @@ public class EnemyAttackState : BaseState
 
     public void Attack()
     {
-        enemyStateMachine.animator.SetBool("chargingAttack", false);
-        enemyStateMachine.animator.SetTrigger("castAttack");
-        enemyStateMachine.attackAnimator.SetTrigger("Attack");
+        // enemyStateMachine.animator.SetBool("chargingAttack", false);
+        // enemyStateMachine.animator.SetTrigger("castAttack");
+        // enemyStateMachine.attackAnimator.SetTrigger("Attack");
     }
 
     public void AttackEnded()
     {
-        enemyStateMachine.animator.SetTrigger("attackEnd");
+        // enemyStateMachine.animator.SetTrigger("attackEnd");
         stateMachine.ChangeState(enemyStateMachine.idleState);
         enemyStateMachine.attackCooldownTimer = enemyStateMachine.attackDuration;
     }

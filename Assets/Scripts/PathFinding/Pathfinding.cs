@@ -9,6 +9,8 @@ public class Pathfinding : MonoBehaviour {
 	PathRequestManager requestManager;
 	Grid grid;
 	Tilemap collisionTileMap;
+
+	public int gridArea;
 	
 	void Awake() {
 		requestManager = GetComponent<PathRequestManager>();
@@ -23,50 +25,51 @@ public class Pathfinding : MonoBehaviour {
 	
 	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos) {
 
-		// Vector3[] waypoints = new Vector3[0];
-		// bool pathSuccess = false;
+		Vector3[] waypoints = new Vector3[0];
+		bool pathSuccess = false;
 		
-		// Node startNode = grid.NodeFromWorldPoint(startPos);
-		// Node targetNode = grid.NodeFromWorldPoint(targetPos);
+		Node startNode = NodeFromWorldPoint(startPos);
+		Node targetNode = NodeFromWorldPoint(targetPos);
+
+		Debug.Log("startNode.x: " + startNode.gridX + ", startNode.y: " + startNode.gridY + ". targetNode.x: " + targetNode.gridX + ", targetNode.y: " + targetNode.gridY);
 		
 		
-		// if (startNode.walkable && targetNode.walkable) {
-		// 	Heap<Node> openSet = new Heap<Node>(grid.MaxSize);
-		// 	HashSet<Node> closedSet = new HashSet<Node>();
-		// 	openSet.Add(startNode);
+		if (startNode.walkable && targetNode.walkable) {
+			Heap<Node> openSet = new Heap<Node>(gridArea);
+			HashSet<Node> closedSet = new HashSet<Node>();
+			openSet.Add(startNode);
 			
-		// 	while (openSet.Count > 0) {
-		// 		Node currentNode = openSet.RemoveFirst();
-		// 		closedSet.Add(currentNode);
+			while (openSet.Count > 0) {
+				Node currentNode = openSet.RemoveFirst();
+				closedSet.Add(currentNode);
 				
-		// 		if (currentNode == targetNode) {
-		// 			pathSuccess = true;
-		// 			break;
-		// 		}
+				if (currentNode == targetNode) {
+					pathSuccess = true;
+					break;
+				}
 				
-		// 		foreach (Node neighbour in grid.GetNeighbours(currentNode)) {
-		// 			if (!neighbour.walkable || closedSet.Contains(neighbour)) {
-		// 				continue;
-		// 			}
+				foreach (Node neighbour in GetNodeNeighbours(currentNode)) {
+					if (!neighbour.walkable || closedSet.Contains(neighbour)) {
+						continue;
+					}
 					
-		// 			int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
-		// 			if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour)) {
-		// 				neighbour.gCost = newMovementCostToNeighbour;
-		// 				neighbour.hCost = GetDistance(neighbour, targetNode);
-		// 				neighbour.parent = currentNode;
+					int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
+					if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour)) {
+						neighbour.gCost = newMovementCostToNeighbour;
+						neighbour.hCost = GetDistance(neighbour, targetNode);
+						neighbour.parent = currentNode;
 						
-		// 				if (!openSet.Contains(neighbour))
-		// 					openSet.Add(neighbour);
-		// 			}
-		// 		}
-		// 	}
-		// }
+						if (!openSet.Contains(neighbour))
+							openSet.Add(neighbour);
+					}
+				}
+			}
+		}
 		yield return null;
-		// if (pathSuccess) {
-		// 	waypoints = RetracePath(startNode,targetNode);
-		// }
-		// requestManager.FinishedProcessingPath(waypoints,pathSuccess);
-		
+		if (pathSuccess) {
+			waypoints = RetracePath(startNode,targetNode);
+		}
+		requestManager.FinishedProcessingPath(waypoints,pathSuccess);
 	}
 
 	// public Node NodeFromWorldPoint(Vector3 worldPosition) {
@@ -91,14 +94,13 @@ public class Pathfinding : MonoBehaviour {
 
     public Node NodeFromVector3(Vector3Int nodePos) //<------------
     {
-        Grid grid = GameObject.Find("Grid").GetComponent<Grid>();
         Vector3 worldPosition = grid.CellToWorld(nodePos);
 
 		Node node = new Node(!collisionTileMap.HasTile(nodePos), worldPosition, nodePos.x, nodePos.y);
 		return node;
     }
 
-	public List<Node> GetNeighbours(Node node) { //<------------
+	public List<Node> GetNodeNeighbours(Node node) { //<------------
 		List<Node> neighbours = new List<Node>();
 
 		for (int x = -1; x <= 1; x++) {
@@ -109,10 +111,7 @@ public class Pathfinding : MonoBehaviour {
 				int checkX = node.gridX + x;
 				int checkY = node.gridY + y;
 
-				// if (checkX >= 0 && checkX < gridSizeX && checkY >= 0 && checkY < gridSizeY) {
-				// 	neighbours.Add(grid[checkX,checkY]);
-				// 	neighbours.Add(GetGridNode(new Vector3Int(checkX, checkY, 0)));
-				// }
+				neighbours.Add(NodeFromVector3(new Vector3Int(checkX, checkY, 0)));
 			}
 		}
 

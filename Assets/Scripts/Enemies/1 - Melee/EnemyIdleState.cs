@@ -11,18 +11,25 @@ public class EnemyIdleState : BaseState
     }
 
     public override void Enter() {
-        // enemyStateMachine.canMove = true;
-        // enemyStateMachine.canAttack = true;
-        // enemyStateMachine.canDash = true;
+        enemyStateMachine.canMove = true;
+        enemyStateMachine.canAttack = true;
     }
 
     public override void UpdateLogic() {
-        // Vector2 moveVector = enemyStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
-
-        // if(moveVector != Vector2.zero)
-        // {
-        //     enemyStateMachine.ChangeState(enemyStateMachine.moveState);
-        // }
+        Vector3 holderPosition = enemyStateMachine.transform.position;
+        Vector3 playerPosition = enemyStateMachine.playerGameObject.transform.position;
+        
+        if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
+        {
+            if(enemyStateMachine.canAttack)
+            {
+                stateMachine.ChangeState(enemyStateMachine.attackState);
+            }
+        }
+        else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
+        {
+            stateMachine.ChangeState(enemyStateMachine.chaseState);
+        }
     }
 
     public override void UpdatePhysics() {
