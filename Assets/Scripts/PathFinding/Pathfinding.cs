@@ -30,37 +30,42 @@ public class Pathfinding : MonoBehaviour {
 		
 		Node startNode = NodeFromWorldPoint(startPos);
 		Node targetNode = NodeFromWorldPoint(targetPos);
-
-		Debug.Log("startNode.x: " + startNode.gridX + ", startNode.y: " + startNode.gridY + ". targetNode.x: " + targetNode.gridX + ", targetNode.y: " + targetNode.gridY);
-		
 		
 		if (startNode.walkable && targetNode.walkable) {
 			Heap<Node> openSet = new Heap<Node>(gridArea);
 			HashSet<Node> closedSet = new HashSet<Node>();
 			openSet.Add(startNode);
 			
-			while (openSet.Count > 0) {
+			while(openSet.Count > 0) 
+			{
 				Node currentNode = openSet.RemoveFirst();
 				closedSet.Add(currentNode);
 				
-				if (currentNode == targetNode) {
+				if(currentNode.gridX == targetNode.gridX && currentNode.gridY == targetNode.gridY) 
+				{
+					targetNode.parent = currentNode.parent;
 					pathSuccess = true;
 					break;
 				}
 				
-				foreach (Node neighbour in GetNodeNeighbours(currentNode)) {
-					if (!neighbour.walkable || closedSet.Contains(neighbour)) {
+				foreach(Node neighbour in GetNodeNeighbours(currentNode)) 
+				{
+					if(!neighbour.walkable || closedSet.Contains(neighbour)) 
+					{
 						continue;
 					}
 					
 					int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
-					if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour)) {
+					if(newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour)) 
+					{
 						neighbour.gCost = newMovementCostToNeighbour;
 						neighbour.hCost = GetDistance(neighbour, targetNode);
 						neighbour.parent = currentNode;
 						
-						if (!openSet.Contains(neighbour))
+						if(!openSet.Contains(neighbour))
+						{
 							openSet.Add(neighbour);
+						}	
 					}
 				}
 			}
@@ -97,17 +102,22 @@ public class Pathfinding : MonoBehaviour {
         Vector3 worldPosition = grid.CellToWorld(nodePos);
 
 		Node node = new Node(!collisionTileMap.HasTile(nodePos), worldPosition, nodePos.x, nodePos.y);
+
 		return node;
     }
 
 	public List<Node> GetNodeNeighbours(Node node) { //<------------
 		List<Node> neighbours = new List<Node>();
 
-		for (int x = -1; x <= 1; x++) {
-			for (int y = -1; y <= 1; y++) {
-				if (x == 0 && y == 0)
+		for(int x = -1; x <= 1; x++) 
+		{
+			for(int y = -1; y <= 1; y++) 
+			{
+				if(x == 0 && y == 0)
+				{
 					continue;
-
+				}
+					
 				int checkX = node.gridX + x;
 				int checkY = node.gridY + y;
 
@@ -115,6 +125,7 @@ public class Pathfinding : MonoBehaviour {
 			}
 		}
 
+		//Debug.Log("Node (" + node.gridX + ", " + node.gridY + ") tem " + neighbours.Count + " vizinhos");
 		return neighbours;
 	}
 	
@@ -126,10 +137,10 @@ public class Pathfinding : MonoBehaviour {
 			path.Add(currentNode);
 			currentNode = currentNode.parent;
 		}
+
 		Vector3[] waypoints = SimplifyPath(path);
 		Array.Reverse(waypoints);
 		return waypoints;
-		
 	}
 	
 	Vector3[] SimplifyPath(List<Node> path) {

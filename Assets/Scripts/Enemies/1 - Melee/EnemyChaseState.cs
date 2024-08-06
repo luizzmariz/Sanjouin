@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyChaseState : BaseState
@@ -66,13 +68,21 @@ public class EnemyChaseState : BaseState
         holderPosition = enemyStateMachine.transform.position;
         playerPosition = enemyStateMachine.playerGameObject.transform.position;
 
+        if(path != null && path.Count() <= 0)
+        {
+            followingPath = false;
+        }
+
         if(!hasAskedPath && !followingPath)
         {
             hasAskedPath = true;
+            Debug.Log("Pedinddo caminho, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
             enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound); 
         }
         else if(followingPath)
         {
+            Debug.Log("Seguindo caminho, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
+
             FollowPath();
         }
     }
@@ -80,7 +90,7 @@ public class EnemyChaseState : BaseState
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful) {
 		if (pathSuccessful && enemyStateMachine.currentState == this)
         {
-            Debug.Log("ok");
+            Debug.Log("Caminho chegou, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
             // for(int i = 0; i < newPath.Length; i++)
             // {
             //     //newPath[i].y = 5;
@@ -100,18 +110,20 @@ public class EnemyChaseState : BaseState
     public void FollowPath() 
     {
         //enemyStateMachine.animator.SetBool("isMoving", true);
-		Vector3 currentWaypoint = path[0];
+        Debug.Log("tamanho do caminho: " + path.Count());
+		Vector3 currentWaypoint = path[targetIndex];
         
 		if (Vector3.Distance(holderPosition, currentWaypoint) <= 0.1) 
         {
             //Debug.Log("AM I  BECOMING FUICKIN CRAZY??? tagetIndex = " + targetIndex);
 			targetIndex ++;
-			if(targetIndex >= path.Length) 
+			if(targetIndex >= path.Count()) 
             {
+                Debug.Log("HEHEHEHE");
                 followingPath = false;
                 return;
 			}
-			currentWaypoint = path[targetIndex];
+			// currentWaypoint = path[targetIndex];
 		}
         
         // enemyStateMachine.characterOrientation.ChangeOrientation(currentWaypoint); <------------------------
@@ -120,20 +132,20 @@ public class EnemyChaseState : BaseState
         enemyStateMachine.rigidBody.velocity = movementDirection.normalized * enemyStateMachine.movementSpeed;
 	}
 
-	public void OnDrawGizmos() 
-    {
-		if (path != null) {
-			for (int i = targetIndex; i < path.Length; i ++) {
-				Gizmos.color = Color.black;
-				Gizmos.DrawCube(path[i], Vector3.one);
+	// public void OnDrawGizmos() 
+    // {
+	// 	if (path != null) {
+	// 		for (int i = targetIndex; i < path.Length; i ++) {
+	// 			Gizmos.color = Color.black;
+	// 			Gizmos.DrawCube(path[i], Vector3.one);
 
-				if (i == targetIndex) {
-					Gizmos.DrawLine(holderPosition, path[i]);
-				}
-				else {
-					Gizmos.DrawLine(path[i-1],path[i]);
-				}
-			}
-		}
-	}
+	// 			if (i == targetIndex) {
+	// 				Gizmos.DrawLine(holderPosition, path[i]);
+	// 			}
+	// 			else {
+	// 				Gizmos.DrawLine(path[i-1],path[i]);
+	// 			}
+	// 		}
+	// 	}
+	// }
 }
