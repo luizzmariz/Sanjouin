@@ -13,6 +13,11 @@ public class EnemyDeadState : BaseState
 
     public override void Enter() 
     {
+        if(enemyStateMachine.spawnedInWave)
+        {
+            enemyStateMachine.waveSpawner.EnemyDied();
+        }
+        
         Object.Destroy(enemyStateMachine.gameObject);
     }
 

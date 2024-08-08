@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class EnemyStateMachine : StateMachine
 {
-    //States
+    [Header("States")]
     [HideInInspector] public EnemyIdleState idleState;
     [HideInInspector] public EnemyChaseState chaseState;
     [HideInInspector] public EnemyAttackState attackState;
     [HideInInspector] public EnemyDamageState damageState;
     [HideInInspector] public EnemyDeadState deadState;
 
-    // Components
+    [Header("Components")]
     [HideInInspector] public PathRequestManager pathRequestManager;
     [HideInInspector] public GameObject playerGameObject;
     [HideInInspector] public Rigidbody2D rigidBody;
@@ -20,8 +20,10 @@ public class EnemyStateMachine : StateMachine
     [HideInInspector] public SpriteRenderer spriteRenderer;
     [HideInInspector] public CharacterOrientation characterOrientation;
     [HideInInspector] public Animator attackAnimator;
+    [HideInInspector] public WaveSpawner waveSpawner;
 
     [Header("Bool variables")]
+    [HideInInspector] public bool spawnedInWave;
     public bool canMove;
     public bool canAttack;
     public bool isAttacking;
@@ -55,6 +57,7 @@ public class EnemyStateMachine : StateMachine
 
         playerGameObject = GameObject.Find("Player");
         pathRequestManager = GameObject.Find("PathfindingManager").GetComponent<PathRequestManager>();
+        waveSpawner = GameObject.Find("WaveSpawner").GetComponent<WaveSpawner>();
 
         idleState = new EnemyIdleState(this);
         chaseState = new EnemyChaseState(this);
