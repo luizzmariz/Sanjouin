@@ -32,7 +32,16 @@ public class PlayerAttackState : BaseState
     public override void UpdateLogic() {
         if(!playerStateMachine.isAttacking)
         {
-            playerStateMachine.ChangeState(playerStateMachine.idleState);
+            Vector2 moveVector = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
+
+            if(moveVector != Vector2.zero)
+            {
+                playerStateMachine.ChangeState(playerStateMachine.moveState);
+            }
+            else
+            {
+                playerStateMachine.ChangeState(playerStateMachine.idleState);
+            }
         }
     }
 
@@ -49,14 +58,14 @@ public class PlayerAttackState : BaseState
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             
             targetPoint = new Vector3(mousePos.x, mousePos.y, targetPoint.z);
-            playerStateMachine.playerOrientation.ChangeOrientation(targetPoint);
+            playerStateMachine.characterOrientation.ChangeOrientation(targetPoint);
         }
         else if(playerStateMachine.playerInput.currentControlScheme == "Gamepad")
         {
             Vector2 lookDirection = playerStateMachine.playerInput.actions["look"].ReadValue<Vector2>();
 
             targetPoint = new Vector3(targetPoint.x + lookDirection.x * 10, targetPoint.y + lookDirection.y * 10, targetPoint.z);
-            playerStateMachine.playerOrientation.ChangeOrientation(targetPoint);
+            playerStateMachine.characterOrientation.ChangeOrientation(targetPoint);
         }
 
         yield return new WaitForSeconds(playerStateMachine.attackDuration);

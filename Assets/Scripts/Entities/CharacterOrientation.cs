@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerOrientation : MonoBehaviour
+public class CharacterOrientation : MonoBehaviour
 {
     // public Vector3 lastOrientation;
     public Transform handTransform;
@@ -35,7 +35,7 @@ public class PlayerOrientation : MonoBehaviour
         Vector3 relativePos = targetPoint - transform.position;
 
         //Debug.Log(relativePos);
-        Debug.DrawLine(targetPoint, transform.position, Color.red, 50);
+        //Debug.DrawLine(targetPoint, transform.position, Color.red, 50);
 
         if(relativePos != Vector3.zero)
         {

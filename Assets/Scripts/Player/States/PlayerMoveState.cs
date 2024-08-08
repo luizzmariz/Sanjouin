@@ -42,7 +42,7 @@ public class PlayerMoveState : BaseState
         if(!playerStateMachine.isAttacking)
         {
             Vector2 orientation = new Vector2(playerStateMachine.transform.position.x + moveVector.x, playerStateMachine.transform.position.y + moveVector.y);
-            playerStateMachine.playerOrientation.ChangeOrientation(orientation);
+            playerStateMachine.characterOrientation.ChangeOrientation(orientation);
         }
     }
 }

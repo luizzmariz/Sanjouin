@@ -7,31 +7,36 @@ public class EnemyStateMachine : StateMachine
     //States
     [HideInInspector] public EnemyIdleState idleState;
     [HideInInspector] public EnemyChaseState chaseState;
-    // [HideInInspector] public HitState hitState;
     [HideInInspector] public EnemyAttackState attackState;
+    [HideInInspector] public EnemyDamageState damageState;
+    [HideInInspector] public EnemyDeadState deadState;
 
-    // //Global information
+    // Components
     [HideInInspector] public PathRequestManager pathRequestManager;
     [HideInInspector] public GameObject playerGameObject;
-    
-    //GameObject information
-    [Header("Holder Components")]
     [HideInInspector] public Rigidbody2D rigidBody;
     // public Animator animator;
+    [HideInInspector] public EnemyDamageable enemyDamageable;
     [HideInInspector] public SpriteRenderer spriteRenderer;
-    // public CharacterOrientation characterOrientation;
-    // public EnemyDamageable enemyDamageable;
-    // public Animator attackAnimator;
+    [HideInInspector] public CharacterOrientation characterOrientation;
+    [HideInInspector] public Animator attackAnimator;
 
     [Header("Bool variables")]
     public bool canMove;
     public bool canAttack;
+    public bool isAttacking;
     
     [Header("Attributes")]
     [Range(0f, 50f)] public float rangeOfView;
     [Range(0f, 25f)] public float rangeOfAttack;
     [Range(0f, 10f)] public float movementSpeed;
-    public float damage;
+
+    [Header("Damage")]
+    public float knockbackDuration;
+    [HideInInspector] public Vector3 knockbackVector;
+    public bool beingPushed;
+    
+    // public float damage;
     public float attackCooldownTimer;
     public float attackDuration;
     public float invencibilityTime;
@@ -44,21 +49,42 @@ public class EnemyStateMachine : StateMachine
         rigidBody = GetComponent<Rigidbody2D>();
         // animator = GetComponent<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        // characterOrientation = GetComponent<CharacterOrientation>();
-        // enemyDamageable = GetComponent<EnemyDamageable>();
+        characterOrientation = GetComponent<CharacterOrientation>();
+        enemyDamageable = GetComponent<EnemyDamageable>();
+        attackAnimator = transform.GetChild(1).GetComponent<Animator>();
 
         playerGameObject = GameObject.Find("Player");
         pathRequestManager = GameObject.Find("PathfindingManager").GetComponent<PathRequestManager>();
 
         idleState = new EnemyIdleState(this);
         chaseState = new EnemyChaseState(this);
-        // hitState = new HitState(this);
         attackState = new EnemyAttackState(this);
-    }
+        damageState = new EnemyDamageState(this);
+        deadState = new EnemyDeadState(this);
 
+        canAttack = true;
+        canMove = true;
+    }
 
     protected override BaseState GetInitialState() {
         return idleState;
+    }
+
+    public IEnumerator Cooldown(string ability)
+    {
+        switch(ability)
+        {
+            case "attack":
+            // Debug.Log("attack cooldown started");
+            yield return new WaitForSeconds(attackCooldownTimer);
+            // Debug.Log("attack cooldown ended");
+            canAttack = true;
+            break;
+
+            default:
+            break;
+        }
+        
     }
 
     private void OnGUI()

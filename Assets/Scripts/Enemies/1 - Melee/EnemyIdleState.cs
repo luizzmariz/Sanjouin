@@ -12,7 +12,8 @@ public class EnemyIdleState : BaseState
 
     public override void Enter() {
         enemyStateMachine.canMove = true;
-        enemyStateMachine.canAttack = true;
+        // enemyStateMachine.canAttack = true;
+        enemyStateMachine.enemyDamageable.damageable = true;
     }
 
     public override void UpdateLogic() {
@@ -25,6 +26,7 @@ public class EnemyIdleState : BaseState
             {
                 stateMachine.ChangeState(enemyStateMachine.attackState);
             }
+            enemyStateMachine.characterOrientation.ChangeOrientation(playerPosition);
         }
         else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
         {

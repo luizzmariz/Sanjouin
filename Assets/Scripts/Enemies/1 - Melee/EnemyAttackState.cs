@@ -9,46 +9,64 @@ public class EnemyAttackState : BaseState
     Vector3 holderPosition;
     Vector3 playerPosition;
 
-    public EnemyAttackState(EnemyStateMachine stateMachine) : base("Charging", stateMachine)
+    bool hasAttacked;
+
+    public EnemyAttackState(EnemyStateMachine stateMachine) : base("Attacking", stateMachine)
     {
         enemyStateMachine = stateMachine;
     }
 
-    public override void Enter() {
-        base.Enter();
-
+    public override void Enter() 
+    {
         enemyStateMachine.rigidBody.velocity = Vector3.zero;
-        //enemyStateMachine.animator.SetBool("chargingAttack", true);
-        
+
+        enemyStateMachine.canMove = false;
+        enemyStateMachine.canAttack = false;
+        enemyStateMachine.enemyDamageable.damageable = true;
+        enemyStateMachine.isAttacking = true;
+        hasAttacked = false;
     }
 
     public override void UpdateLogic() {
-        holderPosition = enemyStateMachine.transform.position;
-        playerPosition = enemyStateMachine.playerGameObject.transform.position;
-
-        if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfAttack)
+        if(!enemyStateMachine.isAttacking)
         {
-            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
+            hasAttacked = false;
+            // Debug.Log("!enemyStateMachine.isAttacking");
+            enemyStateMachine.StartCoroutine(enemyStateMachine.Cooldown("attack"));
+
+            holderPosition = enemyStateMachine.transform.position;
+            playerPosition = enemyStateMachine.playerGameObject.transform.position;
+
+            if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfAttack)
             {
-                stateMachine.ChangeState(enemyStateMachine.chaseState);
+                if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
+                {
+                    stateMachine.ChangeState(enemyStateMachine.chaseState);
+                }
+                else
+                {
+                    stateMachine.ChangeState(enemyStateMachine.idleState);
+                }
             }
             else
             {
                 stateMachine.ChangeState(enemyStateMachine.idleState);
             }
-            //enemyStateMachine.animator.SetBool("chargingAttack", false);
         }
     }
 
     public override void UpdatePhysics() {
-        // enemyStateMachine.characterOrientation.ChangeOrientation(playerPosition);
+        if(!hasAttacked)
+        {
+            Attack();
+        }
     }
 
     public void Attack()
     {
-        // enemyStateMachine.animator.SetBool("chargingAttack", false);
-        // enemyStateMachine.animator.SetTrigger("castAttack");
-        // enemyStateMachine.attackAnimator.SetTrigger("Attack");
+        // Debug.Log("Attack");
+        enemyStateMachine.attackAnimator.SetTrigger("Attack");
+        hasAttacked = true;
     }
 
     public void AttackEnded()

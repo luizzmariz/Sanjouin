@@ -17,6 +17,7 @@ public class PlayerDashState : BaseState
         playerStateMachine.canAttack = false;
         playerStateMachine.canDash = false;
         playerStateMachine.isDashing = true;
+        playerStateMachine.playerDamageable.damageable = false;
         playerStateMachine.StartCoroutine(Dash());
     }
 
@@ -25,7 +26,17 @@ public class PlayerDashState : BaseState
         {
             playerStateMachine.StartCoroutine(playerStateMachine.Cooldown("dash"));
 
-            playerStateMachine.ChangeState(playerStateMachine.idleState);
+            Vector2 moveVector = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
+
+            if(moveVector != Vector2.zero// && playerStateMachine.canMove <-- qual a utilidade disso? não funcionaria por que há uma linha nesse script que faz canMove = false. REAVALIAR ESSAS VARIAVEIS
+            )
+            {
+                playerStateMachine.ChangeState(playerStateMachine.moveState);
+            }
+            else
+            {
+                playerStateMachine.ChangeState(playerStateMachine.idleState);
+            }
         }
     }
 
@@ -36,7 +47,7 @@ public class PlayerDashState : BaseState
     public IEnumerator Dash()
     {
         //Vector2 dashDirection = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
-        Vector2 dashDirection = playerStateMachine.playerOrientation.lastOrientation;
+        Vector2 dashDirection = playerStateMachine.characterOrientation.lastOrientation;
         if(dashDirection == Vector2.zero)
         {
             dashDirection = Vector2.down;

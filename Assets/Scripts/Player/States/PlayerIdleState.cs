@@ -14,6 +14,7 @@ public class PlayerIdleState : BaseState
         playerStateMachine.canMove = true;
         playerStateMachine.canAttack = true;
         playerStateMachine.canDash = true;
+        playerStateMachine.playerDamageable.damageable = true;
     }
 
     public override void UpdateLogic() {

@@ -22,6 +22,7 @@ public class EnemyChaseState : BaseState
     }
 
     public override void Enter() {
+        enemyStateMachine.enemyDamageable.damageable = true;
         hasAskedPath = false;
         followingPath = false;
     }
@@ -76,12 +77,12 @@ public class EnemyChaseState : BaseState
         if(!hasAskedPath && !followingPath)
         {
             hasAskedPath = true;
-            Debug.Log("Pedinddo caminho, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
+            // Debug.Log("Pedinddo caminho, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
             enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound); 
         }
         else if(followingPath)
         {
-            Debug.Log("Seguindo caminho, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
+            // Debug.Log("Seguindo caminho, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
 
             FollowPath();
         }
@@ -90,7 +91,7 @@ public class EnemyChaseState : BaseState
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful) {
 		if (pathSuccessful && enemyStateMachine.currentState == this)
         {
-            Debug.Log("Caminho chegou, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
+            // Debug.Log("Caminho chegou, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
             // for(int i = 0; i < newPath.Length; i++)
             // {
             //     //newPath[i].y = 5;
@@ -110,7 +111,7 @@ public class EnemyChaseState : BaseState
     public void FollowPath() 
     {
         //enemyStateMachine.animator.SetBool("isMoving", true);
-        Debug.Log("tamanho do caminho: " + path.Count());
+        // Debug.Log("tamanho do caminho: " + path.Count());
 		Vector3 currentWaypoint = path[targetIndex];
         
 		if (Vector3.Distance(holderPosition, currentWaypoint) <= 0.1) 
@@ -119,14 +120,14 @@ public class EnemyChaseState : BaseState
 			targetIndex ++;
 			if(targetIndex >= path.Count()) 
             {
-                Debug.Log("HEHEHEHE");
+                // Debug.Log("HEHEHEHE");
                 followingPath = false;
                 return;
 			}
 			// currentWaypoint = path[targetIndex];
 		}
         
-        // enemyStateMachine.characterOrientation.ChangeOrientation(currentWaypoint); <------------------------
+        enemyStateMachine.characterOrientation.ChangeOrientation(currentWaypoint);
 
         Vector3 movementDirection = currentWaypoint - holderPosition;
         enemyStateMachine.rigidBody.velocity = movementDirection.normalized * enemyStateMachine.movementSpeed;

@@ -10,6 +10,8 @@ public class PlayerStateMachine : StateMachine
     [HideInInspector] public PlayerMoveState moveState;
     [HideInInspector] public PlayerAttackState attackState;
     [HideInInspector] public PlayerDashState dashState;
+    [HideInInspector] public PlayerDamageState damageState;
+    [HideInInspector] public PlayerDeadState deadState;
     
     // [HideInInspector] public DeadState deadState;
 
@@ -20,9 +22,9 @@ public class PlayerStateMachine : StateMachine
     [HideInInspector] public Rigidbody2D rigidBody;
     // public Animator animator;
     // public SpriteRenderer spriteRenderer;
-    [HideInInspector] public PlayerOrientation playerOrientation;
+    [HideInInspector] public CharacterOrientation characterOrientation;
+    [HideInInspector] public PlayerDamageable playerDamageable;
     // public WeaponManager weaponManager;
-    // public PlayerDamageable playerDamageable;
     // public TrailRenderer trailRenderer;
 
     [Header("Bool variables")]
@@ -30,28 +32,27 @@ public class PlayerStateMachine : StateMachine
     public bool canDash;
     public bool canAttack;
 
-
     [Header("Movement")]
-    
     public float runningMultiplier;
     public float movementSpeed;
 
     [Header("Dash")]
-    
     public bool isDashing;
     public float dashingPower;
     public float dashCooldownTime;
     public float dashingTime;
 
+    [Header("Damage")]
+    public float knockbackDuration;
+    [HideInInspector] public Vector3 knockbackVector;
+    public bool beingPushed;
+
     [Header("Attack")]
-    
     public bool isAttacking;
     public int attackType;
     public float attackDuration;
     public float attack1CooldownTimer;
     public float attack2CooldownTimer;
-    public int trapsPlaced = 0;
-    public int trapsLimit;
 
     [Header("InvencibilityTime")]
     public float invencibilityTime;
@@ -63,28 +64,30 @@ public class PlayerStateMachine : StateMachine
         rigidBody = GetComponent<Rigidbody2D>();
         // animator = GetComponent<Animator>();
         // spriteRenderer = GetComponent<SpriteRenderer>();
-        playerOrientation = GetComponent<PlayerOrientation>();
+        characterOrientation = GetComponent<CharacterOrientation>();
         // weaponManager = GetComponentInChildren<WeaponManager>();
-        // playerDamageable = GetComponent<PlayerDamageable>();
+        playerDamageable = GetComponent<PlayerDamageable>();
         // trailRenderer = GetComponentInChildren<TrailRenderer>();
 
         idleState = new PlayerIdleState(this);
         moveState = new PlayerMoveState(this);
         attackState = new PlayerAttackState(this);
         dashState = new PlayerDashState(this);
+        damageState = new PlayerDamageState(this);
+        deadState = new PlayerDeadState(this);
     }
 
     protected override BaseState GetInitialState() {
         return idleState;
     }
 
-    // private void OnGUI()
-    // {
-    //     GUILayout.BeginArea(new Rect(250, 125, 200f, 150f));
-    //     string content = currentState != null ? currentState.name : "(no current state)";
-    //     GUILayout.Label($"<color='black'><size=40>{content}</size></color>");
-    //     GUILayout.EndArea();
-    // }
+    private void OnGUI()
+    {
+        GUILayout.BeginArea(new Rect(450, 125, 200f, 150f));
+        string content = currentState != null ? currentState.name : "(no current state)";
+        GUILayout.Label($"<color='black'><size=40>{content}</size></color>");
+        GUILayout.EndArea();
+    }
 
     public void OnMove(InputAction.CallbackContext context)
     {
