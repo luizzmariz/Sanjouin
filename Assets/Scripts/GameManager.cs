@@ -41,8 +41,8 @@ public class GameManager : MonoBehaviour
     {
         if(!gameStarted)
         {
-            // StartCoroutine(waveSpawner.SpawnWave());
-            Debug.Log("okay");
+            StartCoroutine(waveSpawner.SpawnWave());
+            // Debug.Log("okay");
             gameStarted = true;
         }
     }

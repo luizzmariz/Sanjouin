@@ -20,7 +20,7 @@ public class Wave : MonoBehaviour
         currentSubWaveIndex = 0;
     }
 
-    [SerializeField]
+    [Serializable]
     public class Subwave
     {
         public List<GameObject> enemies;

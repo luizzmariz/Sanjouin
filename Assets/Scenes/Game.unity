@@ -242,6 +242,7 @@ MonoBehaviour:
   currentWaveIndex: 0
   waveSpawnEnded: 0
   enemiesAlive: 0
+  pathfinding: {fileID: 0}
 --- !u!1 &203569428
 GameObject:
   m_ObjectHideFlags: 0
@@ -342,7 +343,7 @@ Transform:
   m_GameObject: {fileID: 216676856}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.79, y: -0.44, z: 0}
+  m_LocalPosition: {x: -5.76, y: 2.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -360,10 +361,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e800bf915abcd944597a53b3f469166a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  subwaves:
+  - enemies:
+    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
+    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
+    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
+    timeToNextEnemy: 1
+  - enemies:
+    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
+    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
+    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
+    timeToNextEnemy: 0.5
   currentSubWaveIndex: 0
-  timeBetweenSubwaves: 0
+  timeBetweenSubwaves: 6
   spawnPosition: {x: 0, y: 0, z: 0}
-  spawnRange: 0
+  spawnRange: 2
 --- !u!1 &275491756
 GameObject:
   m_ObjectHideFlags: 0
@@ -12418,7 +12430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1440306674}
   - component: {fileID: 1440306673}
-  - component: {fileID: 1440306672}
+  - component: {fileID: 1440306677}
   - component: {fileID: 1440306671}
   - component: {fileID: 1440306670}
   - component: {fileID: 1440306675}
@@ -12574,51 +12586,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!61 &1440306672
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1440306669}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.6, y: 0.8}
-  m_EdgeRadius: 0
 --- !u!50 &1440306673
 Rigidbody2D:
   serializedVersion: 4
@@ -12693,6 +12660,41 @@ MonoBehaviour:
   currentHealth: 20
   maxHealth: 20
   damageable: 1
+--- !u!70 &1440306677
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440306669}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.5, y: 0.8}
+  m_Direction: 0
 --- !u!1 &1660868729
 GameObject:
   m_ObjectHideFlags: 0
@@ -14235,10 +14237,6 @@ PrefabInstance:
     - target: {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
       propertyPath: m_Name
       value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 1984562648582951424, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-      propertyPath: rangeOfView
-      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2675641238273154309, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
       propertyPath: m_LocalPosition.x

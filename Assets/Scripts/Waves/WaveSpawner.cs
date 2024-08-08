@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
 public class WaveSpawner : MonoBehaviour
 {
 
@@ -14,9 +15,13 @@ public class WaveSpawner : MonoBehaviour
     [Header("Enemies")]
     public int enemiesAlive;
 
+    [Header("Spawn")]
+    public Pathfinding pathfinding;
 
     void Awake()
     {
+        pathfinding = GameObject.Find("PathfindingManager").GetComponent<Pathfinding>();
+
         for(int i = 0; i < transform.childCount; i++)
         {
             waves.Add(transform.GetChild(i).GetComponent<Wave>());
@@ -29,29 +34,36 @@ public class WaveSpawner : MonoBehaviour
         enemiesAlive = 0;
         Wave currentWave = waves[currentWaveIndex];
 
-        for(int i = 0; i < currentWave.subwaves.Count; i++)
+        if(currentWave.subwaves == null || currentWave.subwaves.Count == 0)
         {
-            int subwaveEnemiesAmount = currentWave.subwaves[currentWave.currentSubWaveIndex].enemies.Count;
-
-            for(int o = 0; o < subwaveEnemiesAmount; o++)
+            Debug.Log("The wave " + currentWaveIndex + " doesnt have subwaves");
+        }
+        else
+        {
+            for(int i = 0; i < currentWave.subwaves.Count; i++)
             {
-                yield return new WaitForSeconds(currentWave.subwaves[currentWave.currentSubWaveIndex].timeToNextEnemy);
-                
-                GameObject enemySpawned = Instantiate(currentWave.subwaves[currentWave.currentSubWaveIndex].enemies[o], 
-                GetSpawnPosition(currentWave.spawnPosition, currentWave.spawnRange), 
-                Quaternion.identity, 
-                currentWave.transform);
-                
-                enemySpawned.GetComponent<EnemyStateMachine>().spawnedInWave = true;
-                enemiesAlive++;
+                int subwaveEnemiesAmount = currentWave.subwaves[currentWave.currentSubWaveIndex].enemies.Count;
+
+                for(int o = 0; o < subwaveEnemiesAmount; o++)
+                {
+                    yield return new WaitForSeconds(currentWave.subwaves[currentWave.currentSubWaveIndex].timeToNextEnemy);
+                    
+                    GameObject enemySpawned = Instantiate(currentWave.subwaves[currentWave.currentSubWaveIndex].enemies[o], 
+                    GetSpawnPosition(currentWave.spawnPosition, currentWave.spawnRange), 
+                    Quaternion.identity, 
+                    currentWave.transform);
+                    
+                    enemySpawned.GetComponent<EnemyStateMachine>().spawnedInWave = true;
+                    enemiesAlive++;
+                }
+
+                currentWave.currentSubWaveIndex++;
+
+                yield return new WaitForSeconds(currentWave.timeBetweenSubwaves);
             }
 
-            currentWave.currentSubWaveIndex++;
-
-            yield return new WaitForSeconds(currentWave.timeBetweenSubwaves);
+            waveSpawnEnded = true;
         }
-
-        waveSpawnEnded = true;
     }
 
     Vector3 GetSpawnPosition(Vector3 spawnPosition, float spawnRange)
@@ -60,9 +72,19 @@ public class WaveSpawner : MonoBehaviour
 
         finalSpawnPosition.x += Random.Range(-spawnRange, spawnRange);
         finalSpawnPosition.y += Random.Range(spawnRange, -spawnRange);
-
-        return finalSpawnPosition;
+        
+        if(pathfinding.ValidatePosition(finalSpawnPosition))
+        {
+            return finalSpawnPosition;
+        }
+        else
+        {
+            Debug.Log("chorei");
+            return GetSpawnPosition(spawnPosition, spawnRange);
+        }
     }
+
+
 
     public void EnemyDied()
     {
