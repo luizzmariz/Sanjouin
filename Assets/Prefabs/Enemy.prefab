@@ -147,7 +147,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   handTransform: {fileID: 4465581413061392409}
   lastOrientation: {x: 0, y: 0}
-  spriteRenderer: {fileID: 3915895726543115910}
+  spriteHandler: {fileID: 0}
 --- !u!114 &8253254306734089427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,7 +238,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: faa997266fc3a3b49b218a0eb7fd83eb, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -303,7 +303,7 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.35}
+  m_Offset: {x: 0, y: -0.15}
   m_Size: {x: 1, y: 0.45}
   m_Direction: 1
 --- !u!114 &6790292669389108068
@@ -330,6 +330,7 @@ GameObject:
   - component: {fileID: 7749477304803582610}
   - component: {fileID: 3915895726543115910}
   - component: {fileID: 5245490720380752381}
+  - component: {fileID: 4372603091725947049}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -425,3 +426,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4372603091725947049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4919398120651183147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82c9232bdad25e74fbd2d2c483ff929b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterSpriteRenderer: {fileID: 0}
+  handsSpriteRenderer: {fileID: 0}
+  characterDown: {fileID: 21300000, guid: 845479d57243d27428367a3aeceb3839, type: 3}
+  characterUp: {fileID: 21300000, guid: 87670fca188a0b94290412039f13d682, type: 3}
+  characterSide: {fileID: 21300000, guid: b6eb0a70442d3f74186ba22408f72bd0, type: 3}

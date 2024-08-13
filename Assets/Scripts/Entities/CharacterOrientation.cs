@@ -11,7 +11,7 @@ public class CharacterOrientation : MonoBehaviour
     //private string spriteOrientation;
     //public SpriteChanger sc;
     // public Animator animator;
-    public SpriteRenderer spriteRenderer;
+    public SpriteHandler spriteHandler;
 
     // void Start()
     // {
@@ -26,7 +26,7 @@ public class CharacterOrientation : MonoBehaviour
         lastOrientation = Vector2.zero;
         // spriteOrientation = "forward";
         //animator = transform.GetComponent<Animator>();
-        spriteRenderer = transform.Find("Visual").GetComponent<SpriteRenderer>();
+        spriteHandler = transform.Find("Visual").GetComponent<SpriteHandler>();
     }
 
 
@@ -42,13 +42,16 @@ public class CharacterOrientation : MonoBehaviour
             // AngleCheck(relativePos);
 
             handTransform.up = -relativePos.normalized;
-            
+
+
             lastOrientation = relativePos;
             // CheckSpriteOrientation(relativePos); --- Old way of changing sprites
+            spriteHandler.ChangeSprite(handTransform.rotation.eulerAngles.z);
         }
         else
         {
             handTransform.up = -lastOrientation.normalized;
+            // spriteHandler.ChangeSprite(lastOrientation.normalized);
             // AngleCheck(lastOrientation);
         }
     }

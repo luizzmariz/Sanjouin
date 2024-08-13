@@ -5,9 +5,9 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyChaseState : BaseState
+public class Enemy2ChaseState : BaseState
 {
-    EnemyStateMachine enemyStateMachine;
+    Enemy2StateMachine enemyStateMachine;
     
     public Vector3 holderPosition;
     public Vector3 playerPosition;
@@ -18,7 +18,7 @@ public class EnemyChaseState : BaseState
     int targetIndex;
     Vector3[] path;
 
-    public EnemyChaseState(EnemyStateMachine stateMachine) : base("Chase", stateMachine) {
+    public Enemy2ChaseState(Enemy2StateMachine stateMachine) : base("Chase", stateMachine) {
         enemyStateMachine = stateMachine;
     }
 
@@ -28,14 +28,9 @@ public class EnemyChaseState : BaseState
         followingPath = false;
     }
 
-    public override void UpdateLogic() {
-        //base.UpdateLogic();
-        
+    public override void UpdateLogic() {   
         holderPosition = enemyStateMachine.transform.position;
         playerPosition = enemyStateMachine.playerGameObject.transform.position;
-        
-        //ACHO Q PRECISO MELHORAR ESSAS CHECAGENS DE TROCA DE STATE, PQ TA MEIO ZOADO.
-
 
         if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfView)
         {
@@ -44,6 +39,14 @@ public class EnemyChaseState : BaseState
             path = null;
 
             stateMachine.ChangeState(enemyStateMachine.idleState);
+        }
+        else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDanger)
+        {
+            enemyStateMachine.rigidBody.velocity = Vector3.zero;
+            followingPath = false;
+            path = null;
+
+            stateMachine.ChangeState(enemyStateMachine.fleeState);
         }
         else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
         {
@@ -63,10 +66,7 @@ public class EnemyChaseState : BaseState
         }
     }
 
-    //This function runs at LateUpdate()
     public override void UpdatePhysics() {
-        //base.UpdatePhysics();
-
         holderPosition = enemyStateMachine.transform.position;
         playerPosition = enemyStateMachine.playerGameObject.transform.position;
 
