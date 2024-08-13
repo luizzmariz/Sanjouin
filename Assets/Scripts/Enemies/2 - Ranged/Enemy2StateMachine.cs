@@ -28,6 +28,7 @@ public class Enemy2StateMachine : StateMachine
     public bool canMove;
     public bool canAttack;
     public bool isAttacking;
+    public bool canFlee;
     
     [Header("Attributes")]
     [Range(0f, 50f)] public float rangeOfView;
@@ -40,9 +41,13 @@ public class Enemy2StateMachine : StateMachine
     [HideInInspector] public Vector3 knockbackVector;
     public bool beingPushed;
     
-    // public float damage;
+    [Header("Attack")]
     public float attackCooldownTimer;
     public float attackDuration;
+
+    [Header("Flee")]
+    public float fleeCooldownTimer;
+
 
     private void Awake() {
         rigidBody = GetComponent<Rigidbody2D>();
@@ -80,6 +85,13 @@ public class Enemy2StateMachine : StateMachine
             yield return new WaitForSeconds(attackCooldownTimer);
             // Debug.Log("attack cooldown ended");
             canAttack = true;
+            break;
+
+            case "flee":
+            // Debug.Log("attack cooldown started");
+            yield return new WaitForSeconds(fleeCooldownTimer);
+            // Debug.Log("attack cooldown ended");
+            canFlee = true;
             break;
 
             default:
