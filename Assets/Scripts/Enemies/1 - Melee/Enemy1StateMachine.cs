@@ -1,42 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class Enemy2StateMachine : BaseEnemyStateMachine
+public class EnemyStateMachine : BaseEnemyStateMachine
 {
     [Header("States")]
-    [HideInInspector] public Enemy2IdleState idleState;
-    [HideInInspector] public Enemy2ChaseState chaseState;
-    [HideInInspector] public Enemy2FleeState fleeState;
-    [HideInInspector] public Enemy2AttackState attackState;
-    [HideInInspector] public Enemy2DamageState damageState;
-    [HideInInspector] public Enemy2DeadState deadState;
-
-    [Header("Components")]
-
-    [Header("Bool variables")]
-    public bool canFlee;
-    public bool isFleeing;
-    
-    [Header("Attributes")]
-    [Range(0f, 25f)] public float rangeOfDanger;
-
-    [Header("Flee")]
-    public float fleeCooldownTimer;
-    public float fleeDistance;
+    [HideInInspector] public EnemyIdleState idleState;
+    [HideInInspector] public EnemyChaseState chaseState;
+    [HideInInspector] public EnemyAttackState attackState;
+    [HideInInspector] public EnemyDamageState damageState;
+    [HideInInspector] public EnemyDeadState deadState;
 
     protected override void Awake() {
         base.Awake();
 
-        idleState = new Enemy2IdleState(this);
-        chaseState = new Enemy2ChaseState(this);
-        fleeState = new Enemy2FleeState(this);
-        attackState = new Enemy2AttackState(this);
-        damageState = new Enemy2DamageState(this);
-        deadState = new Enemy2DeadState(this);
+        idleState = new EnemyIdleState(this);
+        chaseState = new EnemyChaseState(this);
+        attackState = new EnemyAttackState(this);
+        damageState = new EnemyDamageState(this);
+        deadState = new EnemyDeadState(this);
 
-        canFlee = true;
+        canAttack = true;
+        canMove = true;
     }
 
     protected override BaseState GetInitialState() {
@@ -52,13 +37,6 @@ public class Enemy2StateMachine : BaseEnemyStateMachine
             yield return new WaitForSeconds(attackCooldownTimer);
             // Debug.Log("attack cooldown ended");
             canAttack = true;
-            break;
-
-            case "flee":
-            // Debug.Log("attack cooldown started");
-            yield return new WaitForSeconds(fleeCooldownTimer);
-            // Debug.Log("attack cooldown ended");
-            canFlee = true;
             break;
 
             default:
@@ -81,9 +59,6 @@ public class Enemy2StateMachine : BaseEnemyStateMachine
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, rangeOfAttack);
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, rangeOfDanger);
     }
 
     public override void TakeDamage(Vector3 knockbackVector) 

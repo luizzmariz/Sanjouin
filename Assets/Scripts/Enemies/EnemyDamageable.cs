@@ -4,13 +4,9 @@ using UnityEngine;
 
 public class EnemyDamageable : Damageable
 {
-    [SerializeField] float maxHealth;
+    [SerializeField] public float maxHealth {get; private set;}
     public bool damageable = true;
-    [HideInInspector] private EnemyStateMachine stateMachine;
-
-    // public EnemyDamageable() : base("Move", stateMachine) {
-    //     moveState = MovementState.WALKING;
-    // }
+    [HideInInspector] private BaseEnemyStateMachine stateMachine;
 
     public void Start()
     {
@@ -25,15 +21,8 @@ public class EnemyDamageable : Damageable
             Vector3 knockbackVector = (attackerPosition - transform.position).normalized * -1;
 
             currentHealth -= damageAmount;
-            if(currentHealth <= 0)
-            {
-                stateMachine.ChangeState(stateMachine.deadState);
-            }
-            else
-            {
-                stateMachine.knockbackVector = knockbackVector;
-                stateMachine.ChangeState(stateMachine.damageState);
-            }
+
+            stateMachine.TakeDamage(knockbackVector);
         }
     }
 }
