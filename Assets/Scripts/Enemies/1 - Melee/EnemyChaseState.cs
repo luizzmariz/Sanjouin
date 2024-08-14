@@ -29,29 +29,15 @@ public class EnemyChaseState : BaseState
     }
 
     public override void UpdateLogic() {
-        //base.UpdateLogic();
-        
         holderPosition = enemyStateMachine.transform.position;
         playerPosition = enemyStateMachine.playerGameObject.transform.position;
         
-        //ACHO Q PRECISO MELHORAR ESSAS CHECAGENS DE TROCA DE STATE, PQ TA MEIO ZOADO.
-
-
         if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfView)
         {
-            enemyStateMachine.rigidBody.velocity = Vector3.zero;
-            followingPath = false;
-            path = null;
-
             stateMachine.ChangeState(enemyStateMachine.idleState);
         }
         else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
         {
-            enemyStateMachine.rigidBody.velocity = Vector3.zero;
-            //enemyStateMachine.animator.SetBool("isMoving", false);
-            followingPath = false;
-            path = null;
-
             if(enemyStateMachine.canAttack)
             {
                 stateMachine.ChangeState(enemyStateMachine.attackState);
@@ -160,4 +146,11 @@ public class EnemyChaseState : BaseState
 	// 		}
 	// 	}
 	// }
+
+    public override void Exit() 
+    {
+        enemyStateMachine.rigidBody.velocity = Vector3.zero;
+        followingPath = false;
+        path = null;
+    }
 }

@@ -30,10 +30,6 @@ public class EnemyAttackState : BaseState
     public override void UpdateLogic() {
         if(!enemyStateMachine.isAttacking)
         {
-            hasAttacked = false;
-            // Debug.Log("!enemyStateMachine.isAttacking");
-            enemyStateMachine.StartCoroutine(enemyStateMachine.Cooldown("attack"));
-
             holderPosition = enemyStateMachine.transform.position;
             playerPosition = enemyStateMachine.playerGameObject.transform.position;
 
@@ -69,10 +65,10 @@ public class EnemyAttackState : BaseState
         hasAttacked = true;
     }
 
-    public void AttackEnded()
+    public override void Exit() 
     {
-        // enemyStateMachine.animator.SetTrigger("attackEnd");
-        stateMachine.ChangeState(enemyStateMachine.idleState);
-        enemyStateMachine.attackCooldownTimer = enemyStateMachine.attackDuration;
+        enemyStateMachine.canMove = true;
+        hasAttacked = false;
+        enemyStateMachine.StartCoroutine(enemyStateMachine.Cooldown("attack"));
     }
 }

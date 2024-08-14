@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Enemy2StateMachine : StateMachine
@@ -29,6 +30,7 @@ public class Enemy2StateMachine : StateMachine
     public bool canAttack;
     public bool isAttacking;
     public bool canFlee;
+    public bool isFleeing;
     
     [Header("Attributes")]
     [Range(0f, 50f)] public float rangeOfView;
@@ -47,7 +49,7 @@ public class Enemy2StateMachine : StateMachine
 
     [Header("Flee")]
     public float fleeCooldownTimer;
-
+    public float fleeDistance;
 
     private void Awake() {
         rigidBody = GetComponent<Rigidbody2D>();
@@ -70,11 +72,12 @@ public class Enemy2StateMachine : StateMachine
 
         canAttack = true;
         canMove = true;
+        canFlee = true;
     }
 
-    // protected override BaseState GetInitialState() {
-    //     return idleState;
-    // }
+    protected override BaseState GetInitialState() {
+        return idleState;
+    }
 
     public IEnumerator Cooldown(string ability)
     {
@@ -97,7 +100,6 @@ public class Enemy2StateMachine : StateMachine
             default:
             break;
         }
-        
     }
 
     private void OnGUI()
@@ -119,18 +121,5 @@ public class Enemy2StateMachine : StateMachine
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, rangeOfDanger);
     }
-
-    // public void ChargingAttackSucessfull()
-    // {
-    //     if(currentState == chargingState)
-    //     {
-    //         chargingState.Attack();
-    //     }
-    // }
-
-    // public void CastAttackEnded()
-    // {
-    //     chargingState.AttackEnded();
-    // }
 }
 

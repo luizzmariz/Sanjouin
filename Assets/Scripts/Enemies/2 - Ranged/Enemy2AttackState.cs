@@ -30,14 +30,14 @@ public class Enemy2AttackState : BaseState
     public override void UpdateLogic() {
         if(!enemyStateMachine.isAttacking)
         {
-            hasAttacked = false;
-            // Debug.Log("!enemyStateMachine.isAttacking");
-            enemyStateMachine.StartCoroutine(enemyStateMachine.Cooldown("attack"));
-
             holderPosition = enemyStateMachine.transform.position;
             playerPosition = enemyStateMachine.playerGameObject.transform.position;
 
-            if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfAttack)
+            if(Vector3.Distance(holderPosition, playerPosition) < enemyStateMachine.rangeOfDanger && enemyStateMachine.canFlee)
+            {
+                stateMachine.ChangeState(enemyStateMachine.fleeState);
+            }
+            else if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfAttack)
             {
                 if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
                 {
@@ -69,10 +69,10 @@ public class Enemy2AttackState : BaseState
         hasAttacked = true;
     }
 
-    public void AttackEnded()
+    public override void Exit() 
     {
-        // enemyStateMachine.animator.SetTrigger("attackEnd");
-        stateMachine.ChangeState(enemyStateMachine.idleState);
-        enemyStateMachine.attackCooldownTimer = enemyStateMachine.attackDuration;
+        enemyStateMachine.canMove = true;
+        hasAttacked = false;
+        enemyStateMachine.StartCoroutine(enemyStateMachine.Cooldown("attack"));
     }
 }

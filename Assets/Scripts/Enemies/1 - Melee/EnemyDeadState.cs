@@ -28,4 +28,9 @@ public class EnemyDeadState : BaseState
     public override void UpdatePhysics() {
 
     }
+
+    public override void Exit() 
+    {
+        
+    }
 }

@@ -34,28 +34,15 @@ public class Enemy2ChaseState : BaseState
 
         if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfView)
         {
-            enemyStateMachine.rigidBody.velocity = Vector3.zero;
-            followingPath = false;
-            path = null;
-
             stateMachine.ChangeState(enemyStateMachine.idleState);
-        }
-        else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDanger)
-        {
-            enemyStateMachine.rigidBody.velocity = Vector3.zero;
-            followingPath = false;
-            path = null;
-
-            stateMachine.ChangeState(enemyStateMachine.fleeState);
         }
         else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
         {
-            enemyStateMachine.rigidBody.velocity = Vector3.zero;
-            //enemyStateMachine.animator.SetBool("isMoving", false);
-            followingPath = false;
-            path = null;
-
-            if(enemyStateMachine.canAttack)
+            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDanger && enemyStateMachine.canFlee)
+            {
+                stateMachine.ChangeState(enemyStateMachine.fleeState);
+            }
+            else if(enemyStateMachine.canAttack)
             {
                 stateMachine.ChangeState(enemyStateMachine.attackState);
             }
@@ -143,21 +130,11 @@ public class Enemy2ChaseState : BaseState
         Vector3 movementDirection = currentWaypoint - holderPosition;
         enemyStateMachine.rigidBody.velocity = movementDirection.normalized * enemyStateMachine.movementSpeed;
 	}
-
-	// public void OnDrawGizmos() 
-    // {
-	// 	if (path != null) {
-	// 		for (int i = targetIndex; i < path.Length; i ++) {
-	// 			Gizmos.color = Color.black;
-	// 			Gizmos.DrawCube(path[i], Vector3.one);
-
-	// 			if (i == targetIndex) {
-	// 				Gizmos.DrawLine(holderPosition, path[i]);
-	// 			}
-	// 			else {
-	// 				Gizmos.DrawLine(path[i-1],path[i]);
-	// 			}
-	// 		}
-	// 	}
-	// }
+    
+    public override void Exit() 
+    {
+        enemyStateMachine.rigidBody.velocity = Vector3.zero;
+        followingPath = false;
+        path = null;
+    }
 }

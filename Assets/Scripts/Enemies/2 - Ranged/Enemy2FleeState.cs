@@ -11,7 +11,7 @@ public class Enemy2FleeState : BaseState
     public bool followingPath;
 
     int targetIndex;
-    Vector3[] path;
+    public Vector3[] path;
 
     public Enemy2FleeState(Enemy2StateMachine stateMachine) : base("Flee", stateMachine) {
         enemyStateMachine = stateMachine;
@@ -20,19 +20,20 @@ public class Enemy2FleeState : BaseState
     public override void Enter() {
         enemyStateMachine.canMove = true;
         enemyStateMachine.enemyDamageable.damageable = true;
+        enemyStateMachine.isFleeing = true;
     }
 
     public override void UpdateLogic() {
         holderPosition = enemyStateMachine.transform.position;
         playerPosition = enemyStateMachine.playerGameObject.transform.position;
-
-        if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfDanger)
+        
+        if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfAttack)
         {
-            enemyStateMachine.rigidBody.velocity = Vector3.zero;
-            
-            // followingPath = false;
-            // path = null;
 
+            stateMachine.ChangeState(enemyStateMachine.idleState);
+        }
+        else if(!enemyStateMachine.isFleeing)
+        {
             if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
             {
                 if(enemyStateMachine.canAttack)
@@ -58,12 +59,17 @@ public class Enemy2FleeState : BaseState
         if(path != null && path.Count() <= 0)
         {
             followingPath = false;
+            enemyStateMachine.isFleeing = false;
         }
 
         if(!hasAskedPath && !followingPath)
         {
             hasAskedPath = true;
-            enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound); 
+
+            Vector3 fleePoint = holderPosition + (holderPosition - playerPosition).normalized * enemyStateMachine.fleeDistance;
+
+            Debug.Log("enemy tryied to find a path to runaway");
+            enemyStateMachine.pathRequestManager.RequestPath(holderPosition, fleePoint, OnPathFound); 
         }
         else if(followingPath)
         {
@@ -72,14 +78,9 @@ public class Enemy2FleeState : BaseState
     }
 
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful) {
-		if (pathSuccessful && enemyStateMachine.currentState == this)
+		if(pathSuccessful && enemyStateMachine.currentState == this)
         {
-            // Debug.Log("Caminho chegou, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
-            // for(int i = 0; i < newPath.Length; i++)
-            // {
-            //     //newPath[i].y = 5;
-            //     //Debug.Log("wayPoint " + i + " is: " + newPath[i]);
-            // }
+            Debug.Log("it succeeded");
             targetIndex = 0;
             hasAskedPath = false;
             followingPath = true;
@@ -87,7 +88,8 @@ public class Enemy2FleeState : BaseState
 		}
         else
         {
-            stateMachine.ChangeState(enemyStateMachine.idleState);
+            Debug.Log("it failed");
+            enemyStateMachine.isFleeing = false;
         }
 	}
 
@@ -97,14 +99,15 @@ public class Enemy2FleeState : BaseState
         // Debug.Log("tamanho do caminho: " + path.Count());
 		Vector3 currentWaypoint = path[targetIndex];
         
-		if (Vector3.Distance(holderPosition, currentWaypoint) <= 0.1) 
+		if(Vector3.Distance(holderPosition, currentWaypoint) <= 0.1) 
         {
             //Debug.Log("AM I  BECOMING FUICKIN CRAZY??? tagetIndex = " + targetIndex);
 			targetIndex ++;
 			if(targetIndex >= path.Count()) 
             {
-                // Debug.Log("HEHEHEHE");
+                Debug.Log("end of flee");
                 followingPath = false;
+                enemyStateMachine.isFleeing = false;
                 return;
 			}
 			// currentWaypoint = path[targetIndex];
@@ -115,4 +118,14 @@ public class Enemy2FleeState : BaseState
         Vector3 movementDirection = currentWaypoint - holderPosition;
         enemyStateMachine.rigidBody.velocity = movementDirection.normalized * enemyStateMachine.movementSpeed;
 	}
+
+    public override void Exit() 
+    {
+        enemyStateMachine.rigidBody.velocity = Vector3.zero;
+        enemyStateMachine.canFlee = false;
+        enemyStateMachine.StartCoroutine(enemyStateMachine.Cooldown("flee"));
+        
+        followingPath = false;
+        path = null;
+    }
 }

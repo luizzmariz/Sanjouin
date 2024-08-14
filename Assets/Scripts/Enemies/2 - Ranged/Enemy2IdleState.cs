@@ -19,7 +19,7 @@ public class Enemy2IdleState : BaseState
         Vector3 holderPosition = enemyStateMachine.transform.position;
         Vector3 playerPosition = enemyStateMachine.playerGameObject.transform.position;
         
-        if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDanger)
+        if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDanger && enemyStateMachine.canFlee)
         {
             stateMachine.ChangeState(enemyStateMachine.fleeState);
         }
@@ -39,5 +39,10 @@ public class Enemy2IdleState : BaseState
 
     public override void UpdatePhysics() {
 
+    }
+
+    public override void Exit() 
+    {
+        
     }
 }

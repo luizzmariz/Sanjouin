@@ -6,12 +6,18 @@ public class EnemyDamageState : BaseState
 {
     EnemyStateMachine enemyStateMachine;
 
+    bool shouldTurnAttackOn;
+
     public EnemyDamageState(EnemyStateMachine stateMachine) : base("Damage", stateMachine) {
         enemyStateMachine = stateMachine;
     }
 
     public override void Enter() {
         enemyStateMachine.canMove = false;
+        if(enemyStateMachine.canAttack)
+        {
+            shouldTurnAttackOn = true;
+        }
         enemyStateMachine.canAttack = false;
         enemyStateMachine.beingPushed = true;
         enemyStateMachine.enemyDamageable.damageable = false;
@@ -56,5 +62,15 @@ public class EnemyDamageState : BaseState
 
         enemyStateMachine.rigidBody.velocity = Vector3.zero;
         enemyStateMachine.beingPushed = false;
+    }
+
+    public override void Exit() 
+    {
+        enemyStateMachine.canMove = true;
+        if(shouldTurnAttackOn)
+        {
+            enemyStateMachine.canAttack = true;
+        }
+        enemyStateMachine.enemyDamageable.damageable = true;
     }
 }

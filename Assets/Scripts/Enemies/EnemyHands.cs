@@ -5,12 +5,17 @@ using UnityEngine;
 public class EnemyHands : MonoBehaviour
 {
     EnemyStateMachine enemyStateMachine;
+    Enemy2StateMachine enemy2StateMachine;
     [SerializeField] private int damageAmount;
     // public Collider2D attack1collider;
 
     void Awake()
     {
         enemyStateMachine = GetComponentInParent<EnemyStateMachine>();
+        if(enemyStateMachine == null)
+        {
+            enemy2StateMachine = GetComponentInParent<Enemy2StateMachine>();
+        }   
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -23,6 +28,13 @@ public class EnemyHands : MonoBehaviour
 
     public void AttackEnd()
     {
-        enemyStateMachine.isAttacking = false;
+        if(enemyStateMachine == null)
+        {
+            enemy2StateMachine.isAttacking = false;
+        }
+        else
+        {
+            enemyStateMachine.isAttacking = false;
+        }
     }
 }
