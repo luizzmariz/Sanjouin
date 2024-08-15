@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Enemy3RunState : BaseState
+public class Enemy4DigState : BaseState
 {
-    Enemy3StateMachine enemyStateMachine;
+    Enemy4StateMachine enemyStateMachine;
 
     Vector3 holderPosition;
     Vector3 playerPosition;
@@ -18,7 +18,7 @@ public class Enemy3RunState : BaseState
     ContactFilter2D contactFilter2D;
     
 
-    public Enemy3RunState(Enemy3StateMachine stateMachine) : base("Run", stateMachine) 
+    public Enemy4DigState(Enemy4StateMachine stateMachine) : base("Run", stateMachine) 
     {
         enemyStateMachine = stateMachine;
 
@@ -102,7 +102,7 @@ public class Enemy3RunState : BaseState
     {
         enemyStateMachine.rigidBody.velocity = Vector3.zero;
         enemyStateMachine.enemyDamageable.damageable = true;
-        enemyStateMachine.canRun = false;
+        enemyStateMachine.canDig = false;
         enemyStateMachine.StartCoroutine(enemyStateMachine.Cooldown("run"));
     }
 }

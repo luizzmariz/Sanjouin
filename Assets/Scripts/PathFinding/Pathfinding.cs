@@ -15,32 +15,43 @@ public class Pathfinding : MonoBehaviour {
 	void Awake() {
 		requestManager = GetComponent<PathRequestManager>();
 		grid = GetComponent<Grid>();
-		collisionTileMap = transform.GetChild(0).GetComponent<Tilemap>();
+		collisionTileMap = transform.Find("CollisionTileMap").GetComponent<Tilemap>();
 	}
 	
 	
-	public void StartFindPath(Vector3 startPos, Vector3 targetPos) {
+	public void StartFindPath(Vector3 startPos, Vector3 targetPos) 
+	{
 		StartCoroutine(FindPath(startPos,targetPos));
 	}
 	
-	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos) {
+	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos) 
+	{
 
 		Vector3[] waypoints = new Vector3[0];
 		bool pathSuccess = false;
 		
 		Node startNode = NodeFromWorldPoint(startPos);
 		Node targetNode = NodeFromWorldPoint(targetPos);
+
+		Node helpStartNode = null;
+		Node helpTargetNode = null;
 		
 		if(!startNode.walkable)
 		{
 			Debug.Log("!startNode.walkable");
+			helpStartNode = startNode;
+			startNode = GetClosestNeighbor(startPos);
+			startNode.parent = helpStartNode;
 		}
 		if(!targetNode.walkable)
 		{
 			Debug.Log("!targetNode.walkable");
+			helpTargetNode = targetNode;
+			targetNode = GetClosestNeighbor(targetPos);
 		}
 
-		if (startNode.walkable && targetNode.walkable) {
+		if(startNode.walkable && targetNode.walkable) 
+		{
 			Heap<Node> openSet = new Heap<Node>(gridArea);
 			HashSet<Node> closedSet = new HashSet<Node>();
 			openSet.Add(startNode);
@@ -80,7 +91,12 @@ public class Pathfinding : MonoBehaviour {
 			}
 		}
 		yield return null;
-		if (pathSuccess) {
+		if(pathSuccess) 
+		{
+			if(helpStartNode != null && helpStartNode != null)
+			{
+
+			}
 			waypoints = RetracePath(startNode,targetNode);
 		}
 		requestManager.FinishedProcessingPath(waypoints,pathSuccess);
@@ -115,7 +131,8 @@ public class Pathfinding : MonoBehaviour {
 		return node;
     }
 
-	public List<Node> GetNodeNeighbours(Node node) { //<------------
+	public List<Node> GetNodeNeighbours(Node node) 
+	{
 		List<Node> neighbours = new List<Node>();
 
 		for(int x = -1; x <= 1; x++) 
@@ -136,6 +153,29 @@ public class Pathfinding : MonoBehaviour {
 
 		//Debug.Log("Node (" + node.gridX + ", " + node.gridY + ") tem " + neighbours.Count + " vizinhos");
 		return neighbours;
+	}
+
+	public Node GetClosestNeighbor(Vector3 worldPosition)
+	{
+		Node node = NodeFromWorldPoint(worldPosition);
+		List<Node> neighbours = GetNodeNeighbours(node);
+
+		float nodeDistance = 100;
+		Node closestNeighbor = node;
+
+		foreach(Node neighbor in neighbours)
+		{
+			Vector3Int nodePos = new Vector3Int(neighbor.gridX, neighbor.gridY);
+			Vector3 neighborWorldPosition = grid.CellToWorld(nodePos);
+
+			if(neighbor.walkable && Vector3.Distance(worldPosition, neighborWorldPosition) < nodeDistance)
+			{
+				nodeDistance = Vector3.Distance(worldPosition, neighborWorldPosition);
+				closestNeighbor = neighbor;
+			}
+		}
+
+		return closestNeighbor;
 	}
 	
 	Vector3[] RetracePath(Node startNode, Node endNode) {
