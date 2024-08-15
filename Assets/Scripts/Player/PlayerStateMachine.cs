@@ -27,6 +27,8 @@ public class PlayerStateMachine : StateMachine
     // public WeaponManager weaponManager;
     // public TrailRenderer trailRenderer;
 
+    public GameObject melee;
+
     [Header("Bool variables")]
     public bool canMove;
     public bool canDash;
@@ -68,6 +70,7 @@ public class PlayerStateMachine : StateMachine
         // weaponManager = GetComponentInChildren<WeaponManager>();
         playerDamageable = GetComponent<PlayerDamageable>();
         // trailRenderer = GetComponentInChildren<TrailRenderer>();
+        melee = transform.Find("Hands").Find("Melee").gameObject;
 
         idleState = new PlayerIdleState(this);
         moveState = new PlayerMoveState(this);
@@ -142,6 +145,11 @@ public class PlayerStateMachine : StateMachine
             case "dash":
             yield return dashCooldownTime;
             canDash = true;
+            break;
+
+            case "attack":
+            yield return attack1CooldownTimer;
+            canAttack = true;
             break;
 
             default:

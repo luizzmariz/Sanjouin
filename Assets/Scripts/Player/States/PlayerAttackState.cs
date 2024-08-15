@@ -6,6 +6,8 @@ public class PlayerAttackState : BaseState
 {
     PlayerStateMachine playerStateMachine;
 
+
+
     public PlayerAttackState(PlayerStateMachine stateMachine) : base("Attack", stateMachine) {
         playerStateMachine = stateMachine;
     }
@@ -32,6 +34,7 @@ public class PlayerAttackState : BaseState
     public override void UpdateLogic() {
         if(!playerStateMachine.isAttacking)
         {
+            playerStateMachine.StartCoroutine(playerStateMachine.Cooldown("attack"));
             Vector2 moveVector = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
 
             if(moveVector != Vector2.zero)
@@ -70,10 +73,14 @@ public class PlayerAttackState : BaseState
             playerStateMachine.characterOrientation.ChangeOrientation(targetPoint);
         }
 
+        playerStateMachine.melee.SetActive(true);
         yield return new WaitForSeconds(playerStateMachine.attackDuration);
+        playerStateMachine.melee.SetActive(false);
 
         playerStateMachine.rigidBody.velocity = Vector2.zero;
         playerStateMachine.isAttacking = false;
+
+
 
         // if(playerStateMachine.attackType == 1)
         // {
