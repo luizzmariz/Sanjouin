@@ -9,15 +9,17 @@ public class BaseEnemyStateMachine : StateMachine
     [HideInInspector] public PathRequestManager pathRequestManager;
     [HideInInspector] public GameObject playerGameObject;
     [HideInInspector] public Rigidbody2D rigidBody;
-    // public Animator animator;
+    [HideInInspector] public Animator animator;
     [HideInInspector] public EnemyDamageable enemyDamageable;
     [HideInInspector] public SpriteRenderer spriteRenderer;
     [HideInInspector] public CharacterOrientation characterOrientation;
     [HideInInspector] public Animator attackAnimator;
     [HideInInspector] public WaveSpawner waveSpawner;
 
-    [Header("Bool variables")]
+    [Header("SpawnedInWave")]
     [HideInInspector] public bool spawnedInWave;
+
+    [Header("Bool variables")]
     public bool canMove;
     public bool canAttack;
     public bool isAttacking;
@@ -32,13 +34,12 @@ public class BaseEnemyStateMachine : StateMachine
     [HideInInspector] public Vector3 knockbackVector;
     public bool beingPushed;
     
-    // public float damage;
+    [Header("Attack")]
     public float attackCooldownTimer;
-    public float attackDuration;
 
     protected virtual void Awake() {
         rigidBody = GetComponent<Rigidbody2D>();
-        // animator = GetComponent<Animator>();
+        animator = transform.GetChild(1).GetComponent<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         characterOrientation = GetComponent<CharacterOrientation>();
         enemyDamageable = GetComponent<EnemyDamageable>();

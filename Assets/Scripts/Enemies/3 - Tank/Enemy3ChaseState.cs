@@ -1,13 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class Enemy1ChaseState : BaseState
+public class Enemy3ChaseState : BaseState
 {
-    Enemy1StateMachine enemyStateMachine;
+    Enemy3StateMachine enemyStateMachine;
     
     public Vector3 holderPosition;
     public Vector3 playerPosition;
@@ -18,7 +14,10 @@ public class Enemy1ChaseState : BaseState
     int targetIndex;
     Vector3[] path;
 
-    public Enemy1ChaseState(Enemy1StateMachine stateMachine) : base("Chase", stateMachine) {
+    public bool startedLoadingRun;
+    Coroutine loadRun;
+
+    public Enemy3ChaseState(Enemy3StateMachine stateMachine) : base("Chase", stateMachine) {
         enemyStateMachine = stateMachine;
     }
 
@@ -49,10 +48,7 @@ public class Enemy1ChaseState : BaseState
         }
     }
 
-    //This function runs at LateUpdate()
     public override void UpdatePhysics() {
-        //base.UpdatePhysics();
-
         holderPosition = enemyStateMachine.transform.position;
         playerPosition = enemyStateMachine.playerGameObject.transform.position;
 
@@ -61,10 +57,20 @@ public class Enemy1ChaseState : BaseState
             followingPath = false;
         }
 
+        if(enemyStateMachine.canRun && !startedLoadingRun && Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfEngage)
+        {
+            startedLoadingRun = true;
+            loadRun = enemyStateMachine.StartCoroutine(enemyStateMachine.LoadRun("run"));
+        }
+        else if(startedLoadingRun && Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfEngage)
+        {
+            startedLoadingRun = false;
+            enemyStateMachine.StopCoroutine(loadRun);
+        }
+
         if(!hasAskedPath && !followingPath)
         {
             hasAskedPath = true;
-            // Debug.Log("Pedinddo caminho, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
             lastPlayerPosition = playerPosition;
             enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound); 
         }
@@ -81,7 +87,6 @@ public class Enemy1ChaseState : BaseState
             {
                 FollowPath();
             }
-            // Debug.Log("Seguindo caminho, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
         }
     }
 
@@ -101,19 +106,17 @@ public class Enemy1ChaseState : BaseState
 		}
         else
         {
+            Debug.Log("Não achou uma solução de caminho");
             stateMachine.ChangeState(enemyStateMachine.idleState);
         }
 	}
 
     public void FollowPath() 
     {
-        //enemyStateMachine.animator.SetBool("isMoving", true);
-        // Debug.Log("tamanho do caminho: " + path.Count());
 		Vector3 currentWaypoint = path[targetIndex];
         
 		if (Vector3.Distance(holderPosition, currentWaypoint) <= 0.1) 
         {
-            //Debug.Log("AM I  BECOMING FUICKIN CRAZY??? tagetIndex = " + targetIndex);
 			targetIndex ++;
 			if(targetIndex >= path.Count()) 
             {
@@ -121,7 +124,6 @@ public class Enemy1ChaseState : BaseState
                 followingPath = false;
                 return;
 			}
-			// currentWaypoint = path[targetIndex];
 		}
         
         enemyStateMachine.characterOrientation.ChangeOrientation(currentWaypoint);
@@ -130,27 +132,16 @@ public class Enemy1ChaseState : BaseState
         enemyStateMachine.rigidBody.velocity = movementDirection.normalized * enemyStateMachine.movementSpeed;
 	}
 
-	// public void OnDrawGizmos() 
-    // {
-	// 	if (path != null) {
-	// 		for (int i = targetIndex; i < path.Length; i ++) {
-	// 			Gizmos.color = Color.black;
-	// 			Gizmos.DrawCube(path[i], Vector3.one);
-
-	// 			if (i == targetIndex) {
-	// 				Gizmos.DrawLine(holderPosition, path[i]);
-	// 			}
-	// 			else {
-	// 				Gizmos.DrawLine(path[i-1],path[i]);
-	// 			}
-	// 		}
-	// 	}
-	// }
-
     public override void Exit() 
     {
         enemyStateMachine.rigidBody.velocity = Vector3.zero;
         followingPath = false;
         path = null;
+
+        if(startedLoadingRun)
+        {
+            startedLoadingRun = false;
+            enemyStateMachine.StopCoroutine(loadRun);
+        }
     }
 }

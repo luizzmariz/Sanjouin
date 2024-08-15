@@ -115,6 +115,7 @@ MonoBehaviour:
   pathRequestManager: {fileID: 0}
   playerGameObject: {fileID: 0}
   rigidBody: {fileID: 0}
+  animator: {fileID: 0}
   enemyDamageable: {fileID: 0}
   spriteRenderer: {fileID: 0}
   characterOrientation: {fileID: 0}
@@ -131,8 +132,6 @@ MonoBehaviour:
   knockbackVector: {x: 0, y: 0, z: 0}
   beingPushed: 0
   attackCooldownTimer: 1.6
-  attackDuration: 0
-  invencibilityTime: 0
 --- !u!114 &344293180157813439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,7 +160,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  maxHealth: 0
   damageable: 1
 --- !u!1 &4808281262256450082
 GameObject:

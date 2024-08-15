@@ -31,6 +31,15 @@ public class Pathfinding : MonoBehaviour {
 		Node startNode = NodeFromWorldPoint(startPos);
 		Node targetNode = NodeFromWorldPoint(targetPos);
 		
+		if(!startNode.walkable)
+		{
+			Debug.Log("!startNode.walkable");
+		}
+		if(!targetNode.walkable)
+		{
+			Debug.Log("!targetNode.walkable");
+		}
+
 		if (startNode.walkable && targetNode.walkable) {
 			Heap<Node> openSet = new Heap<Node>(gridArea);
 			HashSet<Node> closedSet = new HashSet<Node>();

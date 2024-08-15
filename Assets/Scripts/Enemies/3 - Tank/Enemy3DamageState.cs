@@ -2,23 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy1DamageState : BaseState
+public class Enemy3DamageState : BaseState
 {
-    Enemy1StateMachine enemyStateMachine;
+    Enemy3StateMachine enemyStateMachine;
 
-    bool shouldTurnAttackOn;
+    // bool shouldTurnAttackOn;
 
-    public Enemy1DamageState(Enemy1StateMachine stateMachine) : base("Damage", stateMachine) {
+    public Enemy3DamageState(Enemy3StateMachine stateMachine) : base("Damage", stateMachine) {
         enemyStateMachine = stateMachine;
     }
 
     public override void Enter() {
-        enemyStateMachine.canMove = false;
-        if(enemyStateMachine.canAttack)
-        {
-            shouldTurnAttackOn = true;
-        }
-        enemyStateMachine.canAttack = false;
+        // if(enemyStateMachine.canAttack)
+        // {
+        //     shouldTurnAttackOn = true;
+        // }
+        // enemyStateMachine.canAttack = false;
         enemyStateMachine.beingPushed = true;
         enemyStateMachine.enemyDamageable.damageable = false;
 
@@ -66,11 +65,10 @@ public class Enemy1DamageState : BaseState
 
     public override void Exit() 
     {
-        enemyStateMachine.canMove = true;
-        if(shouldTurnAttackOn)
-        {
-            enemyStateMachine.canAttack = true;
-        }
+        // if(shouldTurnAttackOn)
+        // {
+        //     enemyStateMachine.canAttack = true;
+        // }
         enemyStateMachine.enemyDamageable.damageable = true;
     }
 }

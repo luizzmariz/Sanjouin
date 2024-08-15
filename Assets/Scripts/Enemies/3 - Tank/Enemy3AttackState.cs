@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy1AttackState : BaseState
+public class Enemy3AttackState : BaseState
 {
-    Enemy1StateMachine enemyStateMachine;
+    Enemy3StateMachine enemyStateMachine;
 
     Vector3 holderPosition;
     Vector3 playerPosition;
 
     bool hasAttacked;
 
-    public Enemy1AttackState(Enemy1StateMachine stateMachine) : base("Attacking", stateMachine)
+    public Enemy3AttackState(Enemy3StateMachine stateMachine) : base("Attacking", stateMachine)
     {
         enemyStateMachine = stateMachine;
     }
@@ -22,7 +22,6 @@ public class Enemy1AttackState : BaseState
 
         enemyStateMachine.canMove = false;
         enemyStateMachine.canAttack = false;
-        enemyStateMachine.enemyDamageable.damageable = true;
         enemyStateMachine.isAttacking = true;
         hasAttacked = false;
     }
@@ -60,7 +59,6 @@ public class Enemy1AttackState : BaseState
 
     public void Attack()
     {
-        // Debug.Log("Attack");
         enemyStateMachine.attackAnimator.SetTrigger("Attack");
         hasAttacked = true;
     }

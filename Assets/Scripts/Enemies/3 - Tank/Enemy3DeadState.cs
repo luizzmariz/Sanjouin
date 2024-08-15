@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy1DeadState : BaseState
+public class Enemy3DeadState : BaseState
 {
-    Enemy1StateMachine enemyStateMachine;
+    Enemy3StateMachine enemyStateMachine;
 
-    public Enemy1DeadState(Enemy1StateMachine stateMachine) : base("Dead", stateMachine)
+    public Enemy3DeadState(Enemy3StateMachine stateMachine) : base("Dead", stateMachine)
     {
         enemyStateMachine = stateMachine;
     }

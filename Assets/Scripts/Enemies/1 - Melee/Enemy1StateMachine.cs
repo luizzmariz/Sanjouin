@@ -2,23 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStateMachine : BaseEnemyStateMachine
+public class Enemy1StateMachine : BaseEnemyStateMachine
 {
     [Header("States")]
-    [HideInInspector] public EnemyIdleState idleState;
-    [HideInInspector] public EnemyChaseState chaseState;
-    [HideInInspector] public EnemyAttackState attackState;
-    [HideInInspector] public EnemyDamageState damageState;
-    [HideInInspector] public EnemyDeadState deadState;
+    [HideInInspector] public Enemy1IdleState idleState;
+    [HideInInspector] public Enemy1ChaseState chaseState;
+    [HideInInspector] public Enemy1AttackState attackState;
+    [HideInInspector] public Enemy1DamageState damageState;
+    [HideInInspector] public Enemy1DeadState deadState;
 
     protected override void Awake() {
         base.Awake();
 
-        idleState = new EnemyIdleState(this);
-        chaseState = new EnemyChaseState(this);
-        attackState = new EnemyAttackState(this);
-        damageState = new EnemyDamageState(this);
-        deadState = new EnemyDeadState(this);
+        idleState = new Enemy1IdleState(this);
+        chaseState = new Enemy1ChaseState(this);
+        attackState = new Enemy1AttackState(this);
+        damageState = new Enemy1DamageState(this);
+        deadState = new Enemy1DeadState(this);
 
         canAttack = true;
         canMove = true;

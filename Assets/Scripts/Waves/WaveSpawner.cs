@@ -53,7 +53,7 @@ public class WaveSpawner : MonoBehaviour
                     Quaternion.identity, 
                     currentWave.transform);
                     
-                    enemySpawned.GetComponent<EnemyStateMachine>().spawnedInWave = true;
+                    enemySpawned.GetComponent<BaseEnemyStateMachine>().spawnedInWave = true;
                     enemiesAlive++;
                 }
 

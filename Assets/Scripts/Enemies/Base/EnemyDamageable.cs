@@ -10,7 +10,7 @@ public class EnemyDamageable : Damageable
 
     public void Start()
     {
-        stateMachine = GetComponent<EnemyStateMachine>();
+        stateMachine = GetComponent<BaseEnemyStateMachine>();
         currentHealth = maxHealth;
     }
 

@@ -2,18 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy1IdleState : BaseState
+public class Enemy3IdleState : BaseState
 {
-    Enemy1StateMachine enemyStateMachine;
+    Enemy3StateMachine enemyStateMachine;
 
-    public Enemy1IdleState(Enemy1StateMachine stateMachine) : base("Idle", stateMachine) {
+    public Enemy3IdleState(Enemy3StateMachine stateMachine) : base("Idle", stateMachine) {
         enemyStateMachine = stateMachine;
     }
 
     public override void Enter() {
-        enemyStateMachine.canMove = true;
-        // enemyStateMachine.canAttack = true;
-        enemyStateMachine.enemyDamageable.damageable = true;
+
     }
 
     public override void UpdateLogic() {
@@ -34,8 +32,9 @@ public class Enemy1IdleState : BaseState
         }
     }
 
-    public override void UpdatePhysics() {
-
+    public override void UpdatePhysics()
+    {
+    
     }
 
     public override void Exit() 
