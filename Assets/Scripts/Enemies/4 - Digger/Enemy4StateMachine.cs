@@ -16,14 +16,14 @@ public class Enemy4StateMachine : BaseEnemyStateMachine
     [Header("Bool variables")]
     public bool canDig;
 
-    [Header("Run")]
-    public float chargingRunTimer;
-    public float runCooldownTimer;
-    public float maxRunDuration;
+    [Header("Dig")]
+    [Range(0f, 25f)] public float digSpeed;
+    public float diggingTime;
+    public float maxDigDuration;
+    public float digCooldownTimer;
 
     [Header("Attributes")]
     [Range(0f, 25f)] public float rangeOfDig;
-    [Range(0f, 25f)] public float runSpeed;
 
     [Header("Flee")]
     public float fleeDistance;
@@ -57,22 +57,9 @@ public class Enemy4StateMachine : BaseEnemyStateMachine
                 canAttack = true;
             break;
 
-            case "run":
-                yield return new WaitForSeconds(runCooldownTimer);
+            case "dig":
+                yield return new WaitForSeconds(digCooldownTimer);
                 canDig = true;
-            break;
-
-            default:
-            break;
-        }
-    }
-
-    public IEnumerator LoadRun(string ability)
-    {
-        switch(ability)
-        {
-            case "run":
-                yield return new WaitForSeconds(chargingRunTimer);
             break;
 
             default:

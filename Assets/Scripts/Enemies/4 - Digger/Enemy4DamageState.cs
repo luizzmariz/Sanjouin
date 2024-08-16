@@ -6,18 +6,11 @@ public class Enemy4DamageState : BaseState
 {
     Enemy4StateMachine enemyStateMachine;
 
-    // bool shouldTurnAttackOn;
-
     public Enemy4DamageState(Enemy4StateMachine stateMachine) : base("Damage", stateMachine) {
         enemyStateMachine = stateMachine;
     }
 
     public override void Enter() {
-        // if(enemyStateMachine.canAttack)
-        // {
-        //     shouldTurnAttackOn = true;
-        // }
-        // enemyStateMachine.canAttack = false;
         enemyStateMachine.beingPushed = true;
         enemyStateMachine.enemyDamageable.damageable = false;
 
@@ -25,25 +18,18 @@ public class Enemy4DamageState : BaseState
     }
 
     public override void UpdateLogic() {
-        Vector3 holderPosition = enemyStateMachine.transform.position;
-        Vector3 playerPosition = enemyStateMachine.playerGameObject.transform.position;
-        
         if(!enemyStateMachine.beingPushed)
         {
-            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
+            Vector3 holderPosition = enemyStateMachine.transform.position;
+            Vector3 playerPosition = enemyStateMachine.playerGameObject.transform.position;
+
+            if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfView)
             {
-                if(enemyStateMachine.canAttack)
-                {
-                    stateMachine.ChangeState(enemyStateMachine.attackState);
-                }
-            }
-            else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
-            {
-                stateMachine.ChangeState(enemyStateMachine.chaseState);
+                stateMachine.ChangeState(enemyStateMachine.idleState);
             }
             else
             {
-                stateMachine.ChangeState(enemyStateMachine.idleState);
+                stateMachine.ChangeState(enemyStateMachine.fleeState);
             }
         }
     }

@@ -14,9 +14,6 @@ public class Enemy4ChaseState : BaseState
     int targetIndex;
     Vector3[] path;
 
-    public bool startedLoadingRun;
-    Coroutine loadRun;
-
     public Enemy4ChaseState(Enemy4StateMachine stateMachine) : base("Chase", stateMachine) {
         enemyStateMachine = stateMachine;
     }
@@ -35,16 +32,9 @@ public class Enemy4ChaseState : BaseState
         {
             stateMachine.ChangeState(enemyStateMachine.idleState);
         }
-        else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
+        else if(enemyStateMachine.canDig && Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDig)
         {
-            if(enemyStateMachine.canAttack)
-            {
-                stateMachine.ChangeState(enemyStateMachine.attackState);
-            }
-            else
-            {
-                stateMachine.ChangeState(enemyStateMachine.idleState);
-            }
+            stateMachine.ChangeState(enemyStateMachine.digState);
         }
     }
 
@@ -55,17 +45,6 @@ public class Enemy4ChaseState : BaseState
         if(path != null && path.Count() <= 0)
         {
             followingPath = false;
-        }
-
-        if(enemyStateMachine.canDig && !startedLoadingRun && Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDig)
-        {
-            startedLoadingRun = true;
-            loadRun = enemyStateMachine.StartCoroutine(enemyStateMachine.LoadRun("run"));
-        }
-        else if(startedLoadingRun && Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfDig)
-        {
-            startedLoadingRun = false;
-            enemyStateMachine.StopCoroutine(loadRun);
         }
 
         if(!hasAskedPath && !followingPath)
@@ -93,12 +72,6 @@ public class Enemy4ChaseState : BaseState
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful) {
 		if (pathSuccessful && enemyStateMachine.currentState == this)
         {
-            // Debug.Log("Caminho chegou, hasAskedPath = " + hasAskedPath + ", followingPath = " + followingPath);
-            // for(int i = 0; i < newPath.Length; i++)
-            // {
-            //     //newPath[i].y = 5;
-            //     //Debug.Log("wayPoint " + i + " is: " + newPath[i]);
-            // }
             targetIndex = 0;
             hasAskedPath = false;
             followingPath = true;
@@ -120,7 +93,6 @@ public class Enemy4ChaseState : BaseState
 			targetIndex ++;
 			if(targetIndex >= path.Count()) 
             {
-                // Debug.Log("HEHEHEHE");
                 followingPath = false;
                 return;
 			}
@@ -137,11 +109,5 @@ public class Enemy4ChaseState : BaseState
         enemyStateMachine.rigidBody.velocity = Vector3.zero;
         followingPath = false;
         path = null;
-
-        if(startedLoadingRun)
-        {
-            startedLoadingRun = false;
-            enemyStateMachine.StopCoroutine(loadRun);
-        }
     }
 }

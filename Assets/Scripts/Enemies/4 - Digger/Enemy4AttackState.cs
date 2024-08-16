@@ -32,21 +32,7 @@ public class Enemy4AttackState : BaseState
             holderPosition = enemyStateMachine.transform.position;
             playerPosition = enemyStateMachine.playerGameObject.transform.position;
 
-            if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfAttack)
-            {
-                if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
-                {
-                    stateMachine.ChangeState(enemyStateMachine.chaseState);
-                }
-                else
-                {
-                    stateMachine.ChangeState(enemyStateMachine.idleState);
-                }
-            }
-            else
-            {
-                stateMachine.ChangeState(enemyStateMachine.idleState);
-            }
+            stateMachine.ChangeState(enemyStateMachine.fleeState);
         }
     }
 

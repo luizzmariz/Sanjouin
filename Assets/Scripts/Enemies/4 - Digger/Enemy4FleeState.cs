@@ -20,8 +20,6 @@ public class Enemy4FleeState : BaseState
     }
 
     public override void Enter() {
-        enemyStateMachine.canMove = true;
-        enemyStateMachine.enemyDamageable.damageable = true;
         isFleeing = true;
     }
 
@@ -29,35 +27,17 @@ public class Enemy4FleeState : BaseState
         holderPosition = enemyStateMachine.transform.position;
         playerPosition = enemyStateMachine.playerGameObject.transform.position;
         
-        if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfAttack)
+        if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfDig)
         {
-
             stateMachine.ChangeState(enemyStateMachine.idleState);
         }
         else if(!isFleeing)
         {
-            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
-            {
-                if(enemyStateMachine.canAttack)
-                {
-                    stateMachine.ChangeState(enemyStateMachine.attackState);
-                }
-                else
-                {
-                    stateMachine.ChangeState(enemyStateMachine.idleState);
-                }
-            }
-            else
-            {
-                stateMachine.ChangeState(enemyStateMachine.idleState);
-            }
+            stateMachine.ChangeState(enemyStateMachine.idleState);
         }
     }
 
     public override void UpdatePhysics() {
-        holderPosition = enemyStateMachine.transform.position;
-        playerPosition = enemyStateMachine.playerGameObject.transform.position;
-
         if(path != null && path.Count() <= 0)
         {
             followingPath = false;
@@ -66,11 +46,14 @@ public class Enemy4FleeState : BaseState
 
         if(!hasAskedPath && !followingPath)
         {
+            holderPosition = enemyStateMachine.transform.position;
+            playerPosition = enemyStateMachine.playerGameObject.transform.position;
+
             hasAskedPath = true;
 
             Vector3 fleePoint = holderPosition + (holderPosition - playerPosition).normalized * enemyStateMachine.fleeDistance;
+            Debug.Log("chamou flee path");
 
-            Debug.Log("enemy tryied to find a path to runaway");
             enemyStateMachine.pathRequestManager.RequestPath(holderPosition, fleePoint, OnPathFound); 
         }
         else if(followingPath)
@@ -82,7 +65,7 @@ public class Enemy4FleeState : BaseState
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful) {
 		if(pathSuccessful && enemyStateMachine.currentState == this)
         {
-            Debug.Log("it succeeded");
+            Debug.Log("cheou aqui");
             targetIndex = 0;
             hasAskedPath = false;
             followingPath = true;
@@ -90,8 +73,11 @@ public class Enemy4FleeState : BaseState
 		}
         else
         {
-            Debug.Log("it failed");
-            isFleeing = false;
+            Debug.Log("nonamui");
+            targetIndex = 0;
+            hasAskedPath = false;
+            followingPath = true;
+            path = new Vector3[]{holderPosition + (holderPosition - playerPosition).normalized * enemyStateMachine.fleeDistance};
         }
 	}
 
@@ -107,7 +93,6 @@ public class Enemy4FleeState : BaseState
 			targetIndex ++;
 			if(targetIndex >= path.Count()) 
             {
-                Debug.Log("end of flee");
                 followingPath = false;
                 isFleeing = false;
                 return;

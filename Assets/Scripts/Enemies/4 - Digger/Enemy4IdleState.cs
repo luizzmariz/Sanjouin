@@ -6,6 +6,9 @@ public class Enemy4IdleState : BaseState
 {
     Enemy4StateMachine enemyStateMachine;
 
+    Vector3 holderPosition;
+    Vector3 playerPosition;
+
     public Enemy4IdleState(Enemy4StateMachine stateMachine) : base("Idle", stateMachine) {
         enemyStateMachine = stateMachine;
     }
@@ -15,30 +18,39 @@ public class Enemy4IdleState : BaseState
     }
 
     public override void UpdateLogic() {
-        Vector3 holderPosition = enemyStateMachine.transform.position;
-        Vector3 playerPosition = enemyStateMachine.playerGameObject.transform.position;
+        holderPosition = enemyStateMachine.transform.position;
+        playerPosition = enemyStateMachine.playerGameObject.transform.position;
         
-        if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDig && enemyStateMachine.canDig)
+        if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDig)
         {
-            stateMachine.ChangeState(enemyStateMachine.fleeState);
-        }
-        else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
-        {
-            if(enemyStateMachine.canAttack)
+            if(enemyStateMachine.canDig)
             {
-                stateMachine.ChangeState(enemyStateMachine.attackState);
+                stateMachine.ChangeState(enemyStateMachine.digState);
             }
-            enemyStateMachine.characterOrientation.ChangeOrientation(playerPosition);
+            else
+            {
+                stateMachine.ChangeState(enemyStateMachine.fleeState);
+            }
         }
         else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
         {
-            stateMachine.ChangeState(enemyStateMachine.chaseState);
+            if(enemyStateMachine.canDig)
+            {
+                stateMachine.ChangeState(enemyStateMachine.chaseState);
+            }   
         }
     }
 
     public override void UpdatePhysics()
     {
-    
+        holderPosition = enemyStateMachine.transform.position;
+        playerPosition = enemyStateMachine.playerGameObject.transform.position;
+
+        if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
+        {
+            Vector3 playerDirection = (playerPosition - holderPosition).normalized * 5;
+            enemyStateMachine.characterOrientation.ChangeOrientation(playerDirection);
+        }
     }
 
     public override void Exit() 

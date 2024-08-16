@@ -10,9 +10,10 @@ public class Enemy4DigState : BaseState
     Vector3 holderPosition;
     Vector3 playerPosition;
 
-    bool hasStartedRunning;
-    Coroutine run;
-    bool isRunning;
+    bool hasDigged;
+    Coroutine dig;
+    bool isDigging;
+    bool digWentWrong;
 
     List<Collider2D> colliders;
     ContactFilter2D contactFilter2D;
@@ -33,69 +34,80 @@ public class Enemy4DigState : BaseState
     public override void Enter() 
     {
         enemyStateMachine.enemyDamageable.damageable = false;
-        isRunning = true;
+        isDigging = true;
     }
 
     public override void UpdateLogic() 
     {
-        if(!isRunning)
+        if(!isDigging)
         {
-            holderPosition = enemyStateMachine.transform.position;
-            playerPosition = enemyStateMachine.playerGameObject.transform.position;
-            
-            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
+            hasDigged = false;
+            if(digWentWrong)
             {
-                if(enemyStateMachine.canAttack)
-                {
-                    stateMachine.ChangeState(enemyStateMachine.attackState);
-                }
-                enemyStateMachine.characterOrientation.ChangeOrientation(playerPosition);
+                stateMachine.ChangeState(enemyStateMachine.idleState);
             }
-            else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
+            else
             {
-                stateMachine.ChangeState(enemyStateMachine.chaseState);
+                stateMachine.ChangeState(enemyStateMachine.attackState);
             }
         }
     }
 
     public override void UpdatePhysics() 
     {
-        if(!hasStartedRunning)
+        if(!hasDigged)
         {
-            StartRun();
+            enemyStateMachine.StartCoroutine(StartDig());
         }
         else
         {
-            if(enemyStateMachine.GetComponent<Collider2D>().OverlapCollider(contactFilter2D, colliders) > 0)
+            holderPosition = enemyStateMachine.transform.position;
+            playerPosition = enemyStateMachine.playerGameObject.transform.position;
+
+            Vector3 digDirection = (playerPosition - holderPosition).normalized;
+            enemyStateMachine.rigidBody.velocity = digDirection * enemyStateMachine.digSpeed;
+
+            if(Vector3.Distance(holderPosition, playerPosition) <= (enemyStateMachine.rangeOfAttack * 0.85))
             {
-                enemyStateMachine.StopCoroutine(run);
-                enemyStateMachine.rigidBody.velocity = Vector3.zero;
-                hasStartedRunning = false;
-                isRunning = false;
+                enemyStateMachine.StopCoroutine(dig);
+                enemyStateMachine.StartCoroutine(DigOut());
+            }
+            else if(enemyStateMachine.GetComponent<Collider2D>().OverlapCollider(contactFilter2D, colliders) > 0)
+            {
+                enemyStateMachine.StopCoroutine(dig);
+                digWentWrong = true;
+                enemyStateMachine.StartCoroutine(DigOut());
             }
         }
     }
 
-    void StartRun()
+    IEnumerator StartDig()
     {
-        hasStartedRunning = true;
-        run = enemyStateMachine.StartCoroutine(RunTimer());
+        hasDigged = true;
+        digWentWrong = false;
+        enemyStateMachine.enemyDamageable.damageable = false;
         //enemyStateMachine.animator;
 
-        holderPosition = enemyStateMachine.transform.position;
-        playerPosition = enemyStateMachine.playerGameObject.transform.position;
+        yield return new WaitForSeconds(enemyStateMachine.diggingTime);
 
-        Vector3 runVector = (playerPosition - holderPosition).normalized;
-        enemyStateMachine.rigidBody.velocity = runVector * enemyStateMachine.runSpeed;
+        dig = enemyStateMachine.StartCoroutine(DigTimer());
     }
 
-    IEnumerator RunTimer()
+    IEnumerator DigTimer()
     {
-        yield return new WaitForSeconds(enemyStateMachine.maxRunDuration);
-        //enemyStateMachine.animator;
+        yield return new WaitForSeconds(enemyStateMachine.maxDigDuration);
+
+        digWentWrong = true;
+        enemyStateMachine.StartCoroutine(DigOut());
+    }
+
+    IEnumerator DigOut()
+    {
+        yield return new WaitForSeconds(enemyStateMachine.diggingTime);
+
+        isDigging = false;
+        enemyStateMachine.enemyDamageable.damageable = true;
         enemyStateMachine.rigidBody.velocity = Vector3.zero;
-        hasStartedRunning = false;
-        isRunning = false;
     }
 
     public override void Exit() 
@@ -103,6 +115,6 @@ public class Enemy4DigState : BaseState
         enemyStateMachine.rigidBody.velocity = Vector3.zero;
         enemyStateMachine.enemyDamageable.damageable = true;
         enemyStateMachine.canDig = false;
-        enemyStateMachine.StartCoroutine(enemyStateMachine.Cooldown("run"));
+        enemyStateMachine.StartCoroutine(enemyStateMachine.Cooldown("dig"));
     }
 }
