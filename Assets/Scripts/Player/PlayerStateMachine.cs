@@ -9,6 +9,7 @@ public class PlayerStateMachine : StateMachine
     [HideInInspector] public PlayerIdleState idleState;
     [HideInInspector] public PlayerMoveState moveState;
     [HideInInspector] public PlayerAttackState attackState;
+    [HideInInspector] public PlayerFireState fireState;
     [HideInInspector] public PlayerDashState dashState;
     [HideInInspector] public PlayerDamageState damageState;
     [HideInInspector] public PlayerDeadState deadState;
@@ -28,6 +29,7 @@ public class PlayerStateMachine : StateMachine
     // public TrailRenderer trailRenderer;
 
     public GameObject melee;
+    public GameObject Bullet;
 
     [Header("Bool variables")]
     public bool canMove;
@@ -52,6 +54,7 @@ public class PlayerStateMachine : StateMachine
     [Header("Attack")]
     public bool isAttacking;
     public int attackType;
+    public float fireForce;
     public float attackDuration;
     public float attack1CooldownTimer;
     public float attack2CooldownTimer;
@@ -75,6 +78,7 @@ public class PlayerStateMachine : StateMachine
         idleState = new PlayerIdleState(this);
         moveState = new PlayerMoveState(this);
         attackState = new PlayerAttackState(this);
+        fireState = new PlayerFireState(this);
         dashState = new PlayerDashState(this);
         damageState = new PlayerDamageState(this);
         deadState = new PlayerDeadState(this);
@@ -122,7 +126,7 @@ public class PlayerStateMachine : StateMachine
             if(canAttack)
             {
                 attackType = 2;
-                ChangeState(attackState);
+                ChangeState(fireState);
             }
         }
     }
@@ -149,6 +153,11 @@ public class PlayerStateMachine : StateMachine
 
             case "attack":
             yield return attack1CooldownTimer;
+            canAttack = true;
+            break;
+
+            case "fire":
+            yield return attack2CooldownTimer;
             canAttack = true;
             break;
 
