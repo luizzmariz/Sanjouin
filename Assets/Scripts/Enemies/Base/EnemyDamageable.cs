@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyDamageable : Damageable
 {
-    [SerializeField] public float maxHealth {get; private set;}
+    [SerializeField] public float maxHealth;
     public bool damageable = true;
     [HideInInspector] private BaseEnemyStateMachine stateMachine;
 
