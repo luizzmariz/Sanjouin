@@ -115,7 +115,7 @@ public class Pathfinding : MonoBehaviour {
 				}
 				else
 				{
-					Debug.Log("caso 4, startNode: " + startNode.gridX + ", " + startNode.gridY + ", targetNode: " + targetNode.gridX + ", " + targetNode.gridY);
+					Debug.Log("caso 4");
 					waypoints = RetracePath(startNode,targetNode);
 				}
 			}

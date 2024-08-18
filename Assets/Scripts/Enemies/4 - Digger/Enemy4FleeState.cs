@@ -52,7 +52,6 @@ public class Enemy4FleeState : BaseState
             hasAskedPath = true;
 
             Vector3 fleePoint = holderPosition + (holderPosition - playerPosition).normalized * enemyStateMachine.fleeDistance;
-            Debug.Log("chamou flee path");
 
             enemyStateMachine.pathRequestManager.RequestPath(holderPosition, fleePoint, OnPathFound); 
         }
@@ -65,7 +64,6 @@ public class Enemy4FleeState : BaseState
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful) {
 		if(pathSuccessful && enemyStateMachine.currentState == this)
         {
-            Debug.Log("cheou aqui");
             targetIndex = 0;
             hasAskedPath = false;
             followingPath = true;
@@ -73,7 +71,6 @@ public class Enemy4FleeState : BaseState
 		}
         else
         {
-            Debug.Log("nonamui");
             targetIndex = 0;
             hasAskedPath = false;
             followingPath = true;

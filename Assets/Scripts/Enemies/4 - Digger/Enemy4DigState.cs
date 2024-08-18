@@ -69,11 +69,15 @@ public class Enemy4DigState : BaseState
 
             if(Vector3.Distance(holderPosition, playerPosition) <= (enemyStateMachine.rangeOfAttack * 0.85))
             {
-                enemyStateMachine.StopCoroutine(dig);
-                enemyStateMachine.StartCoroutine(DigOut());
+                if(dig != null)
+                {
+                    enemyStateMachine.StopCoroutine(dig);
+                    enemyStateMachine.StartCoroutine(DigOut());
+                }
             }
             else if(enemyStateMachine.GetComponent<Collider2D>().OverlapCollider(contactFilter2D, colliders) > 0)
             {
+                enemyStateMachine.rigidBody.velocity = Vector2.zero;
                 enemyStateMachine.StopCoroutine(dig);
                 digWentWrong = true;
                 enemyStateMachine.StartCoroutine(DigOut());
