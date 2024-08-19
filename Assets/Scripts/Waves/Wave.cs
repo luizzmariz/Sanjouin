@@ -26,4 +26,10 @@ public class Wave : MonoBehaviour
         public List<GameObject> enemies;
         public float timeToNextEnemy;
     }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = new Color(255,140,0,1);
+        Gizmos.DrawWireSphere(transform.position, spawnRange);
+    }
 }

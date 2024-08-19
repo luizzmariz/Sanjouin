@@ -18,6 +18,11 @@ public class WaveSpawner : MonoBehaviour
     [Header("Spawn")]
     public Pathfinding pathfinding;
 
+    [Header("Canvas")]
+    public GameObject waveClearText;
+    public Animator waveClearAnimator;
+    public float messageDuration;
+
     void Awake()
     {
         pathfinding = GameObject.Find("PathfindingManager").GetComponent<Pathfinding>();
@@ -79,12 +84,9 @@ public class WaveSpawner : MonoBehaviour
         }
         else
         {
-            Debug.Log("chorei");
             return GetSpawnPosition(spawnPosition, spawnRange);
         }
     }
-
-
 
     public void EnemyDied()
     {
@@ -96,7 +98,30 @@ public class WaveSpawner : MonoBehaviour
     {
         if(enemiesAlive <= 0 && waveSpawnEnded)
         {
-            Debug.Log("WaveEnded");
+            currentWaveIndex++;
+            if(currentWaveIndex == waves.Count)
+            {
+                GameManager.instance.EndGame();
+            }
+            else
+            {
+
+            }
+            StartCoroutine(WaveClear());
         }
+    }
+
+    IEnumerator WaveClear()
+    {
+        waveClearText.SetActive(true);
+        //waveClearAnimator;
+
+        yield return new WaitForSeconds(messageDuration);
+
+        //waveClearAnimator;
+        waveClearText.SetActive(false);
+
+        yield return new WaitForSeconds(1);
+        SpawnWave();
     }
 }

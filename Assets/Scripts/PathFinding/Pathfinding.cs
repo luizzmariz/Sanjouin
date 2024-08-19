@@ -9,6 +9,7 @@ public class Pathfinding : MonoBehaviour {
 	PathRequestManager requestManager;
 	Grid grid;
 	Tilemap collisionTileMap;
+	Tilemap areaTileMap;
 
 	public int gridArea;
 	
@@ -16,6 +17,7 @@ public class Pathfinding : MonoBehaviour {
 		requestManager = GetComponent<PathRequestManager>();
 		grid = GetComponent<Grid>();
 		collisionTileMap = transform.Find("CollisionTileMap").GetComponent<Tilemap>();
+		areaTileMap = transform.Find("AreaTileMap").GetComponent<Tilemap>();
 	}
 	
 	
@@ -123,17 +125,6 @@ public class Pathfinding : MonoBehaviour {
 		requestManager.FinishedProcessingPath(waypoints,pathSuccess);
 	}
 
-	// public Node NodeFromWorldPoint(Vector3 worldPosition) {
-	// 	float percentX = (worldPosition.x + gridWorldSize.x/2) / gridWorldSize.x;
-	// 	float percentY = (worldPosition.z + gridWorldSize.y/2) / gridWorldSize.y;
-	// 	percentX = Mathf.Clamp01(percentX);
-	// 	percentY = Mathf.Clamp01(percentY);
-
-	// 	int x = Mathf.RoundToInt((gridSizeX-1) * percentX);
-	// 	int y = Mathf.RoundToInt((gridSizeY-1) * percentY);
-	// 	return grid[x,y];
-	// }
-
 	public Node NodeFromWorldPoint(Vector3 worldPosition) //<------------
     {
         Vector3Int nodePosition = grid.WorldToCell(worldPosition);
@@ -168,7 +159,10 @@ public class Pathfinding : MonoBehaviour {
 				int checkX = node.gridX + x;
 				int checkY = node.gridY + y;
 
-				neighbours.Add(NodeFromVector3(new Vector3Int(checkX, checkY, 0)));
+				if(areaTileMap.HasTile(new Vector3Int(checkX, checkY, 0)))
+				{
+					neighbours.Add(NodeFromVector3(new Vector3Int(checkX, checkY, 0)));
+				}
 			}
 		}
 
