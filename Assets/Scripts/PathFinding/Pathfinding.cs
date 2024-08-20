@@ -110,16 +110,19 @@ public class Pathfinding : MonoBehaviour {
 			}
 			else
 			{
-				if(helpTargetNode != null)
-				{
-					Debug.Log("caso 3");
-					waypoints = RetracePath(startNode,helpTargetNode);
-				}
-				else
-				{
-					Debug.Log("caso 4");
-					waypoints = RetracePath(startNode,targetNode);
-				}
+				// if(helpTargetNode != null)
+				// {
+				// 	Debug.Log("caso 3");
+				// 	waypoints = RetracePath(startNode,helpTargetNode);
+				// }
+				// else
+				// {
+				// 	Debug.Log("caso 4");
+				// 	waypoints = RetracePath(startNode,targetNode);
+				// }
+
+				// 	Debug.Log("caso 3");
+				waypoints = RetracePath(startNode,targetNode);
 			}
 		}
 		requestManager.FinishedProcessingPath(waypoints,pathSuccess);

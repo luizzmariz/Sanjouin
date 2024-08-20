@@ -37,7 +37,7 @@ public class PlayerAttackState : BaseState
             playerStateMachine.StartCoroutine(playerStateMachine.Cooldown("attack"));
             Vector2 moveVector = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
 
-            if(moveVector != Vector2.zero)
+            if(moveVector != Vector2.zero && !playerStateMachine.isAiming)
             {
                 playerStateMachine.ChangeState(playerStateMachine.moveState);
             }
@@ -67,11 +67,17 @@ public class PlayerAttackState : BaseState
         }
         else if(playerStateMachine.playerInput.currentControlScheme == "Gamepad")
         {
-            Vector2 lookDirection = playerStateMachine.playerInput.actions["look"].ReadValue<Vector2>();
+            Vector2 lookDirection = playerStateMachine.characterOrientation.lastOrientation;
+            if(playerStateMachine.isAiming)
+            {
+                lookDirection = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
+            }
 
             targetPoint = new Vector3(targetPoint.x + lookDirection.x * 10, targetPoint.y + lookDirection.y * 10, targetPoint.z);
             playerStateMachine.characterOrientation.ChangeOrientation(targetPoint);
         }
+
+        playerStateMachine.animator.SetTrigger("playerAttack");
 
         playerStateMachine.melee.SetActive(true);
         yield return new WaitForSeconds(playerStateMachine.attackDuration);
@@ -79,35 +85,5 @@ public class PlayerAttackState : BaseState
 
         playerStateMachine.rigidBody.velocity = Vector2.zero;
         playerStateMachine.isAttacking = false;
-
-
-
-        // if(playerStateMachine.attackType == 1)
-        // {
-        //     playerStateMachine.weaponManager.PrimaryAttack();        
-        // }
-        // else if(playerStateMachine.attackType == 2)
-        // {
-        //     if(targetPoint - playerStateMachine.transform.position != Vector3.zero)
-        //     {
-        //         playerStateMachine.weaponManager.SecondaryAttack(targetPoint - playerStateMachine.transform.position);  
-        //     }
-        //     else
-        //     {
-        //         playerStateMachine.weaponManager.SecondaryAttack(playerStateMachine.characterOrientation.lastOrientation - playerStateMachine.transform.position);  
-        //     }
-        // }
-        // else if(playerStateMachine.attackType == 3)
-        // {
-        //     if(playerStateMachine.trapsPlaced < playerStateMachine.trapsLimit)
-        //     {
-        //         playerStateMachine.weaponManager.PlaceTrap(targetPoint, playerStateMachine.transform.position);
-        //         playerStateMachine.trapsPlaced++;
-        //     }
-        //     else
-        //     {
-        //         playerStateMachine.CastAttackEnded();
-        //     }
-        // }
     }
 }

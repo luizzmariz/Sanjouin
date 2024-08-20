@@ -17,7 +17,7 @@ public class PlayerMoveState : BaseState
     public override void UpdateLogic() {
         moveVector = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
 
-        if(moveVector == Vector2.zero)
+        if(moveVector == Vector2.zero || playerStateMachine.isAiming)
         {
             playerStateMachine.rigidBody.velocity = Vector3.zero;
             // playerStateMachine.animator.SetBool("isMoving", false);

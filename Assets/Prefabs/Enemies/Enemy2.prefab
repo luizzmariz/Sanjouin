@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 845479d57243d27428367a3aeceb3839, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.12898159, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -261,6 +261,9 @@ MonoBehaviour:
   rangeOfDanger: 2
   fleeCooldownTimer: 4
   fleeDistance: 4
+  fireForce: 7
+  attackProjectile: {fileID: 7152070069280098873, guid: f0984da62ce39064387b584319275d6b, type: 3}
+  attackDuration: 0.5
 --- !u!114 &6782652324195137264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,6 +292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
+  maxHealth: 20
   damageable: 1
 --- !u!1 &5258573247980368564
 GameObject:
@@ -367,7 +371,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: faa997266fc3a3b49b218a0eb7fd83eb, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.12941177, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -445,4 +449,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b19e0b8bea34d4582d945bd6bb7f8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 2
+  weaponType: 0
+  damageAmount: 10

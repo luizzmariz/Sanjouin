@@ -58,15 +58,25 @@ public class Enemy2AttackState : BaseState
     public override void UpdatePhysics() {
         if(!hasAttacked)
         {
-            Attack();
+            enemyStateMachine.StartCoroutine(Attack());
         }
     }
 
-    public void Attack()
+    public IEnumerator Attack()
     {
-        // Debug.Log("Attack");
-        enemyStateMachine.attackAnimator.SetTrigger("Attack");
+        holderPosition = enemyStateMachine.transform.position;
+        playerPosition = enemyStateMachine.playerGameObject.transform.position;
+
+        Vector3 bulletDirection = (playerPosition - holderPosition).normalized;
+
+        // enemyStateMachine.attackAnimator.SetTrigger("Attack");
+        GameObject intBullet = GameObject.Instantiate(enemyStateMachine.attackProjectile, holderPosition, Quaternion.identity);
+        intBullet.GetComponent<Rigidbody2D>().AddForce(bulletDirection * enemyStateMachine.fireForce, ForceMode2D.Impulse);
+        GameObject.Destroy(intBullet, 2f);
         hasAttacked = true;
+        yield return new WaitForSeconds(enemyStateMachine.attackDuration);
+        
+        enemyStateMachine.isAttacking = false;
     }
 
     public override void Exit() 

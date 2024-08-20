@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: faa997266fc3a3b49b218a0eb7fd83eb, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.101960786, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -155,7 +155,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b19e0b8bea34d4582d945bd6bb7f8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 2
+  weaponType: 0
+  damageAmount: 15
 --- !u!1 &8800235102080741534
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,7 +233,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 845479d57243d27428367a3aeceb3839, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.09941673, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -446,4 +447,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
+  maxHealth: 80
   damageable: 1

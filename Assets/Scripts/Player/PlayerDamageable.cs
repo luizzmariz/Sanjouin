@@ -23,7 +23,7 @@ public class PlayerDamageable : Damageable
     {
         if(damageable)
         {
-            Vector3 knockbackVector = (attackerPosition - transform.position).normalized * -1;
+            Vector3 knockbackVector = (transform.position - attackerPosition).normalized;
 
             currentHealth -= damageAmount;
             if(currentHealth <= 0)

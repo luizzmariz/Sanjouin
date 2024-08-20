@@ -31,6 +31,12 @@ public class WaveSpawner : MonoBehaviour
         {
             waves.Add(transform.GetChild(i).GetComponent<Wave>());
         }
+
+        if(waveClearText.activeSelf)
+        {
+            waveClearAnimator.SetBool("waveClearTextOn", false);
+            waveClearText.SetActive(false);
+        }
     }
 
     public IEnumerator SpawnWave()
@@ -114,14 +120,14 @@ public class WaveSpawner : MonoBehaviour
     IEnumerator WaveClear()
     {
         waveClearText.SetActive(true);
-        //waveClearAnimator;
+        waveClearAnimator.SetBool("waveClearTextOn", true);
 
         yield return new WaitForSeconds(messageDuration);
 
-        //waveClearAnimator;
-        waveClearText.SetActive(false);
+        waveClearAnimator.SetBool("waveClearTextOn", false);
 
         yield return new WaitForSeconds(1);
-        SpawnWave();
+        waveClearText.SetActive(false);
+        StartCoroutine(SpawnWave());
     }
 }

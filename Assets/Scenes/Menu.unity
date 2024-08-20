@@ -425,7 +425,7 @@ MonoBehaviour:
       m_Flags: 0
     - m_Name: 
       m_Id: 9b7748cc-2376-4624-908d-4e715e6ee04e
-      m_Path: <Gamepad>/select
+      m_Path: <Gamepad>/start
       m_Interactions: 
       m_Processors: 
       m_Groups: 
@@ -462,6 +462,7 @@ GameObject:
   - component: {fileID: 970527422}
   - component: {fileID: 970527421}
   - component: {fileID: 970527420}
+  - component: {fileID: 970527423}
   m_Layer: 5
   m_Name: 'OptionsButton '
   m_TagString: Untagged
@@ -533,8 +534,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 968928538}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 970527423}
+        m_TargetAssemblyTypeName: Button, Assembly-CSharp
         m_MethodName: ButtonFunction
         m_Mode: 5
         m_Arguments:
@@ -583,6 +584,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 970527418}
   m_CullTransparentMesh: 1
+--- !u!114 &970527423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 970527418}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e248a3ecf9478a14fa71a885481417fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &975301542
 GameObject:
   m_ObjectHideFlags: 0
@@ -729,6 +742,7 @@ GameObject:
   - component: {fileID: 1085334763}
   - component: {fileID: 1085334762}
   - component: {fileID: 1085334761}
+  - component: {fileID: 1085334764}
   m_Layer: 5
   m_Name: 'ExitButton '
   m_TagString: Untagged
@@ -800,8 +814,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 968928538}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 1085334764}
+        m_TargetAssemblyTypeName: Button, Assembly-CSharp
         m_MethodName: ButtonFunction
         m_Mode: 5
         m_Arguments:
@@ -850,6 +864,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1085334759}
   m_CullTransparentMesh: 1
+--- !u!114 &1085334764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085334759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e248a3ecf9478a14fa71a885481417fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1178285104
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,6 +888,7 @@ GameObject:
   - component: {fileID: 1178285108}
   - component: {fileID: 1178285107}
   - component: {fileID: 1178285106}
+  - component: {fileID: 1178285109}
   m_Layer: 5
   m_Name: 'ResumeButton '
   m_TagString: Untagged
@@ -933,8 +960,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 968928538}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 1178285109}
+        m_TargetAssemblyTypeName: Button, Assembly-CSharp
         m_MethodName: ButtonFunction
         m_Mode: 5
         m_Arguments:
@@ -983,6 +1010,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1178285104}
   m_CullTransparentMesh: 1
+--- !u!114 &1178285109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178285104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e248a3ecf9478a14fa71a885481417fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1283556682
 GameObject:
   m_ObjectHideFlags: 0
@@ -1328,6 +1367,7 @@ GameObject:
   - component: {fileID: 1408584568}
   - component: {fileID: 1408584567}
   - component: {fileID: 1408584566}
+  - component: {fileID: 1408584569}
   m_Layer: 5
   m_Name: PlayButton
   m_TagString: Untagged
@@ -1399,8 +1439,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 968928538}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 1408584569}
+        m_TargetAssemblyTypeName: Button, Assembly-CSharp
         m_MethodName: ButtonFunction
         m_Mode: 5
         m_Arguments:
@@ -1449,6 +1489,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1408584564}
   m_CullTransparentMesh: 1
+--- !u!114 &1408584569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1408584564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e248a3ecf9478a14fa71a885481417fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1453645839
 GameObject:
   m_ObjectHideFlags: 0
@@ -1733,6 +1785,7 @@ GameObject:
   - component: {fileID: 1712274566}
   - component: {fileID: 1712274565}
   - component: {fileID: 1712274564}
+  - component: {fileID: 1712274567}
   m_Layer: 5
   m_Name: 'ExitButton '
   m_TagString: Untagged
@@ -1804,8 +1857,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 968928538}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 1712274567}
+        m_TargetAssemblyTypeName: Button, Assembly-CSharp
         m_MethodName: ButtonFunction
         m_Mode: 5
         m_Arguments:
@@ -1854,6 +1907,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1712274562}
   m_CullTransparentMesh: 1
+--- !u!114 &1712274567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1712274562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e248a3ecf9478a14fa71a885481417fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1803023990
 GameObject:
   m_ObjectHideFlags: 0

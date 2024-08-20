@@ -10,7 +10,7 @@ public class StateMachine : MonoBehaviour {
             currentState.Enter();
     }
 
-    void Update() 
+    protected virtual void Update() 
     {
         if (currentState != null)
             currentState.UpdateLogic();

@@ -40,7 +40,7 @@ public class PlayerFireState : BaseState
             playerStateMachine.StartCoroutine(playerStateMachine.Cooldown("attack"));
             Vector2 moveVector = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
 
-            if(moveVector != Vector2.zero)
+            if(moveVector != Vector2.zero && !playerStateMachine.isAiming)
             {
                 playerStateMachine.ChangeState(playerStateMachine.moveState);
             }
@@ -57,8 +57,7 @@ public class PlayerFireState : BaseState
 
     public IEnumerator SetAttack()
     {
-        //playerStateMachine.rigidBody.velocity = Vector2.zero;
-        playerStateMachine.rigidBody.velocity = playerStateMachine.rigidBody.velocity/2;
+        playerStateMachine.rigidBody.velocity = Vector2.zero;
         Vector3 targetPoint = playerStateMachine.transform.position;
 
         if(playerStateMachine.playerInput.currentControlScheme == "Keyboard&Mouse")
@@ -70,15 +69,27 @@ public class PlayerFireState : BaseState
         }
         else if(playerStateMachine.playerInput.currentControlScheme == "Gamepad")
         {
-            Vector2 lookDirection = playerStateMachine.playerInput.actions["look"].ReadValue<Vector2>();
+            Vector2 lookDirection = Vector2.zero;
+            if(playerStateMachine.isAiming)
+            {
+                lookDirection = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
+            }
+            if(lookDirection == Vector2.zero)
+            {
+                lookDirection = playerStateMachine.characterOrientation.lastOrientation;
+            }
 
             targetPoint = new Vector3(targetPoint.x + lookDirection.x * 10, targetPoint.y + lookDirection.y * 10, targetPoint.z);
             playerStateMachine.characterOrientation.ChangeOrientation(targetPoint);
         }
+
+        playerStateMachine.animator.SetTrigger("playerAttack");
+        
         Vector3 bulletDirection = (targetPoint - playerStateMachine.transform.position).normalized;
         GameObject intBullet = GameObject.Instantiate(playerStateMachine.Bullet, playerStateMachine.transform.position, Quaternion.identity);
         intBullet.GetComponent<Rigidbody2D>().AddForce(bulletDirection * playerStateMachine.fireForce, ForceMode2D.Impulse);
         GameObject.Destroy(intBullet, 2f);
+
         yield return new WaitForSeconds(playerStateMachine.attackDuration);
         
 

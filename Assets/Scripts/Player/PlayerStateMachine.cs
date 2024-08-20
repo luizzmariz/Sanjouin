@@ -21,7 +21,7 @@ public class PlayerStateMachine : StateMachine
     //GameObject information
     [HideInInspector] public PlayerInput playerInput;
     [HideInInspector] public Rigidbody2D rigidBody;
-    // public Animator animator;
+    [HideInInspector] public Animator animator;
     // public SpriteRenderer spriteRenderer;
     [HideInInspector] public CharacterOrientation characterOrientation;
     [HideInInspector] public PlayerDamageable playerDamageable;
@@ -35,6 +35,7 @@ public class PlayerStateMachine : StateMachine
     public bool canMove;
     public bool canDash;
     public bool canAttack;
+    public bool isAiming;
 
     [Header("Movement")]
     public float runningMultiplier;
@@ -67,7 +68,7 @@ public class PlayerStateMachine : StateMachine
         // playerInput.actions.FindActionMap("UI").Enable();
 
         rigidBody = GetComponent<Rigidbody2D>();
-        // animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         // spriteRenderer = GetComponent<SpriteRenderer>();
         characterOrientation = GetComponent<CharacterOrientation>();
         // weaponManager = GetComponentInChildren<WeaponManager>();
@@ -88,6 +89,20 @@ public class PlayerStateMachine : StateMachine
         return idleState;
     }
 
+    protected override void Update()
+    {
+        base.Update();
+
+        if(playerInput.actions["Aim"].ReadValue<float>() != 0)
+        {
+            isAiming = true;
+        }
+        else
+        {
+            isAiming = false;
+        }
+    }
+
     private void OnGUI()
     {
         GUILayout.BeginArea(new Rect(450, 125, 200f, 150f));
@@ -100,7 +115,7 @@ public class PlayerStateMachine : StateMachine
     {
         if(context.performed)
         {
-            if(canMove)
+            if(canMove && !isAiming)
             {
                 ChangeState(moveState);
             }

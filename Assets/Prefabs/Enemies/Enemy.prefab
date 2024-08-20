@@ -160,6 +160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
+  maxHealth: 35
   damageable: 1
 --- !u!1 &4808281262256450082
 GameObject:
@@ -316,7 +317,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b19e0b8bea34d4582d945bd6bb7f8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageAmount: 2
+  weaponType: 0
+  damageAmount: 7
 --- !u!1 &4919398120651183147
 GameObject:
   m_ObjectHideFlags: 0

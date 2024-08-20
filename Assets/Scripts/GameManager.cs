@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public WaveSpawner waveSpawner;
     bool gameStarted;
 
+    [Header("Player")]
+    PlayerInput playerInput;
+
     [Header("Menu")]
     bool optionsMenuIsOpen;
     public GameObject optionsMenu;
@@ -56,6 +59,7 @@ public class GameManager : MonoBehaviour
         if(isInGame)
         {
             waveSpawner = GameObject.Find("WaveSpawner").GetComponent<WaveSpawner>();
+            playerInput = GameObject.Find("Player").GetComponent<PlayerInput>();
         }
         else
         {
@@ -133,6 +137,7 @@ public class GameManager : MonoBehaviour
         if(!gameStarted)
         {
             StartCoroutine(waveSpawner.SpawnWave());
+            gameStarted = true;
         }
     }
 
@@ -146,6 +151,11 @@ public class GameManager : MonoBehaviour
                 optionsMenu.SetActive(optionsMenuIsOpen);
                 EventSystem.current.SetSelectedGameObject(optionsMenuSelectedFirst);
                 Time.timeScale = 0;
+
+                if(isInGame)
+                {
+                    playerInput.actions.FindActionMap("Player").Disable();
+                }
             }
             else
             {
@@ -153,6 +163,11 @@ public class GameManager : MonoBehaviour
                 optionsMenu.SetActive(optionsMenuIsOpen);
                 EventSystem.current.SetSelectedGameObject(mainMenuSelectedFirst);
                 Time.timeScale = 1;
+
+                if(isInGame)
+                {
+                    playerInput.actions.FindActionMap("Player").Enable();
+                }
             }
         }
     }

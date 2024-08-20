@@ -26,6 +26,11 @@ public class Enemy2StateMachine : BaseEnemyStateMachine
     public float fleeCooldownTimer;
     public float fleeDistance;
 
+    [Header("Attack")]
+    public float fireForce;
+    public GameObject attackProjectile;
+    public float attackDuration;
+
     protected override void Awake() {
         base.Awake();
 
