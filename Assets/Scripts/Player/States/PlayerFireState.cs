@@ -88,6 +88,7 @@ public class PlayerFireState : BaseState
         Vector3 bulletDirection = (targetPoint - playerStateMachine.transform.position).normalized;
         GameObject intBullet = GameObject.Instantiate(playerStateMachine.Bullet, playerStateMachine.transform.position, Quaternion.identity);
         intBullet.GetComponent<Rigidbody2D>().AddForce(bulletDirection * playerStateMachine.fireForce, ForceMode2D.Impulse);
+        intBullet.GetComponent<PlayerHands>().ExecuteAttack();
         GameObject.Destroy(intBullet, 2f);
 
         yield return new WaitForSeconds(playerStateMachine.attackDuration);

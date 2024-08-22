@@ -13,8 +13,8 @@ public class BaseEnemyStateMachine : StateMachine
     [HideInInspector] public EnemyDamageable enemyDamageable;
     [HideInInspector] public SpriteRenderer spriteRenderer;
     [HideInInspector] public CharacterOrientation characterOrientation;
-    [HideInInspector] public Animator attackAnimator;
     [HideInInspector] public WaveSpawner waveSpawner;
+    [HideInInspector] public EnemyHands enemyHands;
 
     [Header("SpawnedInWave")]
     [HideInInspector] public bool spawnedInWave;
@@ -39,11 +39,11 @@ public class BaseEnemyStateMachine : StateMachine
 
     protected virtual void Awake() {
         rigidBody = GetComponent<Rigidbody2D>();
-        animator = transform.GetChild(1).GetComponent<Animator>();
+        animator = transform.Find("Visual").GetComponent<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         characterOrientation = GetComponent<CharacterOrientation>();
         enemyDamageable = GetComponent<EnemyDamageable>();
-        attackAnimator = transform.GetChild(1).GetComponent<Animator>();
+        enemyHands = transform.Find("Hands").GetComponent<EnemyHands>();
 
         playerGameObject = GameObject.Find("Player");
         pathRequestManager = GameObject.Find("PathfindingManager").GetComponent<PathRequestManager>();

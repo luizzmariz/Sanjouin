@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] InputAction startWave;
     [HideInInspector] public WaveSpawner waveSpawner;
     bool gameStarted;
+    public GameObject screenMessage;
+    public float messageDuration;
 
     [Header("Player")]
     PlayerInput playerInput;
@@ -60,6 +63,7 @@ public class GameManager : MonoBehaviour
         {
             waveSpawner = GameObject.Find("WaveSpawner").GetComponent<WaveSpawner>();
             playerInput = GameObject.Find("Player").GetComponent<PlayerInput>();
+            screenMessage = GameObject.Find("Canvas").transform.Find("ScreenMessage").gameObject;
         }
         else
         {
@@ -130,6 +134,7 @@ public class GameManager : MonoBehaviour
     {
         startWave.Enable();
         startWave.performed += context => StartGame();
+        screenMessage.SetActive(false);
     }
 
     void StartGame()
@@ -172,9 +177,28 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void EndGame()
+    public IEnumerator EndGame(bool win)
     {
-        Debug.Log("Parabens vc terminou o jogo");
+        if(win)
+        {
+            screenMessage.GetComponentInChildren<TMP_Text>().text = "VICTORY";
+        }
+        else
+        {
+            screenMessage.GetComponentInChildren<TMP_Text>().text = "DEFEAT";
+        }
+        screenMessage.SetActive(true);
+        screenMessage.GetComponent<Animator>().SetBool("messageOn", true);
+
+        yield return new WaitForSeconds(messageDuration);
+
+        screenMessage.GetComponent<Animator>().SetBool("messageOn", false);
+
+        yield return new WaitForSeconds(1);
+        screenMessage.SetActive(false);
+
+        scenesToLoad.Add(SceneManager.LoadSceneAsync("Menu"));
+        StartCoroutine(LoadingScreen());
     }
 
     public void QuitGame() {

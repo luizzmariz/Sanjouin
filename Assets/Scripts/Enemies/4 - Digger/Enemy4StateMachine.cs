@@ -67,13 +67,13 @@ public class Enemy4StateMachine : BaseEnemyStateMachine
         }
     }
 
-    private void OnGUI()
-    {
-        GUILayout.BeginArea(new Rect(250, 125, 200f, 150f));
-        string content = currentState != null ? currentState.name : "(no current state)";
-        GUILayout.Label($"<color='red'><size=40>{content}</size></color>");
-        GUILayout.EndArea();
-    }
+    // private void OnGUI()
+    // {
+    //     GUILayout.BeginArea(new Rect(250, 125, 200f, 150f));
+    //     string content = currentState != null ? currentState.name : "(no current state)";
+    //     GUILayout.Label($"<color='red'><size=40>{content}</size></color>");
+    //     GUILayout.EndArea();
+    // }
 
     void OnDrawGizmosSelected()
     {

@@ -80,7 +80,11 @@ public class PlayerAttackState : BaseState
         playerStateMachine.animator.SetTrigger("playerAttack");
 
         playerStateMachine.melee.SetActive(true);
+        playerStateMachine.melee.GetComponent<PlayerHands>().ExecuteAttack();
+
         yield return new WaitForSeconds(playerStateMachine.attackDuration);
+
+        playerStateMachine.melee.GetComponent<PlayerHands>().StopAttack();
         playerStateMachine.melee.SetActive(false);
 
         playerStateMachine.rigidBody.velocity = Vector2.zero;

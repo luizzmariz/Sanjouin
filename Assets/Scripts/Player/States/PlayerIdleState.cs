@@ -27,6 +27,8 @@ public class PlayerIdleState : BaseState
     }
 
     public override void UpdatePhysics() {
+        playerStateMachine.rigidBody.velocity = Vector2.zero;
+        
         if(playerStateMachine.isAiming)
         {
             Vector2 targetPoint = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using TMPro;
 
 
 public class WaveSpawner : MonoBehaviour
@@ -30,12 +30,6 @@ public class WaveSpawner : MonoBehaviour
         for(int i = 0; i < transform.childCount; i++)
         {
             waves.Add(transform.GetChild(i).GetComponent<Wave>());
-        }
-
-        if(waveClearText.activeSelf)
-        {
-            waveClearAnimator.SetBool("waveClearTextOn", false);
-            waveClearText.SetActive(false);
         }
     }
 
@@ -107,24 +101,24 @@ public class WaveSpawner : MonoBehaviour
             currentWaveIndex++;
             if(currentWaveIndex == waves.Count)
             {
-                GameManager.instance.EndGame();
+                StartCoroutine(GameManager.instance.EndGame(true));
             }
             else
             {
-
+                StartCoroutine(WaveClear());
             }
-            StartCoroutine(WaveClear());
         }
     }
 
     IEnumerator WaveClear()
     {
+        waveClearText.GetComponentInChildren<TMP_Text>().text = "WAVE CLEAR";
         waveClearText.SetActive(true);
-        waveClearAnimator.SetBool("waveClearTextOn", true);
+        waveClearAnimator.SetBool("messageOn", true);
 
         yield return new WaitForSeconds(messageDuration);
 
-        waveClearAnimator.SetBool("waveClearTextOn", false);
+        waveClearAnimator.SetBool("messageOn", false);
 
         yield return new WaitForSeconds(1);
         waveClearText.SetActive(false);

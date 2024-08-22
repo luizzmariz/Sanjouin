@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 3912177852750518884}
   - component: {fileID: 6782652324195137264}
   - component: {fileID: 3621632158247970836}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Enemy2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,8 +243,8 @@ MonoBehaviour:
   enemyDamageable: {fileID: 0}
   spriteRenderer: {fileID: 0}
   characterOrientation: {fileID: 0}
-  attackAnimator: {fileID: 0}
   waveSpawner: {fileID: 0}
+  enemyHands: {fileID: 0}
   spawnedInWave: 0
   canMove: 0
   canAttack: 0
@@ -305,7 +305,6 @@ GameObject:
   - component: {fileID: 7328468310315800589}
   - component: {fileID: 3014021585575283573}
   - component: {fileID: 4306007928982352096}
-  - component: {fileID: 1856308870982633467}
   - component: {fileID: 7719589497009788171}
   m_Layer: 0
   m_Name: Hands
@@ -391,7 +390,7 @@ Animator:
   m_GameObject: {fileID: 5258573247980368564}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: df99b2a03a95e99458c89cdd77895695, type: 2}
+  m_Controller: {fileID: 9100000, guid: fc2c7a68d11e9df4fb4ba931832f36e7, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -402,41 +401,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!70 &1856308870982633467
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5258573247980368564}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.15}
-  m_Size: {x: 1, y: 0.45}
-  m_Direction: 1
 --- !u!114 &7719589497009788171
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -449,5 +413,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b19e0b8bea34d4582d945bd6bb7f8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponType: 0
+  attacksParentGameObject: {fileID: 0}
+  handsAnimator: {fileID: 0}
   damageAmount: 10
+  attacks:
+  - {fileID: 7152070069280098873, guid: f0984da62ce39064387b584319275d6b, type: 3}
+  actualAttack: {fileID: 0}

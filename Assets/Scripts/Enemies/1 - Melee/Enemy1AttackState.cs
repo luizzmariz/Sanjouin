@@ -54,15 +54,13 @@ public class Enemy1AttackState : BaseState
     public override void UpdatePhysics() {
         if(!hasAttacked)
         {
-            Attack();
-        }
-    }
+            holderPosition = enemyStateMachine.transform.position;
+            playerPosition = enemyStateMachine.playerGameObject.transform.position;
 
-    public void Attack()
-    {
-        // Debug.Log("Attack");
-        enemyStateMachine.attackAnimator.SetTrigger("Attack");
-        hasAttacked = true;
+            Vector3 attackDirection = playerPosition - holderPosition;
+            enemyStateMachine.enemyHands.Attack(attackDirection);
+            hasAttacked = true;
+        }
     }
 
     public override void Exit() 

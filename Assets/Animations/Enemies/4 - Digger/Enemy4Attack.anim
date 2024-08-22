@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Enemy1Attack
+  m_Name: Enemy4Attack
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -298,7 +298,7 @@ AnimationClip:
     - time: 0.06666667
       value: {fileID: 21300000, guid: 8c1f6aa0a6d5c6f4d99e5e855eeef528, type: 3}
     - time: 0.083333336
-      value: {fileID: 0}
+      value: {fileID: 21300000, guid: faa997266fc3a3b49b218a0eb7fd83eb, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -371,7 +371,7 @@ AnimationClip:
     - {fileID: 21300000, guid: 36557feefd1fae04bbeabbaefc384b11, type: 3}
     - {fileID: 21300000, guid: cf61bd81c3553044bb862c04103c8fad, type: 3}
     - {fileID: 21300000, guid: 8c1f6aa0a6d5c6f4d99e5e855eeef528, type: 3}
-    - {fileID: 0}
+    - {fileID: 21300000, guid: faa997266fc3a3b49b218a0eb7fd83eb, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}

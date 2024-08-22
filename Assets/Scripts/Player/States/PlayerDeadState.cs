@@ -16,7 +16,7 @@ public class PlayerDeadState : BaseState
         playerStateMachine.canDash = false;
         playerStateMachine.playerDamageable.damageable = false;
         
-        Debug.Log("GG MORREU");
+        playerStateMachine.StartCoroutine(GameManager.instance.EndGame(false));
     }
 
     public override void UpdateLogic() {

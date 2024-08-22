@@ -4,54 +4,61 @@ using UnityEngine;
 
 public class EnemyHands : MonoBehaviour
 {
-    public enum WeaponType
-    {
-        Melee,
-        Bullet
-    }
-
-    public WeaponType weaponType;
+    [SerializeField] public Transform attacksParentGameObject;
+    [SerializeField] public Animator handsAnimator;
 
     BaseEnemyStateMachine enemyStateMachine;
     [SerializeField] private int damageAmount;
 
-    // [SerializeField] List<GameObject> attacks;
+    [SerializeField] List<GameObject> attacks;
+    public Attack actualAttack;
 
     void Awake()
     {
         enemyStateMachine = GetComponentInParent<BaseEnemyStateMachine>(); 
+        attacksParentGameObject = GameObject.Find("Attacks").transform;
+        handsAnimator = GetComponent<Animator>(); 
     }
 
-    // public void Attack(float attackType, int)
-    // {
-    //     // if(attackIndex == 0)
-    //     // {
-    //     //     transform.Get
-    //     // }
-        
-    // }
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void Attack(Vector3 attackDirection)
     {
-        if (collision.GetComponent<PlayerDamageable>())
+        if(attacks.Count <= 0)
         {
-            if(weaponType == WeaponType.Bullet)
-            {
-                collision.GetComponent<PlayerDamageable>().Damage(damageAmount, transform.position - (Vector3)GetComponent<Rigidbody2D>().velocity * 1.5f);
-                Destroy(gameObject);
-            }
-            else
-            {
-                collision.GetComponent<PlayerDamageable>().Damage(damageAmount, transform.position);
-            }
+            Debug.Log("There isn't any attacks settled");
         }
+        else if(attacks[0].GetComponent<Attack>().isProjectile)
+        {
+            GameObject projectile = Instantiate(attacks[0], transform.position, Quaternion.identity, attacksParentGameObject);
+            
+            actualAttack = projectile.GetComponent<Attack>();
+            projectile.GetComponent<Rigidbody2D>().AddForce(attackDirection * actualAttack.fireForce, ForceMode2D.Impulse);
+            Destroy(projectile, 2f);
+        }
+        else
+        {
+            attacks[0].SetActive(true);
+            actualAttack = attacks[0].GetComponent<Attack>();
+        }
+        
+        handsAnimator.SetTrigger("Attack");
+        actualAttack.ExecuteAttack();
     }
+
+    // public void Attack(AttackType attackType, int attackIndex)
+    // {
+    //     if(attackType == AttackType.Projectile)
+    //     {
+    //         Instantiate(projectileAttacks[attackIndex-1], transform.position, Quaternion.identity, attackdParentGameObject);
+    //     }
+    // }
 
     public void AttackEnd()
     {
-        // if(weaponType == WeaponType.Melee)
-        // {
-            enemyStateMachine.isAttacking = false;
-        // }
+        if(!actualAttack.isProjectile)
+        {
+            actualAttack.StopAttack();
+        }
+    
+        enemyStateMachine.isAttacking = false;
     }
 }

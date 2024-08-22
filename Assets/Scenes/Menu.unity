@@ -406,6 +406,8 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   waveSpawner: {fileID: 0}
+  screenMessage: {fileID: 0}
+  messageDuration: 3
   optionsMenu: {fileID: 0}
   openMenu:
     m_Name: Open Menu

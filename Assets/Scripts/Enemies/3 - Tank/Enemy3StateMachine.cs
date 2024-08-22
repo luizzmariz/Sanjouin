@@ -19,6 +19,8 @@ public class Enemy3StateMachine : BaseEnemyStateMachine
     public float chargingRunTimer;
     public float runCooldownTimer;
     public float maxRunDuration;
+    public Collider2D runCollider;
+    public float runDamage;
 
     [Header("Attributes")]
     [Range(0f, 25f)] public float rangeOfEngage;
@@ -76,13 +78,13 @@ public class Enemy3StateMachine : BaseEnemyStateMachine
         }
     }
 
-    private void OnGUI()
-    {
-        GUILayout.BeginArea(new Rect(250, 125, 200f, 150f));
-        string content = currentState != null ? currentState.name : "(no current state)";
-        GUILayout.Label($"<color='red'><size=40>{content}</size></color>");
-        GUILayout.EndArea();
-    }
+    // private void OnGUI()
+    // {
+    //     GUILayout.BeginArea(new Rect(250, 125, 200f, 150f));
+    //     string content = currentState != null ? currentState.name : "(no current state)";
+    //     GUILayout.Label($"<color='red'><size=40>{content}</size></color>");
+    //     GUILayout.EndArea();
+    // }
 
     void OnDrawGizmosSelected()
     {

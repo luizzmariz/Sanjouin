@@ -2,20 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHands : MonoBehaviour
+public class Attack : MonoBehaviour
 {
-
-    public enum WeaponType{Melee,Bullet}
-    public WeaponType weaponType;
     public LayerMask layerMask;
-    [SerializeField] private int damageAmount;
+    public bool isProjectile;
+    public int damageAmount;
+    bool isAttacking;
+    public Animator animator;
+    public float fireForce;
 
-    public bool isAttacking;
     List<Collider2D> colliders;
     List<Collider2D> usedColliders;
     ContactFilter2D contactFilter2D;
 
-    void Awake()
+    public void Awake()
     {
         colliders = new List<Collider2D>();
         usedColliders = new List<Collider2D>();
@@ -26,6 +26,8 @@ public class PlayerHands : MonoBehaviour
         };
 
         isAttacking = false;
+
+        animator = GetComponent<Animator>(); 
     }
 
     public virtual void ExecuteAttack()
@@ -34,7 +36,7 @@ public class PlayerHands : MonoBehaviour
         isAttacking = true;
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if(isAttacking && GetComponent<Collider2D>().OverlapCollider(contactFilter2D, colliders) > 0)
         {
@@ -42,7 +44,7 @@ public class PlayerHands : MonoBehaviour
             {
                 if(!usedColliders.Contains(collider))
                 {
-                    if(collider.GetComponent<EnemyDamageable>())
+                    if(collider.GetComponent<PlayerDamageable>())
                     {
                         DealDamage(collider);
                     }
@@ -54,17 +56,17 @@ public class PlayerHands : MonoBehaviour
 
     protected virtual void DealDamage(Collider2D collider)
     {
-        if(weaponType ==  WeaponType.Bullet)
+        if(isProjectile)
         {
-            collider.GetComponent<EnemyDamageable>().Damage(damageAmount, transform.position - (Vector3)GetComponent<Rigidbody2D>().velocity * 1.5f);
-            if(collider.GetComponent<EnemyDamageable>().damageable)
+            collider.GetComponent<PlayerDamageable>().Damage(damageAmount, transform.position - (Vector3)GetComponent<Rigidbody2D>().velocity * 1.5f);
+            if(collider.GetComponent<PlayerDamageable>().damageable)
             {
                 Destroy(gameObject);
             }
         }
         else
         {
-            collider.GetComponent<EnemyDamageable>().Damage(damageAmount, transform.position);
+            collider.GetComponent<PlayerDamageable>().Damage(damageAmount, transform.position);
         }
     }
 
@@ -73,4 +75,3 @@ public class PlayerHands : MonoBehaviour
         isAttacking = false;
     }
 }
-
