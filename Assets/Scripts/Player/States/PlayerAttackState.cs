@@ -54,8 +54,8 @@ public class PlayerAttackState : BaseState
 
     public IEnumerator SetAttack()
     {
-        //playerStateMachine.rigidBody.velocity = Vector2.zero;
-        playerStateMachine.rigidBody.velocity = playerStateMachine.rigidBody.velocity/2;
+        playerStateMachine.rigidBody.velocity = Vector2.zero;
+        //playerStateMachine.rigidBody.velocity = playerStateMachine.rigidBody.velocity/2;
         Vector3 targetPoint = playerStateMachine.transform.position;
 
         if(playerStateMachine.playerInput.currentControlScheme == "Keyboard&Mouse")

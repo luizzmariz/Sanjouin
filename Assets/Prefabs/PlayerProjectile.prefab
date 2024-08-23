@@ -162,4 +162,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponType: 1
-  damageAmount: 50
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 768
+  damageAmount: 8
+  isAttacking: 0

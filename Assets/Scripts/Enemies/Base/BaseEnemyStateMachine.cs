@@ -15,6 +15,8 @@ public class BaseEnemyStateMachine : StateMachine
     [HideInInspector] public CharacterOrientation characterOrientation;
     [HideInInspector] public WaveSpawner waveSpawner;
     [HideInInspector] public EnemyHands enemyHands;
+    [HideInInspector] public SpriteRenderer bodySpriteRenderer;
+    [HideInInspector] public SpriteRenderer handsSpriteRenderer;
 
     [Header("SpawnedInWave")]
     [HideInInspector] public bool spawnedInWave;
@@ -42,7 +44,9 @@ public class BaseEnemyStateMachine : StateMachine
         animator = transform.Find("Visual").GetComponent<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         characterOrientation = GetComponent<CharacterOrientation>();
-        enemyDamageable = GetComponent<EnemyDamageable>();
+        bodySpriteRenderer = transform.Find("Visual").GetComponent<SpriteRenderer>();
+        handsSpriteRenderer= transform.Find("Hands").GetComponent<SpriteRenderer>();
+        enemyDamageable = transform.Find("DamageCollider").GetComponent<EnemyDamageable>();
         enemyHands = transform.Find("Hands").GetComponent<EnemyHands>();
 
         playerGameObject = GameObject.Find("Player");

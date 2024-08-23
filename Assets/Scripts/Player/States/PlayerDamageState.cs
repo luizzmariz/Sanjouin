@@ -35,10 +35,20 @@ public class PlayerDamageState : BaseState
     {
         playerStateMachine.rigidBody.velocity = Vector3.zero;
         playerStateMachine.rigidBody.AddForce(playerStateMachine.knockbackVector, ForceMode2D.Impulse);
+        playerStateMachine.bodySpriteRenderer.color = new Color(1, 1, 1, 0.5f);
+        playerStateMachine.handsSpriteRenderer.color = new Color(1, 1, 1, 0.5f);
 
         yield return new WaitForSeconds(playerStateMachine.knockbackDuration);
 
+        playerStateMachine.bodySpriteRenderer.color = new Color(1, 1, 1, 1f);
+         playerStateMachine.handsSpriteRenderer.color = new Color(1, 1, 1, 1f);
+
         playerStateMachine.rigidBody.velocity = Vector3.zero;
         playerStateMachine.beingPushed = false;
+    }
+
+    public override void Exit()
+    {
+        playerStateMachine.playerDamageable.damageable = true;
     }
 }

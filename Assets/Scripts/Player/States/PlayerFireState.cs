@@ -91,8 +91,9 @@ public class PlayerFireState : BaseState
         intBullet.GetComponent<PlayerHands>().ExecuteAttack();
         GameObject.Destroy(intBullet, 2f);
 
+        Debug.Log("atacking in distance");
         yield return new WaitForSeconds(playerStateMachine.attackDuration);
-        
+        Debug.Log("stop atacking in distance");
 
         playerStateMachine.rigidBody.velocity = Vector2.zero;
         playerStateMachine.isAttacking = false;

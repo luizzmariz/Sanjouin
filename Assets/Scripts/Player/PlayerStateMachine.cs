@@ -22,7 +22,8 @@ public class PlayerStateMachine : StateMachine
     [HideInInspector] public PlayerInput playerInput;
     [HideInInspector] public Rigidbody2D rigidBody;
     [HideInInspector] public Animator animator;
-    // public SpriteRenderer spriteRenderer;
+    [HideInInspector] public SpriteRenderer bodySpriteRenderer;
+    [HideInInspector] public SpriteRenderer handsSpriteRenderer;
     [HideInInspector] public CharacterOrientation characterOrientation;
     [HideInInspector] public PlayerDamageable playerDamageable;
     // public WeaponManager weaponManager;
@@ -69,7 +70,8 @@ public class PlayerStateMachine : StateMachine
 
         rigidBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        // spriteRenderer = GetComponent<SpriteRenderer>();
+        bodySpriteRenderer = transform.Find("Visual").GetComponent<SpriteRenderer>();
+        handsSpriteRenderer= transform.Find("Hands").GetComponent<SpriteRenderer>();
         characterOrientation = GetComponent<CharacterOrientation>();
         // weaponManager = GetComponentInChildren<WeaponManager>();
         playerDamageable = GetComponent<PlayerDamageable>();

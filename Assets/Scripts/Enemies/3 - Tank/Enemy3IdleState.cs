@@ -15,26 +15,29 @@ public class Enemy3IdleState : BaseState
     }
 
     public override void UpdateLogic() {
-        Vector3 holderPosition = enemyStateMachine.transform.position;
-        Vector3 playerPosition = enemyStateMachine.playerGameObject.transform.position;
-        
-        if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
+        if(!(enemyStateMachine.playerGameObject.GetComponent<PlayerStateMachine>().currentState == enemyStateMachine.playerGameObject.GetComponent<PlayerStateMachine>().deadState))
         {
-            if(enemyStateMachine.canAttack)
+            Vector3 holderPosition = enemyStateMachine.transform.position;
+            Vector3 playerPosition = enemyStateMachine.playerGameObject.transform.position;
+            
+            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
             {
-                stateMachine.ChangeState(enemyStateMachine.attackState);
+                if(enemyStateMachine.canAttack)
+                {
+                    stateMachine.ChangeState(enemyStateMachine.attackState);
+                }
+                enemyStateMachine.characterOrientation.ChangeOrientation(playerPosition);
             }
-            enemyStateMachine.characterOrientation.ChangeOrientation(playerPosition);
-        }
-        else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
-        {
-            stateMachine.ChangeState(enemyStateMachine.chaseState);
+            else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
+            {
+                stateMachine.ChangeState(enemyStateMachine.chaseState);
+            }
         }
     }
 
     public override void UpdatePhysics()
     {
-    
+        enemyStateMachine.rigidBody.velocity = Vector2.zero;
     }
 
     public override void Exit() 

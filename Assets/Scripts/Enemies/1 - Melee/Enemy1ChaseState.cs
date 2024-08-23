@@ -29,6 +29,11 @@ public class Enemy1ChaseState : BaseState
     }
 
     public override void UpdateLogic() {
+        if(enemyStateMachine.playerGameObject.GetComponent<PlayerStateMachine>().currentState == enemyStateMachine.playerGameObject.GetComponent<PlayerStateMachine>().deadState)
+        {
+            stateMachine.ChangeState(enemyStateMachine.idleState);
+        }
+
         holderPosition = enemyStateMachine.transform.position;
         playerPosition = enemyStateMachine.playerGameObject.transform.position;
         

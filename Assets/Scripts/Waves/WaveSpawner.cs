@@ -112,7 +112,7 @@ public class WaveSpawner : MonoBehaviour
 
     IEnumerator WaveClear()
     {
-        waveClearText.GetComponentInChildren<TMP_Text>().text = "WAVE CLEAR";
+        waveClearText.GetComponentInChildren<TMP_Text>().text = "WAVE \n CLEAR";
         waveClearText.SetActive(true);
         waveClearAnimator.SetBool("messageOn", true);
 

@@ -165,6 +165,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   isProjectile: 1
-  damageAmount: 3
+  damageAmount: 8
   animator: {fileID: 0}
-  fireForce: 7
+  fireForce: 2

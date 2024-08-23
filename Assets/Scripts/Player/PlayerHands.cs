@@ -32,35 +32,71 @@ public class PlayerHands : MonoBehaviour
     {
         usedColliders = new List<Collider2D>();
         isAttacking = true;
+        Debug.Log("ataque");
     }
 
-    void Update()
+    // void Update()
+    // {
+    //     if(isAttacking && GetComponent<Collider2D>().OverlapCollider(contactFilter2D, colliders) > 0)
+    //     {
+    //         foreach(Collider2D collider in colliders)
+    //         {
+    //             if(!usedColliders.Contains(collider))
+    //             {
+    //                 if(collider.GetComponent<EnemyDamageable>())
+    //                 {
+    //                     Debug.Log("chjegou aquimfj");
+    //                     DealDamage(collider);
+    //                     Destroy(gameObject);
+    //                 }
+    //                 else if(!collider.GetComponent<PlayerDamageable>())
+    //                 {
+    //                     Destroy(gameObject);
+    //                 }
+    //                 usedColliders.Add(collider);
+    //             }
+    //         }
+    //     }
+    // }
+
+    void OnTriggerEnter2D(Collider2D col)
     {
-        if(isAttacking && GetComponent<Collider2D>().OverlapCollider(contactFilter2D, colliders) > 0)
-        {
-            foreach(Collider2D collider in colliders)
-            {
-                if(!usedColliders.Contains(collider))
+        if(isAttacking && !usedColliders.Contains(col))
                 {
-                    if(collider.GetComponent<EnemyDamageable>())
+                    if(col.GetComponent<EnemyDamageable>())
                     {
-                        DealDamage(collider);
+                        DealDamage(col);
+                        if(weaponType == WeaponType.Bullet)
+                        {
+                            Destroy(gameObject);
+                        }
+                        
                     }
-                    usedColliders.Add(collider);
+                    else if(!col.GetComponent<PlayerDamageable>())
+                    {
+                        if(weaponType == WeaponType.Bullet)
+                        {
+                            Destroy(gameObject);
+                        }
+                    }
+                    usedColliders.Add(col);
                 }
-            }
-        }
     }
+
+    // void OnTriggerExit2D(Collider2D col)
+    // {
+    //                 if(weaponType == WeaponType.Bullet && col.GetComponent<PlayerDamageable>())
+    //                 {
+                        
+                        
+    //                 }
+    // }
 
     protected virtual void DealDamage(Collider2D collider)
     {
         if(weaponType ==  WeaponType.Bullet)
         {
             collider.GetComponent<EnemyDamageable>().Damage(damageAmount, transform.position - (Vector3)GetComponent<Rigidbody2D>().velocity * 1.5f);
-            if(collider.GetComponent<EnemyDamageable>().damageable)
-            {
-                Destroy(gameObject);
-            }
         }
         else
         {

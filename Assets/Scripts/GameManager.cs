@@ -12,11 +12,9 @@ public class GameManager : MonoBehaviour
     
     [Header("Game")]
     bool isInGame;
-    [SerializeField] InputAction startWave;
     [HideInInspector] public WaveSpawner waveSpawner;
-    bool gameStarted;
     public GameObject screenMessage;
-    public float messageDuration;
+    public int messageDuration;
 
     [Header("Player")]
     PlayerInput playerInput;
@@ -27,6 +25,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] InputAction openMenu;
     [SerializeField] GameObject mainMenuSelectedFirst;
     [SerializeField] GameObject optionsMenuSelectedFirst;
+    [SerializeField] GameObject howToPlayScreen;
+    [SerializeField] GameObject howToPlaySelectedFirst;
 
     [Header("Scenes")]
     List<AsyncOperation> scenesToLoad = new List<AsyncOperation>(); 
@@ -46,7 +46,6 @@ public class GameManager : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 
         isInGame = false;
-        gameStarted = false;
         optionsMenuIsOpen = false;
 
         GetComponents();
@@ -68,6 +67,8 @@ public class GameManager : MonoBehaviour
         else
         {
             mainMenuSelectedFirst = GameObject.Find("Canvas").transform.Find("PlayButton").gameObject;
+            howToPlayScreen = GameObject.Find("Canvas").transform.Find("HowToPlayScreen").gameObject;
+            howToPlaySelectedFirst = howToPlayScreen.transform.Find("Button").gameObject;
         }
         optionsMenu = GameObject.Find("Canvas").transform.Find("OptionsMenu").gameObject;
         optionsMenuSelectedFirst = optionsMenu.transform.GetChild(1).gameObject;
@@ -85,64 +86,16 @@ public class GameManager : MonoBehaviour
                 OnOptions();
             break;
 
+            case "howToPlay":
+                HowToPlay();
+            break;
+
             case "exit":
                 QuitGame();
             break;
 
             default:
             break;
-        }
-    }
-
-    IEnumerator LoadingScreen()
-    {
-        if(optionsMenuIsOpen)
-        {
-            OnOptions();
-        }
-        LoadingScene = true;
-
-        float totalProgress = 0;
-
-        for(int i = 0; i < scenesToLoad.Count; i++)
-        {
-            while(!scenesToLoad[i].isDone)
-            {
-                totalProgress += scenesToLoad[i].progress;
-                yield return null;
-            }
-        }
-
-        if(!isInGame)
-        {
-            isInGame = true;
-            GetComponents();
-            InitializeGame();
-        }
-        else
-        {
-            isInGame = false;
-            GetComponents();
-        }
-
-        yield return new WaitForSeconds(0.01f);
-
-        LoadingScene = false;
-    }
-
-    void InitializeGame()
-    {
-        startWave.Enable();
-        startWave.performed += context => StartGame();
-        screenMessage.SetActive(false);
-    }
-
-    void StartGame()
-    {
-        if(!gameStarted)
-        {
-            StartCoroutine(waveSpawner.SpawnWave());
-            gameStarted = true;
         }
     }
 
@@ -177,6 +130,77 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void HowToPlay()
+    {
+        if(!howToPlayScreen.activeSelf)
+        {
+            howToPlayScreen.SetActive(true);
+            EventSystem.current.SetSelectedGameObject(howToPlaySelectedFirst);
+        }
+        else
+        {
+            howToPlayScreen.SetActive(false);
+            EventSystem.current.SetSelectedGameObject(mainMenuSelectedFirst);
+        }
+    }
+
+    IEnumerator LoadingScreen()
+    {
+        if(optionsMenuIsOpen)
+        {
+            OnOptions();
+        }
+        LoadingScene = true;
+
+        float totalProgress = 0;
+
+        for(int i = 0; i < scenesToLoad.Count; i++)
+        {
+            while(!scenesToLoad[i].isDone)
+            {
+                totalProgress += scenesToLoad[i].progress;
+                yield return null;
+            }
+        }
+
+        if(!isInGame)
+        {
+            isInGame = true;
+            GetComponents();
+            StartCoroutine(InitializeGame());
+        }
+        else
+        {
+            isInGame = false;
+            GetComponents();
+        }
+
+        yield return new WaitForSeconds(0.01f);
+
+        LoadingScene = false;
+    }
+
+    IEnumerator InitializeGame()
+    {
+        playerInput.actions.FindActionMap("Player").Disable();
+        screenMessage.GetComponentInChildren<TMP_Text>().text = "GAME STARTING IN 3";
+        screenMessage.SetActive(true);
+        screenMessage.GetComponent<Animator>().SetBool("messageOn", true);
+        int i = 3; 
+        while(i > 0)
+        {
+            screenMessage.GetComponentInChildren<TMP_Text>().text = "GAME STARTING IN " + i;
+            yield return new WaitForSeconds(0.75f);
+            i--;
+        }
+        playerInput.actions.FindActionMap("Player").Enable();
+        screenMessage.GetComponent<Animator>().SetBool("messageOn", false);
+        yield return new WaitForSeconds(0.1f);
+        screenMessage.SetActive(false);
+        
+        StartCoroutine(waveSpawner.SpawnWave());
+    }
+
     public IEnumerator EndGame(bool win)
     {
         if(win)
@@ -194,7 +218,7 @@ public class GameManager : MonoBehaviour
 
         screenMessage.GetComponent<Animator>().SetBool("messageOn", false);
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.1f);
         screenMessage.SetActive(false);
 
         scenesToLoad.Add(SceneManager.LoadSceneAsync("Menu"));

@@ -18,31 +18,36 @@ public class Enemy4IdleState : BaseState
     }
 
     public override void UpdateLogic() {
-        holderPosition = enemyStateMachine.transform.position;
-        playerPosition = enemyStateMachine.playerGameObject.transform.position;
-        
-        if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDig)
+        if(!(enemyStateMachine.playerGameObject.GetComponent<PlayerStateMachine>().currentState == enemyStateMachine.playerGameObject.GetComponent<PlayerStateMachine>().deadState))
         {
-            if(enemyStateMachine.canDig)
+            holderPosition = enemyStateMachine.transform.position;
+            playerPosition = enemyStateMachine.playerGameObject.transform.position;
+            
+            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDig)
             {
-                stateMachine.ChangeState(enemyStateMachine.digState);
+                if(enemyStateMachine.canDig)
+                {
+                    stateMachine.ChangeState(enemyStateMachine.digState);
+                }
+                else
+                {
+                    stateMachine.ChangeState(enemyStateMachine.fleeState);
+                }
             }
-            else
+            else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
             {
-                stateMachine.ChangeState(enemyStateMachine.fleeState);
+                if(enemyStateMachine.canDig)
+                {
+                    stateMachine.ChangeState(enemyStateMachine.chaseState);
+                }   
             }
-        }
-        else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
-        {
-            if(enemyStateMachine.canDig)
-            {
-                stateMachine.ChangeState(enemyStateMachine.chaseState);
-            }   
         }
     }
 
     public override void UpdatePhysics()
     {
+        enemyStateMachine.rigidBody.velocity = Vector2.zero;
+        
         holderPosition = enemyStateMachine.transform.position;
         playerPosition = enemyStateMachine.playerGameObject.transform.position;
 

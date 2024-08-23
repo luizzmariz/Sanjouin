@@ -16,29 +16,32 @@ public class Enemy2IdleState : BaseState
     }
 
     public override void UpdateLogic() {
-        Vector3 holderPosition = enemyStateMachine.transform.position;
-        Vector3 playerPosition = enemyStateMachine.playerGameObject.transform.position;
-        
-        if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDanger && enemyStateMachine.canFlee)
+        if(!(enemyStateMachine.playerGameObject.GetComponent<PlayerStateMachine>().currentState == enemyStateMachine.playerGameObject.GetComponent<PlayerStateMachine>().deadState))
         {
-            stateMachine.ChangeState(enemyStateMachine.fleeState);
-        }
-        else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
-        {
-            if(enemyStateMachine.canAttack)
+            Vector3 holderPosition = enemyStateMachine.transform.position;
+            Vector3 playerPosition = enemyStateMachine.playerGameObject.transform.position;
+            
+            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDanger && enemyStateMachine.canFlee)
             {
-                stateMachine.ChangeState(enemyStateMachine.attackState);
+                stateMachine.ChangeState(enemyStateMachine.fleeState);
             }
-            enemyStateMachine.characterOrientation.ChangeOrientation(playerPosition);
-        }
-        else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
-        {
-            stateMachine.ChangeState(enemyStateMachine.chaseState);
+            else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
+            {
+                if(enemyStateMachine.canAttack)
+                {
+                    stateMachine.ChangeState(enemyStateMachine.attackState);
+                }
+                enemyStateMachine.characterOrientation.ChangeOrientation(playerPosition);
+            }
+            else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
+            {
+                stateMachine.ChangeState(enemyStateMachine.chaseState);
+            }
         }
     }
 
     public override void UpdatePhysics() {
-
+        enemyStateMachine.rigidBody.velocity = Vector2.zero;
     }
 
     public override void Exit() 
