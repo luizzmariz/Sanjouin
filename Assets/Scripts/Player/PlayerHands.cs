@@ -32,7 +32,6 @@ public class PlayerHands : MonoBehaviour
     {
         usedColliders = new List<Collider2D>();
         isAttacking = true;
-        Debug.Log("ataque");
     }
 
     // void Update()

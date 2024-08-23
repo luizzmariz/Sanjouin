@@ -68,7 +68,6 @@ public class Enemy2FleeState : BaseState
 
             Vector3 fleePoint = holderPosition + (holderPosition - playerPosition).normalized * enemyStateMachine.fleeDistance;
 
-            Debug.Log("enemy tryied to find a path to runaway");
             enemyStateMachine.pathRequestManager.RequestPath(holderPosition, fleePoint, OnPathFound); 
         }
         else if(followingPath)
@@ -80,7 +79,6 @@ public class Enemy2FleeState : BaseState
     public void OnPathFound(Vector3[] newPath, bool pathSuccessful) {
 		if(pathSuccessful && enemyStateMachine.currentState == this)
         {
-            Debug.Log("it succeeded");
             targetIndex = 0;
             hasAskedPath = false;
             followingPath = true;

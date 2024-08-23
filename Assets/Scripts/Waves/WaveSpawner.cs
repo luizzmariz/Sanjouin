@@ -6,6 +6,8 @@ using TMPro;
 
 public class WaveSpawner : MonoBehaviour
 {
+    [Header("Player")]
+    public PlayerDamageable playerDamageable;
 
     [Header("Waves")]
     public List<Wave> waves;
@@ -26,6 +28,10 @@ public class WaveSpawner : MonoBehaviour
     void Awake()
     {
         pathfinding = GameObject.Find("PathfindingManager").GetComponent<Pathfinding>();
+        if(playerDamageable == null)
+        {
+            playerDamageable = GameObject.Find("Player").GetComponent<PlayerDamageable>();
+        }
 
         for(int i = 0; i < transform.childCount; i++)
         {
@@ -115,6 +121,8 @@ public class WaveSpawner : MonoBehaviour
         waveClearText.GetComponentInChildren<TMP_Text>().text = "WAVE \n CLEAR";
         waveClearText.SetActive(true);
         waveClearAnimator.SetBool("messageOn", true);
+
+        playerDamageable.Heal(8);
 
         yield return new WaitForSeconds(messageDuration);
 

@@ -70,8 +70,16 @@ public class Pathfinding : MonoBehaviour {
 					break;
 				}
 				
+				if(GetNodeNeighbours(currentNode).Count < 1)
+				{
+					Debug.Log("passou aqui");
+					pathSuccess = false;
+					break;
+				}
+				
 				foreach(Node neighbour in GetNodeNeighbours(currentNode)) 
 				{
+					
 					if(!neighbour.walkable || closedSet.Contains(neighbour)) 
 					{
 						continue;

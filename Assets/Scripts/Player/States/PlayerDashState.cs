@@ -46,7 +46,6 @@ public class PlayerDashState : BaseState
 
     public IEnumerator Dash()
     {
-        Debug.Log("é um dash?");
         //Vector2 dashDirection = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
         Vector2 dashDirection = playerStateMachine.characterOrientation.lastOrientation;
         if(dashDirection == Vector2.zero)
