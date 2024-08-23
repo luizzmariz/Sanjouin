@@ -7,41 +7,52 @@ using TMPro;
 
 public class ButtonScript : MonoBehaviour
 {
-    public TMP_Text theText;
+    // public TMP_Text theText;
 
-    public Color onHover;
-    public Color onExit;
-    public Button button;
+    // public Color onHover;
+    // public Color defaultColor;
+    // public Button button;
+    // public bool changeText;
 
     //void OnGUI() { Debug.Log(GUI.skin.button.hover.textColor); } 
 
-    void Awake()
-    {
-        theText = transform.GetComponentInChildren<TMP_Text>();
-        button = GetComponent<Button>();
-    }
+    // void Awake()
+    // {
+    //     theText = transform.GetComponentInChildren<TMP_Text>();
+    //     button = GetComponent<Button>();
+    //     if(changeText)
+    //     {
+    //         button.targetGraphic = theText;
+    //     }
+        
+    //     //playerInput.actions["InteractWithAmbient"].GetBindingDisplayString(group: playerInput.currentControlScheme)
 
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        Debug.Log("C0221A");
-        // theText.text.textColor = onHover; //Or however you do your color
-        // Color = onHover;
-    }
+    //     //Debug.Log(theText.color);
+    // }
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        Debug.Log("204D25");
-        theText.color = onExit; //Or however you do your color
-    }
+    // public void OnPointerEnter(PointerEventData eventData)
+    // {
+    //     Debug.Log("C0221A");
+    //     // theText.text.textColor = onHover; //Or however you do your color
+    //     // Color = onHover;
+    // }
 
-    public void OnMouseOver() {
-        theText.color = onHover;
-    }
+    // public void OnPointerExit(PointerEventData eventData)
+    // {
+    //     Debug.Log("204D25");
+    //     theText.color = defaultColor; //Or however you do your color
+    // }
 
-    void OnMouseExit()
-    {
-        theText.color = onExit;
-    }
+    // public void OnMouseOver() {
+    //     Debug.Log("rggwer");
+    //     theText.color = onHover;
+    // }
+
+    // void OnMouseExit()
+    // {
+    //     Debug.Log("ggeisso");
+    //     theText.color = defaultColor;
+    // }
 
 
     public void ButtonFunction(string buttonName)

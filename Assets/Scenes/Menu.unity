@@ -800,7 +800,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &365350141
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1313,10 +1313,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e248a3ecf9478a14fa71a885481417fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theText: {fileID: 1825656276}
-  onHover: {r: 0.4339623, g: 0.063456744, b: 0.063456744, a: 1}
-  onExit: {r: 0.1254902, g: 0.3019608, b: 0.14509805, a: 1}
-  button: {fileID: 808928782}
 --- !u!114 &808928782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1338,10 +1334,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_NormalColor: {r: 0, g: 0.35686275, b: 0.039215688, a: 1}
+    m_HighlightedColor: {r: 1, g: 0, b: 0, a: 1}
+    m_PressedColor: {r: 1, g: 0, b: 0, a: 1}
+    m_SelectedColor: {r: 1, g: 0, b: 0, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -2041,7 +2037,7 @@ MonoBehaviour:
     m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 1408584566}
-    m_SelectOnDown: {fileID: 1712274564}
+    m_SelectOnDown: {fileID: 1845130564}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
@@ -2131,10 +2127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e248a3ecf9478a14fa71a885481417fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theText: {fileID: 0}
-  onHover: {r: 0, g: 0, b: 0, a: 0}
-  onExit: {r: 0, g: 0, b: 0, a: 0}
-  button: {fileID: 0}
 --- !u!1 &975301542
 GameObject:
   m_ObjectHideFlags: 0
@@ -2817,10 +2809,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e248a3ecf9478a14fa71a885481417fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theText: {fileID: 0}
-  onHover: {r: 0, g: 0, b: 0, a: 0}
-  onExit: {r: 0, g: 0, b: 0, a: 0}
-  button: {fileID: 0}
 --- !u!1 &1162935884
 GameObject:
   m_ObjectHideFlags: 0
@@ -3101,10 +3089,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e248a3ecf9478a14fa71a885481417fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theText: {fileID: 0}
-  onHover: {r: 0, g: 0, b: 0, a: 0}
-  onExit: {r: 0, g: 0, b: 0, a: 0}
-  button: {fileID: 0}
 --- !u!1 &1185235882
 GameObject:
   m_ObjectHideFlags: 0
@@ -3855,10 +3839,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e248a3ecf9478a14fa71a885481417fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theText: {fileID: 0}
-  onHover: {r: 0, g: 0, b: 0, a: 0}
-  onExit: {r: 0, g: 0, b: 0, a: 0}
-  button: {fileID: 0}
 --- !u!1 &1453645839
 GameObject:
   m_ObjectHideFlags: 0
@@ -4454,7 +4434,7 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 970527420}
+    m_SelectOnUp: {fileID: 1845130564}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
@@ -4545,10 +4525,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e248a3ecf9478a14fa71a885481417fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theText: {fileID: 0}
-  onHover: {r: 0, g: 0, b: 0, a: 0}
-  onExit: {r: 0, g: 0, b: 0, a: 0}
-  button: {fileID: 0}
 --- !u!1 &1767905022
 GameObject:
   m_ObjectHideFlags: 0
@@ -4883,8 +4859,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280634656
-  m_fontColor: {r: 0.1254902, g: 0.3019608, b: 0.14509805, a: 1}
+    rgba: 4288020360
+  m_fontColor: {r: 0.53333336, g: 1, b: 0.58431375, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5003,10 +4979,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e248a3ecf9478a14fa71a885481417fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theText: {fileID: 0}
-  onHover: {r: 0, g: 0, b: 0, a: 0}
-  onExit: {r: 0, g: 0, b: 0, a: 0}
-  button: {fileID: 0}
 --- !u!114 &1845130564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5022,7 +4994,7 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 1408584566}
+    m_SelectOnUp: {fileID: 970527420}
     m_SelectOnDown: {fileID: 1712274564}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
