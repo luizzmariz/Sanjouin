@@ -44,6 +44,7 @@ public class Enemy3RunState : BaseState
     {
         enemyStateMachine.enemyDamageable.damageable = false;
         isRunning = true;
+        enemyStateMachine.runCollider.enabled = true;
     }
 
     public override void UpdateLogic() 
@@ -125,6 +126,7 @@ public class Enemy3RunState : BaseState
 
     public override void Exit() 
     {
+        enemyStateMachine.runCollider.enabled = false;
         enemyStateMachine.rigidBody.velocity = Vector3.zero;
         enemyStateMachine.enemyDamageable.damageable = true;
         enemyStateMachine.canRun = false;

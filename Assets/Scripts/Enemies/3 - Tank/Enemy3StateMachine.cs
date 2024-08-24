@@ -36,6 +36,7 @@ public class Enemy3StateMachine : BaseEnemyStateMachine
         damageState = new Enemy3DamageState(this);
         deadState = new Enemy3DeadState(this);
 
+        runCollider.enabled = false;
         canRun = true;
     }
 

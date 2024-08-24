@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -51,9 +53,12 @@ public class GameManager : MonoBehaviour
         GetComponents();
 
         openMenu.Enable();
-        openMenu.performed += context => OnOptions();
+        openMenu.performed += context => OnOptions(context);
 
-        EventSystem.current.SetSelectedGameObject(mainMenuSelectedFirst);
+        if(Input.GetJoystickNames().Count() > 0 && Input.GetJoystickNames()[0] != "")
+        {
+            EventSystem.current.SetSelectedGameObject(mainMenuSelectedFirst);
+        }
     }
 
     void GetComponents()
@@ -68,6 +73,7 @@ public class GameManager : MonoBehaviour
         {
             mainMenuSelectedFirst = GameObject.Find("Canvas").transform.Find("PlayButton").gameObject;
             howToPlayScreen = GameObject.Find("Canvas").transform.Find("HowToPlayScreen").gameObject;
+
             howToPlaySelectedFirst = howToPlayScreen.transform.Find("Button").gameObject;
         }
         optionsMenu = GameObject.Find("Canvas").transform.Find("OptionsMenu").gameObject;
@@ -99,7 +105,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void OnOptions()
+    public void OnOptions(InputAction.CallbackContext callbackContext)
     {
         if(!LoadingScene)
         {
@@ -107,7 +113,10 @@ public class GameManager : MonoBehaviour
             {
                 optionsMenuIsOpen = true;
                 optionsMenu.SetActive(optionsMenuIsOpen);
-                EventSystem.current.SetSelectedGameObject(optionsMenuSelectedFirst);
+                if(callbackContext.control.device.description.deviceClass != "Keyboard")
+                {
+                    EventSystem.current.SetSelectedGameObject(optionsMenuSelectedFirst);
+                }
                 Time.timeScale = 0;
 
                 if(isInGame)
@@ -119,7 +128,47 @@ public class GameManager : MonoBehaviour
             {
                 optionsMenuIsOpen = false;
                 optionsMenu.SetActive(optionsMenuIsOpen);
-                EventSystem.current.SetSelectedGameObject(mainMenuSelectedFirst);
+                if(callbackContext.control.device.description.deviceClass != "Keyboard")
+                {
+                    EventSystem.current.SetSelectedGameObject(mainMenuSelectedFirst);
+                }
+                Time.timeScale = 1;
+
+                if(isInGame)
+                {
+                    playerInput.actions.FindActionMap("Player").Enable();
+                }
+            }
+        }
+    }
+
+    public void OnOptions()
+    {
+        if(!LoadingScene)
+        {
+            if(!optionsMenuIsOpen)
+            {
+                optionsMenuIsOpen = true;
+                optionsMenu.SetActive(optionsMenuIsOpen);
+                if(Input.GetJoystickNames().Count() > 0 && Input.GetJoystickNames()[0] != "")
+                {
+                    EventSystem.current.SetSelectedGameObject(optionsMenuSelectedFirst);
+                }
+                Time.timeScale = 0;
+
+                if(isInGame)
+                {
+                    playerInput.actions.FindActionMap("Player").Disable();
+                }
+            }
+            else
+            {
+                optionsMenuIsOpen = false;
+                optionsMenu.SetActive(optionsMenuIsOpen);
+                if(Input.GetJoystickNames().Count() > 0 && Input.GetJoystickNames()[0] != "")
+                {
+                    EventSystem.current.SetSelectedGameObject(mainMenuSelectedFirst);
+                }
                 Time.timeScale = 1;
 
                 if(isInGame)
@@ -135,12 +184,18 @@ public class GameManager : MonoBehaviour
         if(!howToPlayScreen.activeSelf)
         {
             howToPlayScreen.SetActive(true);
-            EventSystem.current.SetSelectedGameObject(howToPlaySelectedFirst);
+            if(Input.GetJoystickNames().Count() > 0 && Input.GetJoystickNames()[0] != "")
+            {
+                EventSystem.current.SetSelectedGameObject(howToPlaySelectedFirst);
+            }
         }
         else
         {
             howToPlayScreen.SetActive(false);
-            EventSystem.current.SetSelectedGameObject(mainMenuSelectedFirst);
+            if(Input.GetJoystickNames().Count() > 0 && Input.GetJoystickNames()[0] != "")
+            {
+                EventSystem.current.SetSelectedGameObject(mainMenuSelectedFirst);
+            }
         }
     }
 

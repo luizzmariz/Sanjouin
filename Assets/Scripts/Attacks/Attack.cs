@@ -7,13 +7,13 @@ public class Attack : MonoBehaviour
     public LayerMask layerMask;
     public bool isProjectile;
     public int damageAmount;
-    bool isAttacking;
+    [SerializeField] protected bool isAttacking;
     public Animator animator;
     public float fireForce;
 
-    List<Collider2D> colliders;
-    List<Collider2D> usedColliders;
-    ContactFilter2D contactFilter2D;
+    protected List<Collider2D> colliders;
+    protected List<Collider2D> usedColliders;
+    protected ContactFilter2D contactFilter2D;
 
     public void Awake()
     {
@@ -38,40 +38,17 @@ public class Attack : MonoBehaviour
 
     protected virtual void Update()
     {
-        if(isAttacking && GetComponent<Collider2D>().OverlapCollider(contactFilter2D, colliders) > 0)
-        {
-            foreach(Collider2D collider in colliders)
-            {
-                if(!usedColliders.Contains(collider))
-                {
-                    if(collider.GetComponent<PlayerDamageable>())
-                    {
-                        DealDamage(collider);
-                    }
-                    usedColliders.Add(collider);
-                }
-            }
-        }
+        
     }
 
     protected virtual void DealDamage(Collider2D collider)
     {
-        if(isProjectile)
-        {
-            collider.GetComponent<PlayerDamageable>().Damage(damageAmount, transform.position - (Vector3)GetComponent<Rigidbody2D>().velocity * 1.5f);
-            if(collider.GetComponent<PlayerDamageable>().damageable)
-            {
-                Destroy(gameObject);
-            }
-        }
-        else
-        {
-            collider.GetComponent<PlayerDamageable>().Damage(damageAmount, transform.position);
-        }
+
     }
 
     public virtual void StopAttack()
     {
         isAttacking = false;
+        gameObject.SetActive(false);
     }
 }

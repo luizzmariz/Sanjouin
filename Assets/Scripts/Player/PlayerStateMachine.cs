@@ -21,16 +21,13 @@ public class PlayerStateMachine : StateMachine
     //GameObject information
     [HideInInspector] public PlayerInput playerInput;
     [HideInInspector] public Rigidbody2D rigidBody;
-    [HideInInspector] public Animator animator;
     [HideInInspector] public SpriteRenderer bodySpriteRenderer;
     [HideInInspector] public SpriteRenderer handsSpriteRenderer;
     [HideInInspector] public CharacterOrientation characterOrientation;
     [HideInInspector] public PlayerDamageable playerDamageable;
+    [HideInInspector] public PlayerHands playerHands;
     // public WeaponManager weaponManager;
     // public TrailRenderer trailRenderer;
-
-    public GameObject melee;
-    public GameObject Bullet;
 
     [Header("Bool variables")]
     public bool canMove;
@@ -55,9 +52,8 @@ public class PlayerStateMachine : StateMachine
 
     [Header("Attack")]
     public bool isAttacking;
-    public int attackType;
-    public float fireForce;
-    public float attackDuration;
+    // public int attackType;
+    // public float attackDuration;
     public float attack1CooldownTimer;
     public float attack2CooldownTimer;
 
@@ -69,14 +65,13 @@ public class PlayerStateMachine : StateMachine
         // playerInput.actions.FindActionMap("UI").Enable();
 
         rigidBody = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
         bodySpriteRenderer = transform.Find("Visual").GetComponent<SpriteRenderer>();
         handsSpriteRenderer= transform.Find("Hands").GetComponent<SpriteRenderer>();
         characterOrientation = GetComponent<CharacterOrientation>();
         // weaponManager = GetComponentInChildren<WeaponManager>();
         playerDamageable = GetComponent<PlayerDamageable>();
+        playerHands = transform.Find("Hands").GetComponent<PlayerHands>();
         // trailRenderer = GetComponentInChildren<TrailRenderer>();
-        melee = transform.Find("Hands").Find("Melee").gameObject;
 
         idleState = new PlayerIdleState(this);
         moveState = new PlayerMoveState(this);
@@ -130,7 +125,7 @@ public class PlayerStateMachine : StateMachine
         {
             if(canAttack)
             {
-                attackType = 1;
+                // attackType = 1;
                 ChangeState(attackState);
             }
         }
@@ -142,7 +137,7 @@ public class PlayerStateMachine : StateMachine
         {
             if(canAttack)
             {
-                attackType = 2;
+                // attackType = 2;
                 ChangeState(fireState);
             }
         }

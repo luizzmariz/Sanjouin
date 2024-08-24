@@ -220,7 +220,7 @@ GameObject:
   - component: {fileID: 2616094823455837133}
   - component: {fileID: 3912177852750518884}
   - component: {fileID: 6782652324195137264}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Enemy2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -328,11 +328,13 @@ MonoBehaviour:
   characterOrientation: {fileID: 0}
   waveSpawner: {fileID: 0}
   enemyHands: {fileID: 0}
+  bodySpriteRenderer: {fileID: 0}
+  handsSpriteRenderer: {fileID: 0}
   spawnedInWave: 0
   canMove: 0
   canAttack: 0
   isAttacking: 0
-  rangeOfView: 5
+  rangeOfView: 15
   rangeOfAttack: 3.5
   movementSpeed: 0.7
   knockbackDuration: 0.1
@@ -344,9 +346,6 @@ MonoBehaviour:
   rangeOfDanger: 2
   fleeCooldownTimer: 4
   fleeDistance: 4
-  fireForce: 7
-  attackProjectile: {fileID: 7152070069280098873, guid: f0984da62ce39064387b584319275d6b, type: 3}
-  attackDuration: 0.5
 --- !u!114 &6782652324195137264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -483,7 +482,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attacksParentGameObject: {fileID: 0}
   handsAnimator: {fileID: 0}
-  damageAmount: 10
   attacks:
   - {fileID: 7152070069280098873, guid: f0984da62ce39064387b584319275d6b, type: 3}
   actualAttack: {fileID: 0}

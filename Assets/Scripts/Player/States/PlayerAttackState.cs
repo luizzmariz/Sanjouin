@@ -6,29 +6,19 @@ public class PlayerAttackState : BaseState
 {
     PlayerStateMachine playerStateMachine;
 
-
+    bool hasAttacked;
 
     public PlayerAttackState(PlayerStateMachine stateMachine) : base("Attack", stateMachine) {
         playerStateMachine = stateMachine;
     }
 
     public override void Enter() {
-        // playerStateMachine.rigidBody.velocity = Vector3.zero;
+        playerStateMachine.rigidBody.velocity = Vector3.zero;
+
         playerStateMachine.canMove = false;
         playerStateMachine.canAttack = false;
         playerStateMachine.isAttacking = true;
-        // if(playerStateMachine.attackType == 1)
-        // {
-        //     playerStateMachine.attack1CooldownTimer = playerStateMachine.attackDuration;
-
-        // }
-        // else if(playerStateMachine.attackType == 2)
-        // {
-        //     playerStateMachine.attack2CooldownTimer = playerStateMachine.attackDuration;
-
-        // }
-        // SetAttack();
-        playerStateMachine.StartCoroutine(SetAttack());
+        hasAttacked = false;
     }
 
     public override void UpdateLogic() {
@@ -49,45 +39,38 @@ public class PlayerAttackState : BaseState
     }
 
     public override void UpdatePhysics() {
-
-    }
-
-    public IEnumerator SetAttack()
-    {
-        playerStateMachine.rigidBody.velocity = Vector2.zero;
-        //playerStateMachine.rigidBody.velocity = playerStateMachine.rigidBody.velocity/2;
-        Vector3 targetPoint = playerStateMachine.transform.position;
-
-        if(playerStateMachine.playerInput.currentControlScheme == "Keyboard&Mouse")
+        if(!hasAttacked)
         {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            
-            targetPoint = new Vector3(mousePos.x, mousePos.y, targetPoint.z);
-            playerStateMachine.characterOrientation.ChangeOrientation(targetPoint);
-        }
-        else if(playerStateMachine.playerInput.currentControlScheme == "Gamepad")
-        {
-            Vector2 lookDirection = playerStateMachine.characterOrientation.lastOrientation;
-            if(playerStateMachine.isAiming)
+            Vector3 targetPoint = playerStateMachine.transform.position;
+
+            if(playerStateMachine.playerInput.currentControlScheme == "Keyboard&Mouse")
             {
-                lookDirection = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
+                Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                
+                targetPoint = new Vector3(mousePos.x, mousePos.y, targetPoint.z);
+                playerStateMachine.characterOrientation.ChangeOrientation(targetPoint);
+            }
+            else if(playerStateMachine.playerInput.currentControlScheme == "Gamepad")
+            {
+                Vector2 lookDirection = playerStateMachine.characterOrientation.lastOrientation;
+                if(playerStateMachine.isAiming)
+                {
+                    lookDirection = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
+                }
+
+                targetPoint = new Vector3(targetPoint.x + lookDirection.x * 10, targetPoint.y + lookDirection.y * 10, targetPoint.z);
+                playerStateMachine.characterOrientation.ChangeOrientation(targetPoint);
             }
 
-            targetPoint = new Vector3(targetPoint.x + lookDirection.x * 10, targetPoint.y + lookDirection.y * 10, targetPoint.z);
-            playerStateMachine.characterOrientation.ChangeOrientation(targetPoint);
+            Vector3 attackDirection = targetPoint - playerStateMachine.transform.position;
+
+            playerStateMachine.playerHands.Attack(attackDirection, 0);
+            hasAttacked = true;
         }
+    }
 
-        playerStateMachine.animator.SetTrigger("playerAttack");
-
-        playerStateMachine.melee.SetActive(true);
-        playerStateMachine.melee.GetComponent<PlayerHands>().ExecuteAttack();
-
-        yield return new WaitForSeconds(playerStateMachine.attackDuration);
-
-        playerStateMachine.melee.GetComponent<PlayerHands>().StopAttack();
-        playerStateMachine.melee.SetActive(false);
-
-        playerStateMachine.rigidBody.velocity = Vector2.zero;
-        playerStateMachine.isAttacking = false;
+    public override void Exit() 
+    {
+        hasAttacked = false;
     }
 }

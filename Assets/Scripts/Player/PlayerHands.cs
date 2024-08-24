@@ -4,108 +4,77 @@ using UnityEngine;
 
 public class PlayerHands : MonoBehaviour
 {
+    [SerializeField] public Transform attacksParentGameObject;
+    [SerializeField] public Animator handsAnimator;
 
-    public enum WeaponType{Melee,Bullet}
-    public WeaponType weaponType;
-    public LayerMask layerMask;
-    [SerializeField] private int damageAmount;
+    PlayerStateMachine playerStateMachine;
 
-    public bool isAttacking;
-    List<Collider2D> colliders;
-    List<Collider2D> usedColliders;
-    ContactFilter2D contactFilter2D;
+    [SerializeField] List<GameObject> attacks;
+    public Attack actualAttack;
 
     void Awake()
     {
-        colliders = new List<Collider2D>();
-        usedColliders = new List<Collider2D>();
-        contactFilter2D = new ContactFilter2D
+        playerStateMachine = GetComponentInParent<PlayerStateMachine>(); 
+        attacksParentGameObject = GameObject.Find("Attacks").transform;
+        handsAnimator = GetComponent<Animator>(); 
+    }
+
+    public void Attack(Vector3 attackDirection)
+    {
+        if(attacks.Count <= 0)
         {
-            layerMask = this.layerMask,
-            useLayerMask = true
-        };
-
-        isAttacking = false;
-    }
-
-    public virtual void ExecuteAttack()
-    {
-        usedColliders = new List<Collider2D>();
-        isAttacking = true;
-    }
-
-    // void Update()
-    // {
-    //     if(isAttacking && GetComponent<Collider2D>().OverlapCollider(contactFilter2D, colliders) > 0)
-    //     {
-    //         foreach(Collider2D collider in colliders)
-    //         {
-    //             if(!usedColliders.Contains(collider))
-    //             {
-    //                 if(collider.GetComponent<EnemyDamageable>())
-    //                 {
-    //                     Debug.Log("chjegou aquimfj");
-    //                     DealDamage(collider);
-    //                     Destroy(gameObject);
-    //                 }
-    //                 else if(!collider.GetComponent<PlayerDamageable>())
-    //                 {
-    //                     Destroy(gameObject);
-    //                 }
-    //                 usedColliders.Add(collider);
-    //             }
-    //         }
-    //     }
-    // }
-
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        if(isAttacking && !usedColliders.Contains(col))
-                {
-                    if(col.GetComponent<EnemyDamageable>())
-                    {
-                        DealDamage(col);
-                        if(weaponType == WeaponType.Bullet)
-                        {
-                            Destroy(gameObject);
-                        }
-                        
-                    }
-                    else if(!col.GetComponent<PlayerDamageable>())
-                    {
-                        if(weaponType == WeaponType.Bullet)
-                        {
-                            Destroy(gameObject);
-                        }
-                    }
-                    usedColliders.Add(col);
-                }
-    }
-
-    // void OnTriggerExit2D(Collider2D col)
-    // {
-    //                 if(weaponType == WeaponType.Bullet && col.GetComponent<PlayerDamageable>())
-    //                 {
-                        
-                        
-    //                 }
-    // }
-
-    protected virtual void DealDamage(Collider2D collider)
-    {
-        if(weaponType ==  WeaponType.Bullet)
+            Debug.Log("There isn't any attacks settled");
+        }
+        else if(attacks[0].GetComponent<Attack>().isProjectile)
         {
-            collider.GetComponent<EnemyDamageable>().Damage(damageAmount, transform.position - (Vector3)GetComponent<Rigidbody2D>().velocity * 1.5f);
+            GameObject projectile = Instantiate(attacks[0], transform.position, Quaternion.identity, attacksParentGameObject);
+            
+            actualAttack = projectile.GetComponent<Attack>();
+            projectile.GetComponent<Rigidbody2D>().AddForce(attackDirection * actualAttack.fireForce, ForceMode2D.Impulse);
+            Destroy(projectile, 2f);
         }
         else
         {
-            collider.GetComponent<EnemyDamageable>().Damage(damageAmount, transform.position);
+            attacks[0].SetActive(true);
+            actualAttack = attacks[0].GetComponent<Attack>();
         }
+        
+        handsAnimator.SetTrigger("playerAttack");
+        actualAttack.ExecuteAttack();
     }
 
-    public virtual void StopAttack()
+    public void Attack(Vector3 attackDirection, int attackIndex)
     {
-        isAttacking = false;
+        if(attacks.Count <= 0)
+        {
+            Debug.Log("There isn't any attacks settled");
+        }
+        else if(attacks[attackIndex].GetComponent<Attack>().isProjectile)
+        {
+            GameObject projectile = Instantiate(attacks[attackIndex], transform.position, Quaternion.identity, attacksParentGameObject);
+            
+            actualAttack = projectile.GetComponent<Attack>();
+            projectile.GetComponent<Rigidbody2D>().AddForce(attackDirection * actualAttack.fireForce, ForceMode2D.Impulse);
+            Destroy(projectile, 2f);
+        }
+        else
+        {
+            attacks[attackIndex].SetActive(true);
+            actualAttack = attacks[attackIndex].GetComponent<Attack>();
+        }
+        
+        handsAnimator.SetTrigger("playerAttack");
+        actualAttack.ExecuteAttack();
+    }
+
+    public void AttackEnd()
+    {
+        if(!actualAttack.isProjectile)
+        {
+            actualAttack.StopAttack();
+        }
+    
+        playerStateMachine.isAttacking = false;
     }
 }
 

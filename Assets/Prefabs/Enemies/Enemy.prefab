@@ -121,11 +121,13 @@ MonoBehaviour:
   characterOrientation: {fileID: 0}
   waveSpawner: {fileID: 0}
   enemyHands: {fileID: 0}
+  bodySpriteRenderer: {fileID: 0}
+  handsSpriteRenderer: {fileID: 0}
   spawnedInWave: 0
   canMove: 0
   canAttack: 0
   isAttacking: 0
-  rangeOfView: 3
+  rangeOfView: 15
   rangeOfAttack: 1
   movementSpeed: 1.1
   knockbackDuration: 0.1
@@ -352,7 +354,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attacksParentGameObject: {fileID: 0}
   handsAnimator: {fileID: 4714743065391158610}
-  damageAmount: 7
   attacks:
   - {fileID: 6050005025802915388}
   actualAttack: {fileID: 0}
@@ -492,14 +493,14 @@ GameObject:
   - component: {fileID: 818702179285093473}
   - component: {fileID: 5158711244759478700}
   - component: {fileID: 8603056233817205934}
-  - component: {fileID: 9106980701594084458}
+  - component: {fileID: 2889000399196166567}
   m_Layer: 0
   m_Name: MeleeAttack1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3054419499447055657
 Transform:
   m_ObjectHideFlags: 0
@@ -623,7 +624,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.61}
   m_Size: {x: 1.2, y: 1}
   m_Direction: 1
---- !u!114 &9106980701594084458
+--- !u!114 &2889000399196166567
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -632,7 +633,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6050005025802915388}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ad813aabc96fe340917116cff94c927, type: 3}
+  m_Script: {fileID: 11500000, guid: b1636cdd9a77654448044dab4de3caea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   layerMask:
@@ -640,5 +641,6 @@ MonoBehaviour:
     m_Bits: 512
   isProjectile: 0
   damageAmount: 8
+  isAttacking: 0
   animator: {fileID: 0}
   fireForce: 0

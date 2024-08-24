@@ -8,7 +8,6 @@ public class EnemyHands : MonoBehaviour
     [SerializeField] public Animator handsAnimator;
 
     BaseEnemyStateMachine enemyStateMachine;
-    [SerializeField] private int damageAmount;
 
     [SerializeField] List<GameObject> attacks;
     public Attack actualAttack;
