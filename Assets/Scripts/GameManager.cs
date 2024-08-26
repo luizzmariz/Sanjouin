@@ -201,6 +201,8 @@ public class GameManager : MonoBehaviour
 
     IEnumerator LoadingScreen()
     {
+        openMenu.Disable();
+
         if(optionsMenuIsOpen)
         {
             OnOptions();
@@ -228,9 +230,11 @@ public class GameManager : MonoBehaviour
         {
             isInGame = false;
             GetComponents();
+            openMenu.Enable();
         }
 
         yield return new WaitForSeconds(0.01f);
+
 
         LoadingScene = false;
     }
@@ -249,6 +253,7 @@ public class GameManager : MonoBehaviour
             i--;
         }
         playerInput.actions.FindActionMap("Player").Enable();
+        openMenu.Enable();
         screenMessage.GetComponent<Animator>().SetBool("messageOn", false);
         yield return new WaitForSeconds(0.1f);
         screenMessage.SetActive(false);

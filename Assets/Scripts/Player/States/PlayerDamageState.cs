@@ -6,13 +6,35 @@ public class PlayerDamageState : BaseState
 {
     PlayerStateMachine playerStateMachine;
 
+    bool couldMove;
+    bool couldAttack;
+    bool couldFire;
+    bool couldDash;
+
     public PlayerDamageState(PlayerStateMachine stateMachine) : base("Damage", stateMachine) {
         playerStateMachine = stateMachine;
     }
 
     public override void Enter() {
+        if(playerStateMachine.canMove)
+        {
+            couldMove = true;
+        }
         playerStateMachine.canMove = false;
+        if(playerStateMachine.canAttack)
+        {
+            couldAttack = true;
+        }
         playerStateMachine.canAttack = false;
+        if(playerStateMachine.canFire)
+        {
+            couldFire = true;
+        }
+        playerStateMachine.canFire = false;
+        if(playerStateMachine.canDash)
+        {
+            couldDash = true;
+        }
         playerStateMachine.canDash = false;
         playerStateMachine.beingPushed = true;
         playerStateMachine.playerDamageable.damageable = false;
@@ -50,5 +72,21 @@ public class PlayerDamageState : BaseState
     public override void Exit()
     {
         playerStateMachine.playerDamageable.damageable = true;
+        if(couldMove)
+        {
+            playerStateMachine.canMove = true;
+        }
+        if(couldAttack)
+        {
+            playerStateMachine.canAttack = true;
+        }
+        if(couldFire)
+        {
+            playerStateMachine.canFire = true;
+        }
+        if(couldDash)
+        {
+            playerStateMachine.canDash = true;
+        }
     }
 }

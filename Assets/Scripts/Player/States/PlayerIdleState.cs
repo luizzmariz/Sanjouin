@@ -11,10 +11,7 @@ public class PlayerIdleState : BaseState
     }
 
     public override void Enter() {
-        playerStateMachine.canMove = true;
-        playerStateMachine.canAttack = true;
-        playerStateMachine.canDash = true;
-        playerStateMachine.playerDamageable.damageable = true;
+        // Debug.Log(playerStateMachine.canAttack);
     }
 
     public override void UpdateLogic() {

@@ -6,6 +6,10 @@ public class PlayerDashState : BaseState
 {
     PlayerStateMachine playerStateMachine;
 
+    bool couldMove;
+    bool couldAttack;
+    bool couldFire;
+
     public PlayerDashState(PlayerStateMachine stateMachine) : base("Dash", stateMachine) {
         playerStateMachine = stateMachine;
     }
@@ -13,8 +17,21 @@ public class PlayerDashState : BaseState
     public override void Enter() {
         // playerStateMachine.rigidBody.velocity = Vector3.zero;
 
+        if(playerStateMachine.canMove)
+        {
+            couldMove = true;
+        }
         playerStateMachine.canMove = false;
+        if(playerStateMachine.canAttack)
+        {
+            couldAttack = true;
+        }
         playerStateMachine.canAttack = false;
+        if(playerStateMachine.canFire)
+        {
+            couldFire = true;
+        }
+        playerStateMachine.canFire = false;
         playerStateMachine.canDash = false;
         playerStateMachine.isDashing = true;
         playerStateMachine.playerDamageable.damageable = false;
@@ -67,5 +84,22 @@ public class PlayerDashState : BaseState
         // yield return new WaitForSeconds(playerStateMachine.dashCooldownTimer);
 
         // playerStateMachine.canDash = true;
+    }
+
+    public override void Exit()
+    {
+        playerStateMachine.playerDamageable.damageable = true;
+        if(couldMove)
+        {
+            playerStateMachine.canMove = true;
+        }
+        if(couldAttack)
+        {
+            playerStateMachine.canAttack = true;
+        }
+        if(couldFire)
+        {
+            playerStateMachine.canFire = true;
+        }
     }
 }

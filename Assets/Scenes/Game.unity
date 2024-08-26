@@ -177,6 +177,24 @@ MonoBehaviour:
   waveSpawnEnded: 0
   enemiesAlive: 0
   pathfinding: {fileID: 0}
+  spawnEnemy:
+    m_Name: Spawn Enemy
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 5ff883d1-3b48-4417-b5dd-2930d39d1c8b
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: a062d3ae-1843-4e42-ad6e-944ed7276c74
+      m_Path: <Keyboard>/t
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Spawn Enemy
+      m_Flags: 0
+    m_Flags: 0
+  enemyToSpawn: {fileID: 8831874857161815164, guid: e700772b6fc8707478b1c6349aacd070, type: 3}
   waveClearText: {fileID: 1599379718}
   waveClearAnimator: {fileID: 1599379722}
   messageDuration: 1.5
@@ -58905,6 +58923,7 @@ MonoBehaviour:
   canMove: 0
   canDash: 0
   canAttack: 0
+  canFire: 0
   isAiming: 0
   runningMultiplier: 0
   movementSpeed: 2
@@ -58916,8 +58935,8 @@ MonoBehaviour:
   knockbackVector: {x: 0, y: 0, z: 0}
   beingPushed: 0
   isAttacking: 0
-  attack1CooldownTimer: 0.5
-  attack2CooldownTimer: 0.5
+  attack1CooldownTimer: 8
+  attack2CooldownTimer: 8
   invencibilityTime: 0
 --- !u!114 &1440306671
 MonoBehaviour:

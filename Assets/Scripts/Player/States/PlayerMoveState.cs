@@ -10,8 +10,7 @@ public class PlayerMoveState : BaseState
     }
 
     public override void Enter() {
-        playerStateMachine.canAttack = true;
-        playerStateMachine.canDash = true;
+        
     }
 
     public override void UpdateLogic() {

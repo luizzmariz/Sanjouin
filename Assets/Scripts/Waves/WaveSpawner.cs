@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
 
 
 public class WaveSpawner : MonoBehaviour
@@ -19,6 +20,8 @@ public class WaveSpawner : MonoBehaviour
 
     [Header("Spawn")]
     public Pathfinding pathfinding;
+    [SerializeField] InputAction spawnEnemy;
+    public GameObject enemyToSpawn;
 
     [Header("Canvas")]
     public GameObject waveClearText;
@@ -37,6 +40,19 @@ public class WaveSpawner : MonoBehaviour
         {
             waves.Add(transform.GetChild(i).GetComponent<Wave>());
         }
+        
+        spawnEnemy.Enable();
+        spawnEnemy.performed += context => SpawnEnemy();
+    }
+
+    void SpawnEnemy()
+    {
+        Wave currentWave = waves[currentWaveIndex];
+
+        Instantiate(enemyToSpawn, 
+                    GetSpawnPosition(currentWave.spawnPosition, currentWave.spawnRange), 
+                    Quaternion.identity, 
+                    currentWave.transform);
     }
 
     public IEnumerator SpawnWave()

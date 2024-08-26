@@ -168,4 +168,4 @@ MonoBehaviour:
   damageAmount: 8
   isAttacking: 0
   animator: {fileID: 0}
-  fireForce: 5
+  fireForce: 4

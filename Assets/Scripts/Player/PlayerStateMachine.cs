@@ -33,6 +33,7 @@ public class PlayerStateMachine : StateMachine
     public bool canMove;
     public bool canDash;
     public bool canAttack;
+    public bool canFire;
     public bool isAiming;
 
     [Header("Movement")]
@@ -80,6 +81,12 @@ public class PlayerStateMachine : StateMachine
         dashState = new PlayerDashState(this);
         damageState = new PlayerDamageState(this);
         deadState = new PlayerDeadState(this);
+
+        canAttack = true;
+        canFire = true;
+        canMove = true;
+        canDash = true;
+        playerDamageable.damageable = true;
     }
 
     protected override BaseState GetInitialState() {
@@ -100,13 +107,13 @@ public class PlayerStateMachine : StateMachine
         }
     }
 
-    // private void OnGUI()
-    // {
-    //     GUILayout.BeginArea(new Rect(450, 125, 200f, 150f));
-    //     string content = currentState != null ? currentState.name : "(no current state)";
-    //     GUILayout.Label($"<color='black'><size=40>{content}</size></color>");
-    //     GUILayout.EndArea();
-    // }
+    private void OnGUI()
+    {
+        GUILayout.BeginArea(new Rect(450, 125, 200f, 150f));
+        string content = currentState != null ? currentState.name : "(no current state)";
+        GUILayout.Label($"<color='black'><size=40>{content}</size></color>");
+        GUILayout.EndArea();
+    }
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -135,7 +142,7 @@ public class PlayerStateMachine : StateMachine
     {
         if(context.performed)
         {
-            if(canAttack)
+            if(canFire)
             {
                 // attackType = 2;
                 ChangeState(fireState);
@@ -164,13 +171,15 @@ public class PlayerStateMachine : StateMachine
             break;
 
             case "attack":
+            // Debug.Log("huh");
             yield return attack1CooldownTimer;
             canAttack = true;
             break;
 
             case "fire":
+            // Debug.Log("wut");
             yield return attack2CooldownTimer;
-            canAttack = true;
+            canFire = true;
             break;
 
             default:
@@ -180,16 +189,16 @@ public class PlayerStateMachine : StateMachine
     }
 
     //we need to change this after we got some basic character animations - this functions need to be called by the character animations and not by the attack animation
-    public void CastAttackEnded()
-    {
-        canAttack = true;
-        isAttacking = false;
-    }
+    // public void CastAttackEnded()
+    // {
+    //     canAttack = true;
+    //     isAttacking = false;
+    // }
 
-    public void DashEnded()
-    {
-        isDashing = false;
-    }
+    // public void DashEnded()
+    // {
+    //     isDashing = false;
+    // }
 
     // void OnDisable()
     // {
