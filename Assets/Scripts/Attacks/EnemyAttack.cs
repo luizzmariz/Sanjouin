@@ -37,7 +37,9 @@ public class EnemyAttack : Attack
                 {
                     DealDamage(collider);
                 }
-                else if(collider.gameObject.layer == layerMask)
+                else if(collider.gameObject.layer == LayerMask.NameToLayer("Collision") || 
+                (collider.gameObject.layer == LayerMask.NameToLayer("Damageable") &&
+                !(collider.gameObject.GetComponent<EnemyDamageable>())))
                 {
                     if(isProjectile)
                     {
@@ -46,26 +48,6 @@ public class EnemyAttack : Attack
                 }
                 usedColliders.Add(collider);
             }
-        
-        // if(isAttacking && GetComponent<Collider2D>().IsTouchingLayers(layerMask))
-        // {
-        //     if(!usedColliders.Contains(collider))
-        //     {
-                
-        //         if(collider.GetComponent<EnemyDamageable>())
-        //         {
-        //             DealDamage(collider);
-        //         }
-        //         else if(!collider.GetComponent<PlayerDamageable>())
-        //         {
-        //             if(isProjectile)
-        //             {
-        //                 Destroy(gameObject);
-        //             }
-        //         }
-        //         usedColliders.Add(collider);
-        //     }
-        // }
     }
 
     protected override void DealDamage(Collider2D collider) {

@@ -168,4 +168,5 @@ MonoBehaviour:
   damageAmount: 8
   isAttacking: 0
   animator: {fileID: 0}
-  fireForce: 4
+  fireForce: 9.5
+  projectileDuration: 0.75

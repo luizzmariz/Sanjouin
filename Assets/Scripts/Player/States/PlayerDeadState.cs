@@ -36,6 +36,6 @@ public class PlayerDeadState : BaseState
     }
 
     public override void UpdatePhysics() {
-
+        playerStateMachine.rigidBody.velocity = Vector2.zero;
     }
 }

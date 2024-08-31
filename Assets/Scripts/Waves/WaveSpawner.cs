@@ -22,6 +22,7 @@ public class WaveSpawner : MonoBehaviour
     public Pathfinding pathfinding;
     [SerializeField] InputAction spawnEnemy;
     public GameObject enemyToSpawn;
+    public Transform spawnLocation;
 
     [Header("Canvas")]
     public GameObject waveClearText;
@@ -50,7 +51,7 @@ public class WaveSpawner : MonoBehaviour
         Wave currentWave = waves[currentWaveIndex];
 
         Instantiate(enemyToSpawn, 
-                    GetSpawnPosition(currentWave.spawnPosition, currentWave.spawnRange), 
+                    GetSpawnPosition(spawnLocation.position, 0), 
                     Quaternion.identity, 
                     currentWave.transform);
     }

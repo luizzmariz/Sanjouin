@@ -10,6 +10,7 @@ public class Attack : MonoBehaviour
     [SerializeField] protected bool isAttacking;
     public Animator animator;
     public float fireForce;
+    public float projectileDuration;
 
     protected List<Collider2D> colliders;
     protected List<Collider2D> usedColliders;

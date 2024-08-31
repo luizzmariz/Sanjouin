@@ -4,32 +4,6 @@ using UnityEngine;
 
 public class PlayerAttack : Attack
 {
-    // protected override void Update() 
-    // {
-    //     if(isAttacking && GetComponent<Collider2D>().OverlapCollider(contactFilter2D, colliders) > 0)
-    //     {
-    //         foreach(Collider2D collider in colliders)
-    //         {
-    //             if(!usedColliders.Contains(collider))
-    //             {
-    //                 Debug.Log("Maria?");
-    //                 if(collider.GetComponent<EnemyDamageable>())
-    //                 {
-    //                     DealDamage(collider);
-    //                 }
-    //                 else if(!collider.GetComponent<PlayerDamageable>())
-    //                 {
-    //                     if(isProjectile)
-    //                     {
-    //                         Destroy(gameObject);
-    //                     }
-    //                 }
-    //                 usedColliders.Add(collider);
-    //             }
-    //         }
-    //     }
-    // }
-
     void OnTriggerEnter2D(Collider2D collider)
     {
         if(!usedColliders.Contains(collider))
@@ -38,7 +12,9 @@ public class PlayerAttack : Attack
                 {
                     DealDamage(collider);
                 }
-                else if(collider.gameObject.layer == layerMask)
+                else if(collider.gameObject.layer == LayerMask.NameToLayer("Collision") || 
+                (collider.gameObject.layer == LayerMask.NameToLayer("Damageable") &&
+                !(collider.gameObject.GetComponent<PlayerDamageable>())))
                 {
                     if(isProjectile)
                     {

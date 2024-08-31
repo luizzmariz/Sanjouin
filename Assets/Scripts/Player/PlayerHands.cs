@@ -31,7 +31,7 @@ public class PlayerHands : MonoBehaviour
             
             actualAttack = projectile.GetComponent<Attack>();
             projectile.GetComponent<Rigidbody2D>().AddForce(attackDirection * actualAttack.fireForce, ForceMode2D.Impulse);
-            Destroy(projectile, 2f);
+            Destroy(projectile, actualAttack.projectileDuration);
         }
         else
         {
@@ -74,7 +74,7 @@ public class PlayerHands : MonoBehaviour
             actualAttack.StopAttack();
         }
     
-        playerStateMachine.isAttacking = false;
+        playerStateMachine.attacked = false;
     }
 }
 

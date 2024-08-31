@@ -14,7 +14,6 @@ public class PlayerStateMachine : StateMachine
     [HideInInspector] public PlayerDamageState damageState;
     [HideInInspector] public PlayerDeadState deadState;
     
-    // [HideInInspector] public DeadState deadState;
 
     //Global information
     
@@ -26,6 +25,7 @@ public class PlayerStateMachine : StateMachine
     [HideInInspector] public CharacterOrientation characterOrientation;
     [HideInInspector] public PlayerDamageable playerDamageable;
     [HideInInspector] public PlayerHands playerHands;
+
     // public WeaponManager weaponManager;
     // public TrailRenderer trailRenderer;
 
@@ -53,10 +53,9 @@ public class PlayerStateMachine : StateMachine
 
     [Header("Attack")]
     public bool isAttacking;
-    // public int attackType;
-    // public float attackDuration;
+    public bool attacked;
     public float attack1CooldownTimer;
-    public float attack2CooldownTimer;
+    public float fireCooldownTimer;
 
     [Header("InvencibilityTime")]
     public float invencibilityTime;
@@ -72,6 +71,7 @@ public class PlayerStateMachine : StateMachine
         // weaponManager = GetComponentInChildren<WeaponManager>();
         playerDamageable = GetComponent<PlayerDamageable>();
         playerHands = transform.Find("Hands").GetComponent<PlayerHands>();
+        //runningCoroutines = new List<string>();
         // trailRenderer = GetComponentInChildren<TrailRenderer>();
 
         idleState = new PlayerIdleState(this);
@@ -87,6 +87,31 @@ public class PlayerStateMachine : StateMachine
         canMove = true;
         canDash = true;
         playerDamageable.damageable = true;
+
+        // List<string> fd = new List<string>();
+        // fd.Add("nalivia");
+        // fd.Add("kuda");
+        // fd.Add("nalivia");
+        // fd.Add("nalivia");
+        // fd.Add("nalivia");
+        // fd.Add("julio");
+
+        // int i = 0;
+        // foreach(string name in fd)
+        // {
+        //     i++;
+        //     Debug.Log(name + " " + i);
+        // }
+
+        // i = 0;
+
+        // fd.Remove("nalivia");
+
+        // foreach(string name in fd)
+        // {
+        //     i++;
+        //     Debug.Log(name + " " + i);
+        // }
     }
 
     protected override BaseState GetInitialState() {
@@ -119,7 +144,7 @@ public class PlayerStateMachine : StateMachine
     {
         if(context.performed)
         {
-            if(canMove && !isAiming)
+            if(canMove && !isAiming && !isDashing)
             {
                 ChangeState(moveState);
             }
@@ -130,8 +155,9 @@ public class PlayerStateMachine : StateMachine
     {
         if(context.performed)
         {
-            if(canAttack)
+            if(canAttack && !isAttacking && !isDashing)
             {
+                //Debug.Log("Changing to attackState, canAttack: " + canAttack + ", isDashing: " + isDashing + ", isAttacking: " + isAttacking + ". Time: " + Time.time);
                 // attackType = 1;
                 ChangeState(attackState);
             }
@@ -142,7 +168,7 @@ public class PlayerStateMachine : StateMachine
     {
         if(context.performed)
         {
-            if(canFire)
+            if(canFire && !isAttacking && !isDashing)
             {
                 // attackType = 2;
                 ChangeState(fireState);
@@ -154,8 +180,9 @@ public class PlayerStateMachine : StateMachine
     {
         if(context.performed)
         {
-            if(canDash && !isDashing)
+            if(canDash && !isDashing && !isAttacking)
             {
+                //Debug.Log("Changing to dashState, canDash: " + canDash + ", isDashing: " + isDashing + ", isAttacking: " + isAttacking + ". Time: " + Time.time);
                 ChangeState(dashState);
             }
         }
@@ -166,19 +193,17 @@ public class PlayerStateMachine : StateMachine
         switch(ability)
         {
             case "dash":
-            yield return dashCooldownTime;
+            yield return new WaitForSeconds(dashCooldownTime);
             canDash = true;
             break;
 
             case "attack":
-            // Debug.Log("huh");
-            yield return attack1CooldownTimer;
+            yield return new WaitForSeconds(attack1CooldownTimer);
             canAttack = true;
             break;
 
             case "fire":
-            // Debug.Log("wut");
-            yield return attack2CooldownTimer;
+            yield return new WaitForSeconds(fireCooldownTimer);
             canFire = true;
             break;
 
@@ -186,27 +211,6 @@ public class PlayerStateMachine : StateMachine
             break;
         }
         
+        // runningCoroutines.Remove(ability);
     }
-
-    //we need to change this after we got some basic character animations - this functions need to be called by the character animations and not by the attack animation
-    // public void CastAttackEnded()
-    // {
-    //     canAttack = true;
-    //     isAttacking = false;
-    // }
-
-    // public void DashEnded()
-    // {
-    //     isDashing = false;
-    // }
-
-    // void OnDisable()
-    // {
-    //     playerInput.actions.FindActionMap("Player").Disable();
-    // }
-
-    // void OnEnable()
-    // {
-    //     playerInput.actions.FindActionMap("Player").Enable();
-    // }
 }

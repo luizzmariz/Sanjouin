@@ -16,6 +16,11 @@ public class PlayerDamageState : BaseState
     }
 
     public override void Enter() {
+        couldMove = false;
+        couldAttack = false;
+        couldFire = false;
+        couldDash = false;
+
         if(playerStateMachine.canMove)
         {
             couldMove = true;

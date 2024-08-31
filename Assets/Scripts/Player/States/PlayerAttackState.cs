@@ -18,6 +18,9 @@ public class PlayerAttackState : BaseState
 
     public override void Enter() {
         playerStateMachine.rigidBody.velocity = Vector3.zero;
+        couldMove = false;
+        couldFire = false;
+        couldDash = false;
 
         if(playerStateMachine.canMove)
         {
@@ -35,14 +38,17 @@ public class PlayerAttackState : BaseState
         }
         playerStateMachine.canDash = false;
         playerStateMachine.canAttack = false;
+        playerStateMachine.attacked = true;
         playerStateMachine.isAttacking = true;
         hasAttacked = false;
     }
 
     public override void UpdateLogic() {
-        if(!playerStateMachine.isAttacking)
+        if(!playerStateMachine.attacked)
         {
             playerStateMachine.StartCoroutine(playerStateMachine.Cooldown("attack"));
+            playerStateMachine.isAttacking = false;
+
             Vector2 moveVector = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
 
             if(moveVector != Vector2.zero && !playerStateMachine.isAiming)

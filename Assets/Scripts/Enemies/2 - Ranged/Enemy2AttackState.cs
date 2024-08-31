@@ -66,7 +66,7 @@ public class Enemy2AttackState : BaseState
             holderPosition = enemyStateMachine.transform.position;
             playerPosition = enemyStateMachine.playerGameObject.transform.position;
 
-            Vector3 attackDirection = playerPosition - holderPosition;
+            Vector3 attackDirection = (playerPosition - holderPosition).normalized;
             enemyStateMachine.enemyHands.Attack(attackDirection);
             hasAttacked = true;
         }

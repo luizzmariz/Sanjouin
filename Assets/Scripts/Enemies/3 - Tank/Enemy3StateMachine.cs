@@ -20,6 +20,7 @@ public class Enemy3StateMachine : BaseEnemyStateMachine
     public float runCooldownTimer;
     public float maxRunDuration;
     public Collider2D runCollider;
+    public SpriteRenderer runSprite;
     public float runDamage;
 
     [Header("Attributes")]
@@ -36,6 +37,7 @@ public class Enemy3StateMachine : BaseEnemyStateMachine
         damageState = new Enemy3DamageState(this);
         deadState = new Enemy3DeadState(this);
 
+        runSprite.enabled = false;
         runCollider.enabled = false;
         canRun = true;
     }

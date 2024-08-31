@@ -10,38 +10,55 @@ public class PlayerDashState : BaseState
     bool couldAttack;
     bool couldFire;
 
+    bool dashGoingOn;
+
     public PlayerDashState(PlayerStateMachine stateMachine) : base("Dash", stateMachine) {
         playerStateMachine = stateMachine;
     }
 
     public override void Enter() {
         // playerStateMachine.rigidBody.velocity = Vector3.zero;
+        couldMove = false;
+        couldAttack = false;
+        couldFire = false;
 
         if(playerStateMachine.canMove)
         {
             couldMove = true;
         }
         playerStateMachine.canMove = false;
-        if(playerStateMachine.canAttack)
+        if(playerStateMachine.canAttack 
+        //|| playerStateMachine.runningCoroutines.Contains("attack")
+        )
         {
             couldAttack = true;
         }
         playerStateMachine.canAttack = false;
-        if(playerStateMachine.canFire)
+        if(playerStateMachine.canFire 
+        //|| playerStateMachine.runningCoroutines.Contains("fire")
+        )
         {
             couldFire = true;
         }
         playerStateMachine.canFire = false;
+        // Debug.Log("is starting to dash, canDash: " + playerStateMachine.canDash + ". Time: " + Time.time);
         playerStateMachine.canDash = false;
         playerStateMachine.isDashing = true;
+        dashGoingOn = true;
         playerStateMachine.playerDamageable.damageable = false;
         playerStateMachine.StartCoroutine(Dash());
     }
 
     public override void UpdateLogic() {
-        if(!playerStateMachine.isDashing)
+        // if(!playerStateMachine.isDashing)
+        if(!dashGoingOn)
         {
+            playerStateMachine.isDashing = false;
             playerStateMachine.StartCoroutine(playerStateMachine.Cooldown("dash"));
+
+            // Debug.Log("Stopped Dashing, calling coroutine" + ". Time: " + Time.time);
+            // playerStateMachine.StartCoroutine(playerStateMachine.DashCooldown());
+            // playerStateMachine.runningCoroutines.Add("dash");
 
             Vector2 moveVector = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
 
@@ -63,6 +80,7 @@ public class PlayerDashState : BaseState
 
     public IEnumerator Dash()
     {
+        
         //Vector2 dashDirection = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
         Vector2 dashDirection = playerStateMachine.characterOrientation.lastOrientation;
         if(dashDirection == Vector2.zero)
@@ -72,32 +90,33 @@ public class PlayerDashState : BaseState
         playerStateMachine.rigidBody.velocity = dashDirection.normalized * playerStateMachine.dashingPower;
         // playerStateMachine.trailRenderer.emitting = true;
 
+        //Debug.Log("dashing part 1, canDash: " + playerStateMachine.canDash + ", isDashing: " + playerStateMachine.isDashing + ", canAttack: " + playerStateMachine.canAttack + ". Time: " + Time.time);
         yield return new WaitForSeconds(playerStateMachine.dashingTime);
 
         // playerStateMachine.trailRenderer.emitting = false;
         playerStateMachine.rigidBody.velocity = Vector2.zero;
-        playerStateMachine.isDashing = false;
-        // playerStateMachine.canMove = true;
-        // playerStateMachine.canAttack = true;
-        // playerStateMachine.rigidBody.velocity = Vector3.zero;
-
-        // yield return new WaitForSeconds(playerStateMachine.dashCooldownTimer);
-
-        // playerStateMachine.canDash = true;
+        dashGoingOn = false;
+        //Debug.Log("dashing part 2, canDash: " + playerStateMachine.canDash + ", isDashing: " + playerStateMachine.isDashing + ", canAttack: " + playerStateMachine.canAttack + ". Time: " + Time.time);
     }
 
     public override void Exit()
     {
+        playerStateMachine.isDashing = false;
         playerStateMachine.playerDamageable.damageable = true;
         if(couldMove)
         {
             playerStateMachine.canMove = true;
         }
-        if(couldAttack)
+        if(couldAttack 
+        //|| playerStateMachine.canAttack
+        )
         {
+            //Debug.Log("dashing part 2, canDash: " + playerStateMachine.canDash + ", isDashing: " + playerStateMachine.isDashing + ", canAttack: " + playerStateMachine.canAttack + ". Time: " + Time.time);
             playerStateMachine.canAttack = true;
         }
-        if(couldFire)
+        if(couldFire 
+        //|| playerStateMachine.canFire
+        )
         {
             playerStateMachine.canFire = true;
         }

@@ -21,6 +21,9 @@ public class PlayerFireState : BaseState
 
     public override void Enter() {
         playerStateMachine.rigidBody.velocity = Vector3.zero;
+        couldMove = false;
+        couldAttack = false;
+        couldDash = false;
 
         if(playerStateMachine.canMove)
         {
@@ -39,13 +42,16 @@ public class PlayerFireState : BaseState
         playerStateMachine.canDash = false;
         playerStateMachine.canFire = false;
         playerStateMachine.isAttacking = true;
+        playerStateMachine.attacked = true;
         hasAttacked = false;
     }
 
     public override void UpdateLogic() {
-        if(!playerStateMachine.isAttacking)
+        if(!playerStateMachine.attacked)
         {
             playerStateMachine.StartCoroutine(playerStateMachine.Cooldown("fire"));
+            playerStateMachine.isAttacking = false;
+
             Vector2 moveVector = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
 
             if(moveVector != Vector2.zero && !playerStateMachine.isAiming)
@@ -83,7 +89,7 @@ public class PlayerFireState : BaseState
                 playerStateMachine.characterOrientation.ChangeOrientation(targetPoint);
             }
 
-            Vector3 attackDirection = targetPoint - playerStateMachine.transform.position;
+            Vector3 attackDirection = (targetPoint - playerStateMachine.transform.position).normalized;
 
             playerStateMachine.playerHands.Attack(attackDirection, 1);
             hasAttacked = true;

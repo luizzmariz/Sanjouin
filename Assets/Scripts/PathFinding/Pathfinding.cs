@@ -12,6 +12,8 @@ public class Pathfinding : MonoBehaviour {
 	Tilemap areaTileMap;
 
 	public int gridArea;
+	public Vector2 xAxisLimit;
+    public Vector2 yAxisLimit;
 	
 	void Awake() {
 		requestManager = GetComponent<PathRequestManager>();
@@ -94,6 +96,7 @@ public class Pathfinding : MonoBehaviour {
 						
 						if(!openSet.Contains(neighbour))
 						{
+							Debug.Log("h");
 							openSet.Add(neighbour);
 						}	
 					}
@@ -139,6 +142,12 @@ public class Pathfinding : MonoBehaviour {
 	public Node NodeFromWorldPoint(Vector3 worldPosition) //<------------
     {
         Vector3Int nodePosition = grid.WorldToCell(worldPosition);
+
+		if(!areaTileMap.HasTile(nodePosition))
+		{
+			nodePosition.x = (int)Mathf.Clamp(nodePosition.x ,xAxisLimit.x, xAxisLimit.y);
+			nodePosition.y = (int)Mathf.Clamp(nodePosition.y ,yAxisLimit.x, yAxisLimit.y);
+		}
 
 		Node node = new Node(!collisionTileMap.HasTile(nodePosition), grid.CellToWorld(nodePosition), nodePosition.x, nodePosition.y);
 
