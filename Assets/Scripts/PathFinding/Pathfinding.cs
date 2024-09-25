@@ -6,6 +6,8 @@ using UnityEngine.Tilemaps;
 
 public class Pathfinding : MonoBehaviour {
     
+	public GameObject teste;
+
 	PathRequestManager requestManager;
 	Grid grid;
 	Tilemap collisionTileMap;
@@ -23,12 +25,12 @@ public class Pathfinding : MonoBehaviour {
 	}
 	
 	
-	public void StartFindPath(Vector3 startPos, Vector3 targetPos) 
+	public void StartFindPath(Vector3 startPos, Vector3 targetPos, GameObject enemy) 
 	{
-		StartCoroutine(FindPath(startPos,targetPos));
+		StartCoroutine(FindPath(startPos,targetPos, enemy));
 	}
 	
-	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos) 
+	IEnumerator FindPath(Vector3 startPos, Vector3 targetPos, GameObject enemy) 
 	{
 
 		Vector3[] waypoints = new Vector3[0];
@@ -57,13 +59,19 @@ public class Pathfinding : MonoBehaviour {
 		if(startNode.walkable && targetNode.walkable) 
 		{
 			Heap<Node> openSet = new Heap<Node>(gridArea);
-			HashSet<Node> closedSet = new HashSet<Node>();
+			List<Vector2Int> openSetPositions = new List<Vector2Int>(gridArea);
+			//HashSet<Node> closedSet = new HashSet<Node>();
+			Heap<Node> closedSet = new Heap<Node>(gridArea);
+			List<Vector2Int> closedSetPositions = new List<Vector2Int>(gridArea);
 			openSet.Add(startNode);
+			openSetPositions.Add(startNode.GetPosition());
 			
 			while(openSet.Count > 0) 
 			{
 				Node currentNode = openSet.RemoveFirst();
+				openSetPositions.RemoveAt(0);
 				closedSet.Add(currentNode);
+				closedSetPositions.Add(currentNode.GetPosition());
 				
 				if(currentNode.gridX == targetNode.gridX && currentNode.gridY == targetNode.gridY) 
 				{
@@ -74,7 +82,6 @@ public class Pathfinding : MonoBehaviour {
 				
 				if(GetNodeNeighbours(currentNode).Count < 1)
 				{
-					Debug.Log("passou aqui");
 					pathSuccess = false;
 					break;
 				}
@@ -82,24 +89,39 @@ public class Pathfinding : MonoBehaviour {
 				foreach(Node neighbour in GetNodeNeighbours(currentNode)) 
 				{
 					
-					if(!neighbour.walkable || closedSet.Contains(neighbour)) 
+					if(!neighbour.walkable || //closedSet.Contains(neighbour)
+					closedSetPositions.Contains(neighbour.GetPosition())) 
 					{
 						continue;
 					}
 					
 					int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
-					if(newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour)) 
+					if(newMovementCostToNeighbour < neighbour.gCost || //!openSet.Contains(neighbour)
+					!openSetPositions.Contains(neighbour.GetPosition())) 
 					{
 						neighbour.gCost = newMovementCostToNeighbour;
 						neighbour.hCost = GetDistance(neighbour, targetNode);
 						neighbour.parent = currentNode;
 						
-						if(!openSet.Contains(neighbour))
+						if(//!openSet.Contains(neighbour)
+						!openSetPositions.Contains(neighbour.GetPosition()))
 						{
-							Debug.Log("h");
+							Debug.Log(enemy.name);
 							openSet.Add(neighbour);
+							openSetPositions.Add(startNode.GetPosition());
 						}	
 					}
+				}
+
+				if(openSet.Count > 2000)
+				{
+					pathSuccess = false;
+					foreach(Node node in openSet.GetItems())
+					{
+						GameObject insObj = Instantiate(teste, node.worldPosition, Quaternion.identity);
+						insObj.GetComponent<AutoDelete>().nodeXY = new Vector2Int(node.gridX, node.gridY);
+					}
+					break;
 				}
 			}
 		}
@@ -121,23 +143,23 @@ public class Pathfinding : MonoBehaviour {
 			}
 			else
 			{
-				// if(helpTargetNode != null)
-				// {
-				// 	Debug.Log("caso 3");
-				// 	waypoints = RetracePath(startNode,helpTargetNode);
-				// }
-				// else
-				// {
-				// 	Debug.Log("caso 4");
-				// 	waypoints = RetracePath(startNode,targetNode);
-				// }
-
-				// 	Debug.Log("caso 3");
 				waypoints = RetracePath(startNode,targetNode);
 			}
 		}
 		requestManager.FinishedProcessingPath(waypoints,pathSuccess);
 	}
+
+	// public bool CheckIfContain(Node[] array, Vector2Int position)
+	// {
+	// 	foreach(Node node in array)
+	// 	{
+	// 		if(node.GetPosition() == position)
+	// 		{
+	// 			return true;
+	// 		}
+	// 	}
+	// 	return false;
+	// }
 
 	public Node NodeFromWorldPoint(Vector3 worldPosition) //<------------
     {
@@ -254,6 +276,27 @@ public class Pathfinding : MonoBehaviour {
 	{
 		Vector3Int nodePosition = grid.WorldToCell(position);
 
-		return !collisionTileMap.HasTile(nodePosition);
+		bool validation = true;
+
+		for(int x = -1; x <= 1; x++) 
+		{
+			for(int y = -1; y <= 1; y++) 
+			{
+				if(x == 0 && y == 0)
+				{
+					continue;
+				}
+					
+				int checkX = nodePosition.x + x;
+				int checkY = nodePosition.y + y;
+
+				if(collisionTileMap.HasTile(new Vector3Int(checkX, checkY, 0)))
+				{
+					validation = false;
+				}
+			}
+		}
+
+		return validation;
 	}
 }

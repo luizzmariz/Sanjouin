@@ -23,37 +23,17 @@ public class PlayerAttack : Attack
                 }
                 usedColliders.Add(collider);
             }
-        
-        // if(isAttacking && GetComponent<Collider2D>().IsTouchingLayers(layerMask))
-        // {
-        //     if(!usedColliders.Contains(collider))
-        //     {
-                
-        //         if(collider.GetComponent<EnemyDamageable>())
-        //         {
-        //             DealDamage(collider);
-        //         }
-        //         else if(!collider.GetComponent<PlayerDamageable>())
-        //         {
-        //             if(isProjectile)
-        //             {
-        //                 Destroy(gameObject);
-        //             }
-        //         }
-        //         usedColliders.Add(collider);
-        //     }
-        // }
     }
 
     protected override void DealDamage(Collider2D collider) 
     {
         if(isProjectile)
         {
-            collider.GetComponent<EnemyDamageable>().Damage(damageAmount, transform.position - (Vector3)GetComponent<Rigidbody2D>().velocity * 1.5f);
             if(collider.GetComponent<EnemyDamageable>().damageable)
             {
                 Destroy(gameObject);
             }
+            collider.GetComponent<EnemyDamageable>().Damage(damageAmount, transform.position - (Vector3)GetComponent<Rigidbody2D>().velocity * 1.5f);
         }
         else
         {

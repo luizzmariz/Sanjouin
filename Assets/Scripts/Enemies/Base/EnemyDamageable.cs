@@ -18,7 +18,7 @@ public class EnemyDamageable : Damageable
     {
         if(damageable)
         {
-            Debug.Log("chegou aqui");
+            //Debug.Log("chegou aqui");
             Vector3 knockbackVector = (attackerPosition - transform.position).normalized * -1;
 
             currentHealth -= damageAmount;

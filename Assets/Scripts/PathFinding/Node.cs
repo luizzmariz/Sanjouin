@@ -42,4 +42,9 @@ public class Node : IHeapItem<Node> {
 		}
 		return -compare;
 	}
+
+	public Vector2Int GetPosition()
+	{
+		return new Vector2Int(gridX, gridY);
+	}
 }

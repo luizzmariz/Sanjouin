@@ -132,13 +132,13 @@ public class PlayerStateMachine : StateMachine
         }
     }
 
-    private void OnGUI()
-    {
-        GUILayout.BeginArea(new Rect(450, 125, 200f, 150f));
-        string content = currentState != null ? currentState.name : "(no current state)";
-        GUILayout.Label($"<color='black'><size=40>{content}</size></color>");
-        GUILayout.EndArea();
-    }
+    // private void OnGUI()
+    // {
+    //     GUILayout.BeginArea(new Rect(450, 125, 200f, 150f));
+    //     string content = currentState != null ? currentState.name : "(no current state)";
+    //     GUILayout.Label($"<color='black'><size=40>{content}</size></color>");
+    //     GUILayout.EndArea();
+    // }
 
     public void OnMove(InputAction.CallbackContext context)
     {

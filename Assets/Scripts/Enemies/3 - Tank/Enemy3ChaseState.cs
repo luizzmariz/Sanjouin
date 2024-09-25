@@ -14,9 +14,6 @@ public class Enemy3ChaseState : BaseState
     int targetIndex;
     Vector3[] path;
 
-    public bool startedLoadingRun;
-    Coroutine loadRun;
-
     public Enemy3ChaseState(Enemy3StateMachine stateMachine) : base("Chase", stateMachine) {
         enemyStateMachine = stateMachine;
     }
@@ -53,7 +50,19 @@ public class Enemy3ChaseState : BaseState
         }
     }
 
-    public override void UpdatePhysics() {
+    public override void UpdatePhysics() 
+    {
+        if(enemyStateMachine.canRun && !enemyStateMachine.runIsLoading && Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfEngage)
+        {
+            enemyStateMachine.runIsLoading = true;
+            enemyStateMachine.loadRun = enemyStateMachine.StartCoroutine(enemyStateMachine.LoadRun());
+        }
+        else if(enemyStateMachine.runIsLoading && Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfEngage)
+        {
+            enemyStateMachine.runIsLoading = false;
+            enemyStateMachine.StopCoroutine(enemyStateMachine.loadRun);
+        }
+
         holderPosition = enemyStateMachine.transform.position;
         playerPosition = enemyStateMachine.playerGameObject.transform.position;
 
@@ -62,36 +71,32 @@ public class Enemy3ChaseState : BaseState
             followingPath = false;
         }
 
-        if(enemyStateMachine.canRun && !startedLoadingRun && Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfEngage)
+        if(Vector3.Distance(holderPosition, playerPosition) < enemyStateMachine.rangeOfView * 0.8f)
         {
-            startedLoadingRun = true;
-            loadRun = enemyStateMachine.StartCoroutine(enemyStateMachine.LoadRun("run"));
-        }
-        else if(startedLoadingRun && Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfEngage)
-        {
-            startedLoadingRun = false;
-            enemyStateMachine.StopCoroutine(loadRun);
-        }
-
-        if(!hasAskedPath && !followingPath)
-        {
-            hasAskedPath = true;
-            lastPlayerPosition = playerPosition;
-            enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound); 
-        }
-        else if(followingPath)
-        {
-            if(Vector3.Distance(playerPosition, lastPlayerPosition) > 1.25f)
+            if(!hasAskedPath && !followingPath)
             {
-                followingPath = false;
                 hasAskedPath = true;
                 lastPlayerPosition = playerPosition;
-                enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound); 
+                enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound, enemyStateMachine.gameObject); 
             }
-            else
+            else if(followingPath)
             {
-                FollowPath();
+                if(Vector3.Distance(playerPosition, lastPlayerPosition) > 1.25f)
+                {
+                    followingPath = false;
+                    hasAskedPath = true;
+                    lastPlayerPosition = playerPosition;
+                    enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound, enemyStateMachine.gameObject); 
+                }
+                else
+                {
+                    FollowPath();
+                }
             }
+        }
+        else
+        {
+            enemyStateMachine.rigidBody.velocity = (playerPosition - holderPosition).normalized * enemyStateMachine.movementSpeed;
         }
     }
 
@@ -143,10 +148,10 @@ public class Enemy3ChaseState : BaseState
         followingPath = false;
         path = null;
 
-        if(startedLoadingRun)
+        if(enemyStateMachine.runIsLoading)
         {
-            startedLoadingRun = false;
-            enemyStateMachine.StopCoroutine(loadRun);
+            enemyStateMachine.runIsLoading = false;
+            enemyStateMachine.StopCoroutine(enemyStateMachine.loadRun);
         }
     }
 }

@@ -68,7 +68,7 @@ public class Enemy2FleeState : BaseState
 
             Vector3 fleePoint = holderPosition + (holderPosition - playerPosition).normalized * enemyStateMachine.fleeDistance;
 
-            enemyStateMachine.pathRequestManager.RequestPath(holderPosition, fleePoint, OnPathFound); 
+            enemyStateMachine.pathRequestManager.RequestPath(holderPosition, fleePoint, OnPathFound, enemyStateMachine.gameObject); 
         }
         else if(followingPath)
         {

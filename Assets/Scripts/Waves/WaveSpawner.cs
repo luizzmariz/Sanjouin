@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
-
+using System.Reflection;
 
 public class WaveSpawner : MonoBehaviour
 {
@@ -13,7 +13,7 @@ public class WaveSpawner : MonoBehaviour
     [Header("Waves")]
     public List<Wave> waves;
     [HideInInspector] public int currentWaveIndex = 0;
-    [HideInInspector] public bool waveSpawnEnded;
+    public bool waveSpawnEnded;
 
     [Header("Enemies")]
     public int enemiesAlive;
@@ -81,13 +81,19 @@ public class WaveSpawner : MonoBehaviour
                     Quaternion.identity, 
                     currentWave.transform);
                     
+                    //
+                    enemySpawned.name = "W" + i + " (" + o + ") " + currentWave.subwaves[currentWave.currentSubWaveIndex].enemies[o].name;
+
                     enemySpawned.GetComponent<BaseEnemyStateMachine>().spawnedInWave = true;
                     enemiesAlive++;
                 }
 
                 currentWave.currentSubWaveIndex++;
 
-                yield return new WaitForSeconds(currentWave.timeBetweenSubwaves);
+                if(i != (currentWave.subwaves.Count - 1))
+                {
+                    yield return new WaitForSeconds(currentWave.timeBetweenSubwaves);
+                }
             }
 
             waveSpawnEnded = true;
@@ -142,6 +148,8 @@ public class WaveSpawner : MonoBehaviour
         playerDamageable.Heal(8);
 
         yield return new WaitForSeconds(messageDuration);
+        
+        //ClearLog();
 
         waveClearAnimator.SetBool("messageOn", false);
 
@@ -149,4 +157,12 @@ public class WaveSpawner : MonoBehaviour
         waveClearText.SetActive(false);
         StartCoroutine(SpawnWave());
     }
+
+    // public void ClearLog()
+    // {
+    //     var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+    //     var type = assembly.GetType("UnityEditor.LogEntries");
+    //     var method = type.GetMethod("Clear");
+    //     method.Invoke(new object(), null);
+    // }
 }

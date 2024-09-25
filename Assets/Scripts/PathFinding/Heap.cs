@@ -5,10 +5,16 @@ using System;
 public class Heap<T> where T : IHeapItem<T> {
 	
 	T[] items;
+	Vector2Int[] nodePositions;
 	public int currentItemCount;
 	
 	public Heap(int maxHeapSize) {
 		items = new T[maxHeapSize];
+
+		// if(items.GetType().ToString() == "Node[]")
+		// {
+		// 	nodePositions = new Vector2Int[maxHeapSize];
+		// }
 	}
 	
 	public void Add(T item) {
@@ -38,6 +44,10 @@ public class Heap<T> where T : IHeapItem<T> {
 	}
 
 	public bool Contains(T item) {
+		// if(Array.IndexOf(items, item) > -1)
+		// {
+		// 	return true;
+		// }
 		return Equals(items[item.HeapIndex], item);
 	}
 
@@ -95,8 +105,9 @@ public class Heap<T> where T : IHeapItem<T> {
 		itemB.HeapIndex = itemAIndex;
 	}
 	
-	
-	
+	public T[] GetItems() {
+		return items;
+	}
 }
 
 public interface IHeapItem<T> : IComparable<T> {

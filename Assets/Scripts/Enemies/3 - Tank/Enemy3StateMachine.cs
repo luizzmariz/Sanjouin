@@ -22,6 +22,8 @@ public class Enemy3StateMachine : BaseEnemyStateMachine
     public Collider2D runCollider;
     public SpriteRenderer runSprite;
     public float runDamage;
+    [HideInInspector] public Coroutine loadRun;
+    public bool runIsLoading;
 
     [Header("Attributes")]
     [Range(0f, 25f)] public float rangeOfEngage;
@@ -40,6 +42,7 @@ public class Enemy3StateMachine : BaseEnemyStateMachine
         runSprite.enabled = false;
         runCollider.enabled = false;
         canRun = true;
+        runIsLoading = false;
     }
 
     protected override BaseState GetInitialState() {
@@ -67,18 +70,10 @@ public class Enemy3StateMachine : BaseEnemyStateMachine
         }
     }
 
-    public IEnumerator LoadRun(string ability)
+    public IEnumerator LoadRun()
     {
-        switch(ability)
-        {
-            case "run":
-                yield return new WaitForSeconds(chargingRunTimer);
-                ChangeState(runState);
-            break;
-
-            default:
-            break;
-        }
+        yield return new WaitForSeconds(chargingRunTimer);
+        ChangeState(runState);
     }
 
     // private void OnGUI()

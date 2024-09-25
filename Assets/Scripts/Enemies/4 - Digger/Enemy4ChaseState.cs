@@ -52,25 +52,32 @@ public class Enemy4ChaseState : BaseState
             followingPath = false;
         }
 
-        if(!hasAskedPath && !followingPath)
+        if(Vector3.Distance(holderPosition, playerPosition) < enemyStateMachine.rangeOfView * 0.8f)
         {
-            hasAskedPath = true;
-            lastPlayerPosition = playerPosition;
-            enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound); 
-        }
-        else if(followingPath)
-        {
-            if(Vector3.Distance(playerPosition, lastPlayerPosition) > 1.25f)
+            if(!hasAskedPath && !followingPath)
             {
-                followingPath = false;
                 hasAskedPath = true;
                 lastPlayerPosition = playerPosition;
-                enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound); 
+                enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound, enemyStateMachine.gameObject); 
             }
-            else
+            else if(followingPath)
             {
-                FollowPath();
+                if(Vector3.Distance(playerPosition, lastPlayerPosition) > 1.25f)
+                {
+                    followingPath = false;
+                    hasAskedPath = true;
+                    lastPlayerPosition = playerPosition;
+                    enemyStateMachine.pathRequestManager.RequestPath(holderPosition, playerPosition, OnPathFound, enemyStateMachine.gameObject); 
+                }
+                else
+                {
+                    FollowPath();
+                }
             }
+        }
+        else
+        {
+            enemyStateMachine.rigidBody.velocity = (playerPosition - holderPosition).normalized * enemyStateMachine.movementSpeed;
         }
     }
 
