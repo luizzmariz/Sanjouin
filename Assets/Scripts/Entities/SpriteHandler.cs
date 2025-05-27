@@ -22,27 +22,20 @@ public class SpriteHandler : MonoBehaviour
 
         if((orientationAngle > 315f && orientationAngle <= 360f) || (orientationAngle >= 0f && orientationAngle <= 45f))
         {
-            // spriteOrientation = "back";
             characterSpriteRenderer.sprite = characterDown;
-            // animator.SetInteger("orientationNumber", 3);
         }
         else if(orientationAngle > 45f && orientationAngle <= 135f)
         {
-            // spriteOrientation = "right";
             characterSpriteRenderer.sprite = characterSide;
-            // animator.SetInteger("orientationNumber", 0);
         }
         else if(orientationAngle > 135f && orientationAngle <= 225f)
         {
-            // spriteOrientation = "forward";
             characterSpriteRenderer.sprite = characterUp;
-            // animator.SetInteger("orientationNumber", 2);
         }
         else if(orientationAngle > 225f && orientationAngle <= 315f)
         {
             characterSpriteRenderer.sprite = characterSide;
             characterSpriteRenderer.flipX = true;
-            // animator.SetInteger("orientationNumber", 1);
         }
 
         if(orientationAngle >= 90 && orientationAngle <= 270)
