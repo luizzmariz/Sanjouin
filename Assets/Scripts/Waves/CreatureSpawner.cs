@@ -85,7 +85,7 @@ public class CreatureSpawner : MonoBehaviour
                 Quaternion.identity,
                 creatureSpawners[zone].transform);
 
-                creatureSpawned.GetComponent<BaseEnemyStateMachine>().spawnedInWave = true;
+                creatureSpawned.GetComponent<BaseCreatureStateMachine>().spawnedInWave = true;
                 creaturesAlive.Add(creatureSpawned);
             }
         }

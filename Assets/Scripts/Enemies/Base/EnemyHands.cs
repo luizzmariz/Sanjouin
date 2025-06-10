@@ -7,14 +7,14 @@ public class EnemyHands : MonoBehaviour
     [SerializeField] public Transform attacksParentGameObject;
     [SerializeField] public Animator handsAnimator;
 
-    BaseEnemyStateMachine enemyStateMachine;
+    BaseCreatureStateMachine enemyStateMachine;
 
     [SerializeField] List<GameObject> attacks;
     public Attack actualAttack;
 
     void Awake()
     {
-        enemyStateMachine = GetComponentInParent<BaseEnemyStateMachine>(); 
+        enemyStateMachine = GetComponentInParent<BaseCreatureStateMachine>(); 
         attacksParentGameObject = GameObject.Find("Attacks").transform;
         handsAnimator = GetComponent<Animator>(); 
     }
