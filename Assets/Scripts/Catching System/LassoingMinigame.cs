@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -43,24 +41,30 @@ public class LassoingMinigame : MonoBehaviour
     [SerializeField] InputAction UnlockLasso;
     bool pause = false;
     [SerializeField] float failTimer = 10f;
+    bool minigameStarted = false;
 
     public void EnableMinigame()
     {
+        minigameStarted = true;
         UnlockLasso.Enable();
     }
 
     public void DisableMinigame()
     {
+        minigameStarted = false;
         UnlockLasso.Disable();
     }
 
     void Update()
     {
-        if (pause) return;
+        if(minigameStarted)
+        {
+            if (pause) return;
 
-        Creature();
-        Lasso();
-        ProgressCheck();
+            Creature();
+            Lasso();
+            ProgressCheck();
+        }
     }
 
     void Creature()
@@ -137,12 +141,12 @@ public class LassoingMinigame : MonoBehaviour
     void Win()
     {
         pause = true;
-        Debug.Log("Win");
+        CatchSystem.instance.EndCatch(true);
     }
 
     void Lose()
     {
         pause = true;
-        Debug.Log("Lose");
+        CatchSystem.instance.EndCatch(true);
     }
 }

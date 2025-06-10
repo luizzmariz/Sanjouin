@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     
     [Header("Game")]
     bool isInGame;
-    [HideInInspector] public WaveSpawner waveSpawner;
+    [HideInInspector] public CreatureSpawner waveSpawner;
     public GameObject screenMessage;
     public int messageDuration;
 
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         if(isInGame)
         {
-            waveSpawner = GameObject.Find("WaveSpawner").GetComponent<WaveSpawner>();
+            waveSpawner = GameObject.Find("WaveSpawner").GetComponent<CreatureSpawner>();
             playerInput = GameObject.Find("Player").GetComponent<PlayerInput>();
             screenMessage = GameObject.Find("Canvas").transform.Find("ScreenMessage").gameObject;
         }
@@ -258,7 +258,7 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         screenMessage.SetActive(false);
         
-        StartCoroutine(waveSpawner.SpawnWave());
+        // StartCoroutine(waveSpawner.SpawnWave());
     }
 
     public IEnumerator EndGame(bool win)
@@ -293,5 +293,3 @@ public class GameManager : MonoBehaviour
         #endif
     }
 }
-
-//alo

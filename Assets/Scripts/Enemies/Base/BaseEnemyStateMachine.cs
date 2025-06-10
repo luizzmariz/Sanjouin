@@ -13,7 +13,7 @@ public class BaseEnemyStateMachine : StateMachine
     [HideInInspector] public EnemyDamageable enemyDamageable;
     [HideInInspector] public SpriteRenderer spriteRenderer;
     [HideInInspector] public CharacterOrientation characterOrientation;
-    [HideInInspector] public WaveSpawner waveSpawner;
+    [HideInInspector] public CreatureSpawner waveSpawner;
     [HideInInspector] public EnemyHands enemyHands;
     [HideInInspector] public SpriteRenderer bodySpriteRenderer;
     [HideInInspector] public SpriteRenderer handsSpriteRenderer;
@@ -51,7 +51,7 @@ public class BaseEnemyStateMachine : StateMachine
 
         playerGameObject = GameObject.Find("Player");
         pathRequestManager = GameObject.Find("PathfindingManager").GetComponent<PathRequestManager>();
-        waveSpawner = GameObject.Find("WaveSpawner").GetComponent<WaveSpawner>();
+        waveSpawner = GameObject.Find("WaveSpawner").GetComponent<CreatureSpawner>();
 
         canAttack = true;
         canMove = true;
