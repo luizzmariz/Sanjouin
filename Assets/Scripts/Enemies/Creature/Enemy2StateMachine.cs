@@ -1,15 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class Enemy2StateMachine : BaseEnemyStateMachine
+public class SimpleCreatureStateMachine : BaseCreatureStateMachine
 {
     [Header("States")]
     [HideInInspector] public Enemy2IdleState idleState;
     [HideInInspector] public Enemy2ChaseState chaseState;
     [HideInInspector] public Enemy2FleeState fleeState;
-    [HideInInspector] public Enemy2AttackState attackState;
     [HideInInspector] public Enemy2DamageState damageState;
     [HideInInspector] public Enemy2DeadState deadState;
 
@@ -32,7 +29,6 @@ public class Enemy2StateMachine : BaseEnemyStateMachine
         idleState = new Enemy2IdleState(this);
         chaseState = new Enemy2ChaseState(this);
         fleeState = new Enemy2FleeState(this);
-        attackState = new Enemy2AttackState(this);
         damageState = new Enemy2DamageState(this);
         deadState = new Enemy2DeadState(this);
 

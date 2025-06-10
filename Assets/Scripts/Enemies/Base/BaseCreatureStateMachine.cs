@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseEnemyStateMachine : StateMachine
+public class BaseCreatureStateMachine : StateMachine
 {
 
     [Header("Components")]

@@ -53024,7 +53024,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1229712273
 RectTransform:
   m_ObjectHideFlags: 0
@@ -53097,6 +53097,7 @@ MonoBehaviour:
       m_Action: Unlock Lasso
       m_Flags: 0
     m_Flags: 0
+  failTimer: 10
 --- !u!1 &1238148413
 GameObject:
   m_ObjectHideFlags: 0
@@ -65550,6 +65551,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1907678038}
   m_CullTransparentMesh: 1
+--- !u!1 &2034625990
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2034625992}
+  - component: {fileID: 2034625991}
+  m_Layer: 0
+  m_Name: CatchSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2034625991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034625990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9730f6e1aa9642d45b0e77823b1ab0ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigame: {fileID: 1229712272}
+--- !u!4 &2034625992
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034625990}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2046660718
 GameObject:
   m_ObjectHideFlags: 0
@@ -65711,7 +65757,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2429464683878825822
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65724,25 +65770,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e800bf915abcd944597a53b3f469166a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subwaves:
-  - enemies:
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    timeToNextEnemy: 0.75
-  - enemies:
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 8831874857161815164, guid: e700772b6fc8707478b1c6349aacd070, type: 3}
-    timeToNextEnemy: 1
-  currentSubWaveIndex: 0
-  timeBetweenSubwaves: 3.5
   spawnPosition: {x: 0, y: 0, z: 0}
   spawnRange: 3.03
+  spawnRates: []
 --- !u!114 &3262401254679038963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65894,24 +65924,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e800bf915abcd944597a53b3f469166a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subwaves:
-  - enemies:
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    timeToNextEnemy: 1
-  - enemies:
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    timeToNextEnemy: 0.75
-  currentSubWaveIndex: 0
-  timeBetweenSubwaves: 5
   spawnPosition: {x: 0, y: 0, z: 0}
   spawnRange: 2
+  spawnRates: []
 --- !u!222 &6735288680733735522
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -65968,22 +65983,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerDamageable: {fileID: 1440306676}
-  waves: []
+  creatureSpawners: []
   currentWaveIndex: 0
-  waveSpawnEnded: 0
-  enemiesAlive: 0
+  creaturePrefab: {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
+  creaturesAlive: []
   pathfinding: {fileID: 0}
-  spawnEnemy:
-    m_Name: Spawn Enemy
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 5ff883d1-3b48-4417-b5dd-2930d39d1c8b
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
-  enemyToSpawn: {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-  spawnLocation: {fileID: 0}
+  creatureSpawnedLimit: 0
   waveClearText: {fileID: 1247561718099691324}
   waveClearAnimator: {fileID: 8784363223382160754}
   messageDuration: 1.5
@@ -65999,35 +66004,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e800bf915abcd944597a53b3f469166a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subwaves:
-  - enemies:
-    - {fileID: 8955919590433746173, guid: 657b7040b7605b94d8554bd92ad82bf2, type: 3}
-    - {fileID: 8955919590433746173, guid: 657b7040b7605b94d8554bd92ad82bf2, type: 3}
-    - {fileID: 8955919590433746173, guid: 657b7040b7605b94d8554bd92ad82bf2, type: 3}
-    timeToNextEnemy: 0.3
-  - enemies:
-    - {fileID: 8831874857161815164, guid: e700772b6fc8707478b1c6349aacd070, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    timeToNextEnemy: 0.5
-  - enemies:
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 8955919590433746173, guid: 657b7040b7605b94d8554bd92ad82bf2, type: 3}
-    - {fileID: 8831874857161815164, guid: e700772b6fc8707478b1c6349aacd070, type: 3}
-    - {fileID: 8831874857161815164, guid: e700772b6fc8707478b1c6349aacd070, type: 3}
-    timeToNextEnemy: 0.75
-  currentSubWaveIndex: 0
-  timeBetweenSubwaves: 3.5
   spawnPosition: {x: 0, y: 0, z: 0}
   spawnRange: 6.74
+  spawnRates: []
 --- !u!1 &7956380770137201446
 GameObject:
   m_ObjectHideFlags: 0
@@ -66057,26 +66036,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e800bf915abcd944597a53b3f469166a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  subwaves:
-  - enemies:
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 1951979224151128629, guid: 4853da211d0d8264891dd536afdba9f8, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 8831874857161815164, guid: e700772b6fc8707478b1c6349aacd070, type: 3}
-    timeToNextEnemy: 0.75
-  - enemies:
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 8831874857161815164, guid: e700772b6fc8707478b1c6349aacd070, type: 3}
-    - {fileID: 8831874857161815164, guid: e700772b6fc8707478b1c6349aacd070, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    - {fileID: 4628059290491363751, guid: dd55eb398304b47458eadad4782c7463, type: 3}
-    timeToNextEnemy: 0.5
-  currentSubWaveIndex: 0
-  timeBetweenSubwaves: 2.5
   spawnPosition: {x: 0, y: 0, z: 0}
   spawnRange: 6.74
+  spawnRates: []
 --- !u!114 &8310696158482677448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66198,3 +66160,4 @@ SceneRoots:
   - {fileID: 1577767123}
   - {fileID: 512740659}
   - {fileID: 817344059}
+  - {fileID: 2034625992}

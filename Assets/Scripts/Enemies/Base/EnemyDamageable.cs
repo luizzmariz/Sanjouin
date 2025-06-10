@@ -1,16 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyDamageable : Damageable
 {
     [SerializeField] public float maxHealth;
     public bool damageable = true;
-    [HideInInspector] private BaseEnemyStateMachine stateMachine;
+    [HideInInspector] private BaseCreatureStateMachine stateMachine;
 
     public void Start()
     {
-        stateMachine = transform.parent.GetComponent<BaseEnemyStateMachine>();
+        stateMachine = transform.parent.GetComponent<BaseCreatureStateMachine>();
         currentHealth = maxHealth;
     }
 

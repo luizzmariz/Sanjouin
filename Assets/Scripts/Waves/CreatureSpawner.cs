@@ -21,7 +21,7 @@ public class CreatureSpawner : MonoBehaviour
     public Pathfinding pathfinding;
     // [SerializeField] InputAction spawnEnemy;
     // public GameObject enemyToSpawn;
-    public Transform spawnLocation;
+    // public Transform spawnLocation;
     public int creatureSpawnedLimit;
 
     [Header("Canvas")]

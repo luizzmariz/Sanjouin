@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Enemy2FleeState : BaseState
 {
-    Enemy2StateMachine enemyStateMachine;
+    SimpleCreatureStateMachine enemyStateMachine;
 
     public Vector3 holderPosition;
     public Vector3 playerPosition;
@@ -13,7 +13,7 @@ public class Enemy2FleeState : BaseState
     int targetIndex;
     public Vector3[] path;
 
-    public Enemy2FleeState(Enemy2StateMachine stateMachine) : base("Flee", stateMachine) {
+    public Enemy2FleeState(SimpleCreatureStateMachine stateMachine) : base("Flee", stateMachine) {
         enemyStateMachine = stateMachine;
     }
 
@@ -34,21 +34,7 @@ public class Enemy2FleeState : BaseState
         }
         else if(!enemyStateMachine.isFleeing)
         {
-            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
-            {
-                if(enemyStateMachine.canAttack)
-                {
-                    stateMachine.ChangeState(enemyStateMachine.attackState);
-                }
-                else
-                {
-                    stateMachine.ChangeState(enemyStateMachine.idleState);
-                }
-            }
-            else
-            {
-                stateMachine.ChangeState(enemyStateMachine.idleState);
-            }
+            stateMachine.ChangeState(enemyStateMachine.idleState);
         }
     }
 

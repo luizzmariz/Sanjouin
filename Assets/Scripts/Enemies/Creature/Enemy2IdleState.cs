@@ -2,16 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy3IdleState : BaseState
+public class Enemy2IdleState : BaseState
 {
-    Enemy3StateMachine enemyStateMachine;
+    SimpleCreatureStateMachine enemyStateMachine;
 
-    public Enemy3IdleState(Enemy3StateMachine stateMachine) : base("Idle", stateMachine) {
+    public Enemy2IdleState(SimpleCreatureStateMachine stateMachine) : base("Idle", stateMachine) {
         enemyStateMachine = stateMachine;
     }
 
     public override void Enter() {
-
+        enemyStateMachine.canMove = true;
+        enemyStateMachine.enemyDamageable.damageable = true;
     }
 
     public override void UpdateLogic() {
@@ -20,13 +21,9 @@ public class Enemy3IdleState : BaseState
             Vector3 holderPosition = enemyStateMachine.transform.position;
             Vector3 playerPosition = enemyStateMachine.playerGameObject.transform.position;
             
-            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
+            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDanger && enemyStateMachine.canFlee)
             {
-                if(enemyStateMachine.canAttack)
-                {
-                    stateMachine.ChangeState(enemyStateMachine.attackState);
-                }
-                enemyStateMachine.characterOrientation.ChangeOrientation(playerPosition);
+                stateMachine.ChangeState(enemyStateMachine.fleeState);
             }
             else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
             {
@@ -35,8 +32,7 @@ public class Enemy3IdleState : BaseState
         }
     }
 
-    public override void UpdatePhysics()
-    {
+    public override void UpdatePhysics() {
         enemyStateMachine.rigidBody.velocity = Vector2.zero;
     }
 

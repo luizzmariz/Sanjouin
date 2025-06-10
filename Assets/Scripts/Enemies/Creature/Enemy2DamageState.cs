@@ -2,22 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy3DamageState : BaseState
+public class Enemy2DamageState : BaseState
 {
-    Enemy3StateMachine enemyStateMachine;
+    SimpleCreatureStateMachine enemyStateMachine;
 
-    // bool shouldTurnAttackOn;
+    bool shouldTurnAttackOn;
 
-    public Enemy3DamageState(Enemy3StateMachine stateMachine) : base("Damage", stateMachine) {
+    public Enemy2DamageState(SimpleCreatureStateMachine stateMachine) : base("Damage", stateMachine) {
         enemyStateMachine = stateMachine;
     }
 
     public override void Enter() {
-        // if(enemyStateMachine.canAttack)
-        // {
-        //     shouldTurnAttackOn = true;
-        // }
-        // enemyStateMachine.canAttack = false;
+        enemyStateMachine.canMove = false;
+        if(enemyStateMachine.canAttack)
+        {
+            shouldTurnAttackOn = true;
+        }
+        enemyStateMachine.canAttack = false;
         enemyStateMachine.beingPushed = true;
         enemyStateMachine.enemyDamageable.damageable = false;
 
@@ -32,9 +33,13 @@ public class Enemy3DamageState : BaseState
         {
             if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
             {
-                if(enemyStateMachine.canAttack)
+                if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDanger && enemyStateMachine.canFlee)
                 {
-                    stateMachine.ChangeState(enemyStateMachine.attackState);
+                    stateMachine.ChangeState(enemyStateMachine.fleeState);
+                }
+                else
+                {
+                    stateMachine.ChangeState(enemyStateMachine.idleState);
                 }
             }
             else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfView)
@@ -73,10 +78,11 @@ public class Enemy3DamageState : BaseState
 
     public override void Exit() 
     {
-        // if(shouldTurnAttackOn)
-        // {
-        //     enemyStateMachine.canAttack = true;
-        // }
+        enemyStateMachine.canMove = true;
+        if(shouldTurnAttackOn)
+        {
+            enemyStateMachine.canAttack = true;
+        }
         enemyStateMachine.enemyDamageable.damageable = true;
     }
 }

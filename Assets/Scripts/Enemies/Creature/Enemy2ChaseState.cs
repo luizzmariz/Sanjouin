@@ -1,13 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class Enemy1ChaseState : BaseState
+public class Enemy2ChaseState : BaseState
 {
-    Enemy1StateMachine enemyStateMachine;
+    SimpleCreatureStateMachine enemyStateMachine;
     
     public Vector3 holderPosition;
     public Vector3 playerPosition;
@@ -18,7 +14,7 @@ public class Enemy1ChaseState : BaseState
     int targetIndex;
     Vector3[] path;
 
-    public Enemy1ChaseState(Enemy1StateMachine stateMachine) : base("Chase", stateMachine) {
+    public Enemy2ChaseState(SimpleCreatureStateMachine stateMachine) : base("Chase", stateMachine) {
         enemyStateMachine = stateMachine;
     }
 
@@ -28,24 +24,24 @@ public class Enemy1ChaseState : BaseState
         followingPath = false;
     }
 
-    public override void UpdateLogic() {
+    public override void UpdateLogic() {   
         if(enemyStateMachine.playerGameObject.GetComponent<PlayerStateMachine>().currentState == enemyStateMachine.playerGameObject.GetComponent<PlayerStateMachine>().deadState)
         {
             stateMachine.ChangeState(enemyStateMachine.idleState);
         }
-
+        
         holderPosition = enemyStateMachine.transform.position;
         playerPosition = enemyStateMachine.playerGameObject.transform.position;
-        
+
         if(Vector3.Distance(holderPosition, playerPosition) > enemyStateMachine.rangeOfView)
         {
             stateMachine.ChangeState(enemyStateMachine.idleState);
         }
         else if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfAttack)
         {
-            if(enemyStateMachine.canAttack)
+            if(Vector3.Distance(holderPosition, playerPosition) <= enemyStateMachine.rangeOfDanger && enemyStateMachine.canFlee)
             {
-                stateMachine.ChangeState(enemyStateMachine.attackState);
+                stateMachine.ChangeState(enemyStateMachine.fleeState);
             }
             else
             {
@@ -54,10 +50,7 @@ public class Enemy1ChaseState : BaseState
         }
     }
 
-    //This function runs at LateUpdate()
     public override void UpdatePhysics() {
-        //base.UpdatePhysics();
-
         holderPosition = enemyStateMachine.transform.position;
         playerPosition = enemyStateMachine.playerGameObject.transform.position;
 
@@ -141,24 +134,7 @@ public class Enemy1ChaseState : BaseState
         Vector3 movementDirection = currentWaypoint - holderPosition;
         enemyStateMachine.rigidBody.velocity = movementDirection.normalized * enemyStateMachine.movementSpeed;
 	}
-
-	// public void OnDrawGizmos() 
-    // {
-	// 	if (path != null) {
-	// 		for (int i = targetIndex; i < path.Length; i ++) {
-	// 			Gizmos.color = Color.black;
-	// 			Gizmos.DrawCube(path[i], Vector3.one);
-
-	// 			if (i == targetIndex) {
-	// 				Gizmos.DrawLine(holderPosition, path[i]);
-	// 			}
-	// 			else {
-	// 				Gizmos.DrawLine(path[i-1],path[i]);
-	// 			}
-	// 		}
-	// 	}
-	// }
-
+    
     public override void Exit() 
     {
         enemyStateMachine.rigidBody.velocity = Vector3.zero;

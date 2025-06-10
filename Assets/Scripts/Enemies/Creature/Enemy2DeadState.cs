@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy3DeadState : BaseState
+public class Enemy2DeadState : BaseState
 {
-    Enemy3StateMachine enemyStateMachine;
+    SimpleCreatureStateMachine enemyStateMachine;
 
-    public Enemy3DeadState(Enemy3StateMachine stateMachine) : base("Dead", stateMachine)
+    public Enemy2DeadState(SimpleCreatureStateMachine stateMachine) : base("Dead", stateMachine)
     {
         enemyStateMachine = stateMachine;
     }
@@ -27,10 +27,5 @@ public class Enemy3DeadState : BaseState
 
     public override void UpdatePhysics() {
 
-    }
-
-    public override void Exit() 
-    {
-        
     }
 }
