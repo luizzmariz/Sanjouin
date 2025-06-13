@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class Enemy2ChaseState : BaseState
+public class CreatureChaseState : BaseState
 {
     SimpleCreatureStateMachine enemyStateMachine;
     
@@ -14,7 +14,7 @@ public class Enemy2ChaseState : BaseState
     int targetIndex;
     Vector3[] path;
 
-    public Enemy2ChaseState(SimpleCreatureStateMachine stateMachine) : base("Chase", stateMachine) {
+    public CreatureChaseState(SimpleCreatureStateMachine stateMachine) : base("Chase", stateMachine) {
         enemyStateMachine = stateMachine;
     }
 

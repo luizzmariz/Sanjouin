@@ -2,16 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using UnityEngine.InputSystem;
+// using UnityEngine.InputSystem;
 
 public class CreatureSpawner : MonoBehaviour
 {
+    [Header("CreatureSpawner")]
+    public static CreatureSpawner instance = null;
+
     [Header("Player")]
     public PlayerDamageable playerDamageable;
 
-    [Header("Waves")]
+    [Header("Spawners")]
     public List<CreatureSpawn> creatureSpawners;
-    [HideInInspector] public int currentWaveIndex = 0;
 
     [Header("Enemies")]
     public GameObject creaturePrefab;
@@ -43,14 +45,24 @@ public class CreatureSpawner : MonoBehaviour
     void Awake()
     {
         pathfinding = GameObject.Find("PathfindingManager").GetComponent<Pathfinding>();
-        if(playerDamageable == null)
+
+        if (playerDamageable == null)
         {
             playerDamageable = GameObject.Find("Player").GetComponent<PlayerDamageable>();
         }
 
-        for(int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
             creatureSpawners.Add(transform.GetChild(i).GetComponent<CreatureSpawn>());
+        }
+        
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -85,7 +97,11 @@ public class CreatureSpawner : MonoBehaviour
                 Quaternion.identity,
                 creatureSpawners[zone].transform);
 
-                creatureSpawned.GetComponent<BaseCreatureStateMachine>().spawnedInWave = true;
+                creatureSpawned.GetComponent<BaseCreatureStateMachine>().spawnedByRegularLogic = true;
+                creatureSpawned.GetComponent<Creature>().SetBreed(creatureSpawners[zone].GetRandomBreed());
+
+                creatureSpawned.name = "" + creatureSpawned.GetComponent<Creature>().race;
+
                 creaturesAlive.Add(creatureSpawned);
             }
         }
@@ -108,27 +124,12 @@ public class CreatureSpawner : MonoBehaviour
         }
     }
 
-    public void EnemyDied()
+    public void CreatureCaptured(GameObject capturedCreature)
     {
+        creaturesAlive.Remove(capturedCreature);
         // creaturesAlive--;
         // CheckEnemiesLeft();
     }
-
-    // public void CheckEnemiesLeft()
-    // {
-    //     if(creaturesAlive <= 0)
-    //     {
-    //         currentWaveIndex++;
-    //         if(currentWaveIndex == waves.Count)
-    //         {
-    //             StartCoroutine(GameManager.instance.EndGame(true));
-    //         }
-    //         else
-    //         {
-    //             StartCoroutine(WaveClear());
-    //         }
-    //     }
-    // }
 
     IEnumerator WaveClear()
     {

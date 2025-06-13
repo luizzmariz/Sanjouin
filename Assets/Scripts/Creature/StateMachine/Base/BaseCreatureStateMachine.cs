@@ -12,13 +12,13 @@ public class BaseCreatureStateMachine : StateMachine
     [HideInInspector] public EnemyDamageable enemyDamageable;
     [HideInInspector] public SpriteRenderer spriteRenderer;
     [HideInInspector] public CharacterOrientation characterOrientation;
-    [HideInInspector] public CreatureSpawner waveSpawner;
+    [HideInInspector] public CreatureSpawner creatureSpawner;
     [HideInInspector] public EnemyHands enemyHands;
     [HideInInspector] public SpriteRenderer bodySpriteRenderer;
     [HideInInspector] public SpriteRenderer handsSpriteRenderer;
 
     [Header("SpawnedInWave")]
-    [HideInInspector] public bool spawnedInWave;
+    [HideInInspector] public bool spawnedByRegularLogic;
 
     [Header("Bool variables")]
     public bool canMove;
@@ -50,7 +50,7 @@ public class BaseCreatureStateMachine : StateMachine
 
         playerGameObject = GameObject.Find("Player");
         pathRequestManager = GameObject.Find("PathfindingManager").GetComponent<PathRequestManager>();
-        waveSpawner = GameObject.Find("WaveSpawner").GetComponent<CreatureSpawner>();
+        creatureSpawner = GameObject.Find("CreatureSpawner").GetComponent<CreatureSpawner>();
 
         canAttack = true;
         canMove = true;

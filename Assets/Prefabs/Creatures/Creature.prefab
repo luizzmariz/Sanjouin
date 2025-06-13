@@ -111,7 +111,7 @@ Transform:
   m_GameObject: {fileID: 2552088793539195607}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.54, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -158,8 +158,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 845479d57243d27428367a3aeceb3839, type: 3}
-  m_Color: {r: 0, g: 0.12898159, b: 1, a: 1}
+  m_Sprite: {fileID: -2080631238, guid: bf3697d1788e10340b21c53d288a218e, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -204,9 +204,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterSpriteRenderer: {fileID: 0}
   handsSpriteRenderer: {fileID: 0}
-  characterDown: {fileID: 21300000, guid: 845479d57243d27428367a3aeceb3839, type: 3}
-  characterUp: {fileID: 21300000, guid: 87670fca188a0b94290412039f13d682, type: 3}
-  characterSide: {fileID: 21300000, guid: b6eb0a70442d3f74186ba22408f72bd0, type: 3}
+  characterDown: {fileID: -2080631238, guid: bf3697d1788e10340b21c53d288a218e, type: 3}
+  characterUp: {fileID: -352798144, guid: bf3697d1788e10340b21c53d288a218e, type: 3}
+  characterSide: {fileID: -126791824, guid: bf3697d1788e10340b21c53d288a218e, type: 3}
 --- !u!1 &4628059290491363751
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,6 +220,7 @@ GameObject:
   - component: {fileID: 2616094823455837133}
   - component: {fileID: 3912177852750518884}
   - component: {fileID: 6782652324195137264}
+  - component: {fileID: 3480633407195944329}
   m_Layer: 0
   m_Name: Creature
   m_TagString: Untagged
@@ -334,18 +335,22 @@ MonoBehaviour:
   canMove: 0
   canAttack: 0
   isAttacking: 0
-  rangeOfView: 15
+  rangeOfView: 6.6
   rangeOfAttack: 3.5
-  movementSpeed: 0.7
+  movementSpeed: 2.75
   knockbackDuration: 0.1
   knockbackVector: {x: 0, y: 0, z: 0}
   beingPushed: 0
   attackCooldownTimer: 2
+  canRoam: 0
+  isRoaming: 0
+  roamCooldownTimer: 0
+  roamDistance: 0
+  rangeOfDanger: 3.6
   canFlee: 0
   isFleeing: 0
-  rangeOfDanger: 2
   fleeCooldownTimer: 4
-  fleeDistance: 4
+  fleeDistance: 7
 --- !u!114 &6782652324195137264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -361,6 +366,21 @@ MonoBehaviour:
   handTransform: {fileID: 7328468310315800589}
   lastOrientation: {x: 0, y: 0}
   spriteHandler: {fileID: 0}
+--- !u!114 &3480633407195944329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4628059290491363751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2da997a0a49d294d91711013adfb758, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  race: 0
+  speed: 0
+  attenionRange: 0
 --- !u!1 &5258573247980368564
 GameObject:
   m_ObjectHideFlags: 0
@@ -436,15 +456,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: faa997266fc3a3b49b218a0eb7fd83eb, type: 3}
-  m_Color: {r: 0, g: 0.12941177, b: 1, a: 1}
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1, y: 1.0714285}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
 --- !u!95 &4306007928982352096
