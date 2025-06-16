@@ -21,10 +21,14 @@ public class CreatureIdleState : BaseState
     {
         Vector3 holderPosition = creatureStateMachine.transform.position;
         Vector3 playerPosition = creatureStateMachine.playerGameObject.transform.position;
-        
-        if(Vector3.Distance(holderPosition, playerPosition) <= creatureStateMachine.rangeOfDanger && creatureStateMachine.canFlee)
+
+        if (Vector3.Distance(holderPosition, playerPosition) <= creatureStateMachine.rangeOfDanger && creatureStateMachine.canFlee)
         {
             stateMachine.ChangeState(creatureStateMachine.fleeState);
+        }
+        else if (creatureStateMachine.canRoam)
+        {
+            stateMachine.ChangeState(creatureStateMachine.roamState);
         }
     }
 

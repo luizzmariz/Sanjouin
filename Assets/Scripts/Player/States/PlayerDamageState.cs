@@ -42,7 +42,6 @@ public class PlayerDamageState : BaseState
         }
         playerStateMachine.canDash = false;
         playerStateMachine.beingPushed = true;
-        playerStateMachine.playerDamageable.damageable = false;
 
         playerStateMachine.StartCoroutine(Knockback());
     }
@@ -76,7 +75,6 @@ public class PlayerDamageState : BaseState
 
     public override void Exit()
     {
-        playerStateMachine.playerDamageable.damageable = true;
         if(couldMove)
         {
             playerStateMachine.canMove = true;

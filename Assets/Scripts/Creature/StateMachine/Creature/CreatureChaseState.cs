@@ -19,7 +19,6 @@ public class CreatureChaseState : BaseState
     }
 
     public override void Enter() {
-        enemyStateMachine.enemyDamageable.damageable = true;
         hasAskedPath = false;
         followingPath = false;
     }

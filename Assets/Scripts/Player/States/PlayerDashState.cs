@@ -45,7 +45,6 @@ public class PlayerDashState : BaseState
         playerStateMachine.canDash = false;
         playerStateMachine.isDashing = true;
         dashGoingOn = true;
-        playerStateMachine.playerDamageable.damageable = false;
         playerStateMachine.StartCoroutine(Dash());
     }
 
@@ -102,7 +101,6 @@ public class PlayerDashState : BaseState
     public override void Exit()
     {
         playerStateMachine.isDashing = false;
-        playerStateMachine.playerDamageable.damageable = true;
         if(couldMove)
         {
             playerStateMachine.canMove = true;

@@ -38,7 +38,6 @@ public class LassoingMinigame : MonoBehaviour
     [SerializeField] Transform teste2;
 
     [Header("Game")]
-    [SerializeField] InputAction UnlockLasso;
     bool pause = false;
     [SerializeField] float failTimer = 10f;
     bool minigameStarted = false;
@@ -46,13 +45,8 @@ public class LassoingMinigame : MonoBehaviour
     public void EnableMinigame()
     {
         minigameStarted = true;
-        UnlockLasso.Enable();
-    }
-
-    public void DisableMinigame()
-    {
-        minigameStarted = false;
-        UnlockLasso.Disable();
+        lassoProgress = 0;
+        pause = false;
     }
 
     void Update()
@@ -141,12 +135,14 @@ public class LassoingMinigame : MonoBehaviour
     void Win()
     {
         pause = true;
+        minigameStarted = false;
         CatchSystem.instance.EndCatch(true);
     }
 
     void Lose()
     {
         pause = true;
+        minigameStarted = false;
         CatchSystem.instance.EndCatch(true);
     }
 }

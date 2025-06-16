@@ -49,37 +49,51 @@ public class Pathfinding : MonoBehaviour
 
 		if (!startNode.walkable)
 		{
-			Debug.Log("!startNode.walkable");
+			// Debug.Log("!startNode.walkable");
 			helpStartNode = startNode;
 			startNode = GetClosestNeighbor(startPos);
 			startNode.parent = helpStartNode;
 		}
 		if (!targetNode.walkable)
 		{
-			Debug.Log("!targetNode.walkable");
+			// Debug.Log("!targetNode.walkable");
 			helpTargetNode = targetNode;
 			targetNode = GetClosestNeighbor(targetPos);
 		}
 
 		if (startNode.walkable && targetNode.walkable)
 		{
+			// Debug.Log("startPos: " + startPos + ". startNode: (" + startNode.gridX + ", " + startNode.gridY
+			//  + "). targetPos: " + targetPos + ". targetNode: (" + targetNode.gridX + ", " + targetNode.gridY + ")");
+
 			Heap<Node> openSet = new Heap<Node>(gridArea);
-			List<Vector2Int> openSetPositions = new List<Vector2Int>(gridArea);
-			//HashSet<Node> closedSet = new HashSet<Node>();
+			// List<Vector2Int> openSetPositions = new List<Vector2Int>(gridArea);
+
 			Heap<Node> closedSet = new Heap<Node>(gridArea);
-			List<Vector2Int> closedSetPositions = new List<Vector2Int>(gridArea);
+			// List<Vector2Int> closedSetPositions = new List<Vector2Int>(gridArea);
 			openSet.Add(startNode);
-			openSetPositions.Add(startNode.GetPosition());
+			// openSetPositions.Add(startNode.GetPosition());
+
+			int index = 0;
 
 			while (openSet.Count > 0)
 			{
+				index++;
 				Node currentNode = openSet.RemoveFirst();
-				openSetPositions.RemoveAt(0);
+				// openSetPositions.RemoveAt(0);
 				closedSet.Add(currentNode);
-				closedSetPositions.Add(currentNode.GetPosition());
+				// closedSetPositions.Add(currentNode.GetPosition());
 
 				if (currentNode.gridX == targetNode.gridX && currentNode.gridY == targetNode.gridY)
 				{
+					// Debug.Log("index: " + index + ". currentNode: (" + currentNode.gridX + ", " + currentNode.gridY + ")");
+
+					// Debug.Log("index: " + index + ".targetNode.parent: " + targetNode.parent + ", currentNode.parent: " + currentNode.parent);
+
+					if (currentNode.parent == null)
+					{
+						targetNode.parent = startNode;
+					}
 					targetNode.parent = currentNode.parent;
 					pathSuccess = true;
 					break;
@@ -94,30 +108,37 @@ public class Pathfinding : MonoBehaviour
 				foreach (Node neighbour in GetNodeNeighbours(currentNode))
 				{
 
-					if (!neighbour.walkable || //closedSet.Contains(neighbour)
-					closedSetPositions.Contains(neighbour.GetPosition()))
+					if (!neighbour.walkable || closedSet.Contains(neighbour)
+					// closedSetPositions.Contains(neighbour.GetPosition())
+					)
 					{
 						continue;
 					}
 
 					int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
-					if (newMovementCostToNeighbour < neighbour.gCost || //!openSet.Contains(neighbour)
-					!openSetPositions.Contains(neighbour.GetPosition()))
+
+					if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour)
+					// !openSetPositions.Contains(neighbour.GetPosition())
+					)
 					{
 						neighbour.gCost = newMovementCostToNeighbour;
 						neighbour.hCost = GetDistance(neighbour, targetNode);
+
+						// Debug.Log("index: " + index + ".neighbour: (" + neighbour.gridX + ", " + neighbour.gridY + "), currentNode: (" + currentNode.gridX + ", " + currentNode.gridY + ")");
+
 						neighbour.parent = currentNode;
 
-						if (//!openSet.Contains(neighbour)
-						!openSetPositions.Contains(neighbour.GetPosition()))
+						if (!openSet.Contains(neighbour)
+						// !openSetPositions.Contains(neighbour.GetPosition())
+						)
 						{
 							openSet.Add(neighbour);
-							openSetPositions.Add(startNode.GetPosition());
+							// openSetPositions.Add(startNode.GetPosition());
 						}
 					}
 				}
 
-				if (openSet.Count > 2000)
+				if (openSet.Count > 150)
 				{
 					pathSuccess = false;
 					foreach (Node node in openSet.GetItems())
@@ -148,6 +169,7 @@ public class Pathfinding : MonoBehaviour
 			}
 			else
 			{
+				
 				waypoints = RetracePath(startNode, targetNode);
 			}
 		}
@@ -251,6 +273,7 @@ public class Pathfinding : MonoBehaviour
 		while (currentNode != startNode)
 		{
 			path.Add(currentNode);
+			// Debug.Log("currentNode: " + currentNode + ", currentNode.parent: " + currentNode.parent);
 			currentNode = currentNode.parent;
 		}
 

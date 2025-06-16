@@ -46,9 +46,6 @@ public class PlayerAttackState : BaseState
     public override void UpdateLogic() {
         if(!playerStateMachine.attacked)
         {
-            playerStateMachine.StartCoroutine(playerStateMachine.Cooldown("attack"));
-            playerStateMachine.isAttacking = false;
-
             Vector2 moveVector = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
 
             if(moveVector != Vector2.zero && !playerStateMachine.isAiming)
@@ -88,7 +85,8 @@ public class PlayerAttackState : BaseState
 
             Vector3 attackDirection = targetPoint - playerStateMachine.transform.position;
 
-            playerStateMachine.playerHands.Attack(attackDirection, 0);
+            playerStateMachine.playerLassoThrower.ThrowLasso(attackDirection);
+            // playerStateMachine.playerHands.Attack(attackDirection, 0);
             hasAttacked = true;
         }
     }
@@ -96,8 +94,11 @@ public class PlayerAttackState : BaseState
     public override void Exit() 
     {
         hasAttacked = false;
+        
+        playerStateMachine.StartCoroutine(playerStateMachine.Cooldown("attack"));
+        playerStateMachine.isAttacking = false;
 
-        if(couldMove)
+        if (couldMove)
         {
             playerStateMachine.canMove = true;
         }

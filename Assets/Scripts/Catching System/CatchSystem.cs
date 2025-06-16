@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class CatchSystem : MonoBehaviour
@@ -5,6 +6,9 @@ public class CatchSystem : MonoBehaviour
     public static CatchSystem instance = null;
 
     public GameObject minigame;
+
+    GameObject creatureToCacth;
+    [SerializeField] Transform Hands; 
 
     void Start()
     {
@@ -20,24 +24,33 @@ public class CatchSystem : MonoBehaviour
         minigame.SetActive(false);
     }
 
-    public void StartCatch()
+    public void StartCatch(GameObject creatureGameObject)
     {
+        creatureToCacth = creatureGameObject;
         minigame.SetActive(true);
+
+        foreach (GameObject creature in CreatureSpawner.instance.GetAllCreaturesAlive())
+        {
+            creature.GetComponent<SimpleCreatureStateMachine>().ChangeToCatchState();
+        }
+
         minigame.GetComponent<LassoingMinigame>().EnableMinigame();
     }
 
     public void EndCatch(bool victory)
     {
-        minigame.GetComponent<LassoingMinigame>().DisableMinigame();
         minigame.SetActive(false);
+
+        foreach (GameObject creature in CreatureSpawner.instance.GetAllCreaturesAlive())
+        {
+            creature.GetComponent<SimpleCreatureStateMachine>().LeaveCatchState();
+        }
 
         if (victory)
         {
-            Debug.Log("Captured!");
+            creatureToCacth.GetComponent<SimpleCreatureStateMachine>().ChangeToCapturedState();
         }
-        else
-        {
-            Debug.Log("Fail.");
-        }
+
+        Hands.GetChild(0).GetComponent<LassoController>().EndLassoing();
     }
 }

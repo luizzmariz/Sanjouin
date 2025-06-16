@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 
@@ -23,12 +22,6 @@ public class PathRequestManager : MonoBehaviour {
 		instance.pathRequestQueue.Enqueue(newRequest);
 		instance.TryProcessNext();
 	}
-
-    // public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> callback) {
-	// 	PathRequest newRequest = new PathRequest(pathStart,pathEnd,callback);
-	// 	instance.pathRequestQueue.Enqueue(newRequest);
-	// 	instance.TryProcessNext();
-	// }
 
 	void TryProcessNext() {
 		if (!isProcessingPath && pathRequestQueue.Count > 0) {

@@ -9,11 +9,9 @@ public class BaseCreatureStateMachine : StateMachine
     [HideInInspector] public GameObject playerGameObject;
     [HideInInspector] public Rigidbody2D rigidBody;
     [HideInInspector] public Animator animator;
-    [HideInInspector] public EnemyDamageable enemyDamageable;
     [HideInInspector] public SpriteRenderer spriteRenderer;
     [HideInInspector] public CharacterOrientation characterOrientation;
     [HideInInspector] public CreatureSpawner creatureSpawner;
-    [HideInInspector] public EnemyHands enemyHands;
     [HideInInspector] public SpriteRenderer bodySpriteRenderer;
     [HideInInspector] public SpriteRenderer handsSpriteRenderer;
 
@@ -24,6 +22,8 @@ public class BaseCreatureStateMachine : StateMachine
     public bool canMove;
     public bool canAttack;
     public bool isAttacking;
+
+    public bool stopped = false;
     
     [Header("Attributes")]
     [Range(0f, 50f)] public float rangeOfView;
@@ -45,8 +45,6 @@ public class BaseCreatureStateMachine : StateMachine
         characterOrientation = GetComponent<CharacterOrientation>();
         bodySpriteRenderer = transform.Find("Visual").GetComponent<SpriteRenderer>();
         handsSpriteRenderer= transform.Find("Hands").GetComponent<SpriteRenderer>();
-        enemyDamageable = transform.Find("DamageCollider").GetComponent<EnemyDamageable>();
-        enemyHands = transform.Find("Hands").GetComponent<EnemyHands>();
 
         playerGameObject = GameObject.Find("Player");
         pathRequestManager = GameObject.Find("PathfindingManager").GetComponent<PathRequestManager>();
@@ -59,11 +57,6 @@ public class BaseCreatureStateMachine : StateMachine
     public virtual IEnumerator Cooldown(string ability)
     {
         yield return null;
-    }
-
-    public virtual void TakeDamage(Vector3 knockbackVector) 
-    {
-        
     }
 }
 

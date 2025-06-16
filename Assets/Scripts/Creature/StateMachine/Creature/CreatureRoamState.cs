@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class CreatureFleeState : BaseState
+public class CreatureRoamState : BaseState
 {
     SimpleCreatureStateMachine creatureStateMachine;
 
@@ -13,23 +13,23 @@ public class CreatureFleeState : BaseState
     int targetIndex;
     public Vector3[] path;
 
-    public CreatureFleeState(SimpleCreatureStateMachine stateMachine) : base("Flee", stateMachine) {
+    public CreatureRoamState(SimpleCreatureStateMachine stateMachine) : base("Roam", stateMachine) {
         creatureStateMachine = stateMachine;
     }
 
     public override void Enter() {
-        creatureStateMachine.isFleeing = true;
+        creatureStateMachine.isRoaming = true;
     }
 
     public override void UpdateLogic() {
         holderPosition = creatureStateMachine.transform.position;
         playerPosition = creatureStateMachine.playerGameObject.transform.position;
         
-        if(Vector3.Distance(holderPosition, playerPosition) > creatureStateMachine.fleeDistance)
+        if(Vector3.Distance(holderPosition, playerPosition) < creatureStateMachine.rangeOfDanger)
         {
-            stateMachine.ChangeState(creatureStateMachine.idleState);
+            stateMachine.ChangeState(creatureStateMachine.fleeState);
         }
-        else if(!creatureStateMachine.isFleeing)
+        else if(!creatureStateMachine.isRoaming)
         {
             stateMachine.ChangeState(creatureStateMachine.idleState);
         }
@@ -37,21 +37,20 @@ public class CreatureFleeState : BaseState
 
     public override void UpdatePhysics() {
         holderPosition = creatureStateMachine.transform.position;
-        playerPosition = creatureStateMachine.playerGameObject.transform.position;
 
         if(path != null && path.Count() <= 0)
         {
             followingPath = false;
-            creatureStateMachine.isFleeing = false;
+            creatureStateMachine.isRoaming = false;
         }
 
         if(!hasAskedPath && !followingPath)
         {
             hasAskedPath = true;
 
-            Vector3 fleePoint = holderPosition + (holderPosition - playerPosition).normalized * creatureStateMachine.fleeDistance;
+            Vector3 roamPoint = SetRoamDirection(); 
 
-            creatureStateMachine.pathRequestManager.RequestPath(holderPosition, fleePoint, OnPathFound, creatureStateMachine.gameObject); 
+            creatureStateMachine.pathRequestManager.RequestPath(holderPosition, roamPoint, OnPathFound, creatureStateMachine.gameObject); 
         }
         else if(followingPath)
         {
@@ -59,19 +58,34 @@ public class CreatureFleeState : BaseState
         }
     }
 
-    public void OnPathFound(Vector3[] newPath, bool pathSuccessful) {
-		if(pathSuccessful && creatureStateMachine.currentState == this)
+    public Vector3 SetRoamDirection()
+    {
+        Vector3 roamDirection = new Vector2(Random.Range(-creatureStateMachine.maxRoamDistance, creatureStateMachine.maxRoamDistance),
+        Random.Range(-creatureStateMachine.maxRoamDistance, creatureStateMachine.maxRoamDistance));
+        float roamDistance = Random.Range(0.5f, creatureStateMachine.maxRoamDistance);
+
+        Vector3 roamPoint = holderPosition + roamDirection.normalized * roamDistance;
+
+        // Debug.Log(creatureStateMachine.name + " position is: " + holderPosition + ". roamPoint is: " + roamPoint
+        //  + " (roamDirection: " + roamDirection + ", roamDistance: " + roamDistance + ").");
+
+        return roamPoint; 
+    }
+
+    public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
+    {
+        if (pathSuccessful && creatureStateMachine.currentState == this)
         {
             targetIndex = 0;
             hasAskedPath = false;
             followingPath = true;
-			path = newPath;
-		}
+            path = newPath;
+        }
         else
         {
-            creatureStateMachine.isFleeing = false;
+            hasAskedPath = false;
         }
-	}
+    }
 
     public void FollowPath() 
     {
@@ -83,7 +97,7 @@ public class CreatureFleeState : BaseState
 			if(targetIndex >= path.Count()) 
             {
                 followingPath = false;
-                creatureStateMachine.isFleeing = false;
+                creatureStateMachine.isRoaming = false;
                 return;
 			}
 		}
@@ -97,8 +111,8 @@ public class CreatureFleeState : BaseState
     public override void Exit() 
     {
         creatureStateMachine.rigidBody.velocity = Vector3.zero;
-        creatureStateMachine.canFlee = false;
-        creatureStateMachine.StartCoroutine(creatureStateMachine.Cooldown("flee"));
+        creatureStateMachine.canRoam = false;
+        creatureStateMachine.StartCoroutine(creatureStateMachine.Cooldown("roam"));
         
         followingPath = false;
         path = null;

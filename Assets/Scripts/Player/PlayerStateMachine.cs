@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,22 +8,21 @@ public class PlayerStateMachine : StateMachine
     [HideInInspector] public PlayerIdleState idleState;
     [HideInInspector] public PlayerMoveState moveState;
     [HideInInspector] public PlayerAttackState attackState;
-    [HideInInspector] public PlayerFireState fireState;
     [HideInInspector] public PlayerDashState dashState;
     [HideInInspector] public PlayerDamageState damageState;
     [HideInInspector] public PlayerDeadState deadState;
-    
+
 
     //Global information
-    
+
     //GameObject information
     [HideInInspector] public PlayerInput playerInput;
     [HideInInspector] public Rigidbody2D rigidBody;
     [HideInInspector] public SpriteRenderer bodySpriteRenderer;
     [HideInInspector] public SpriteRenderer handsSpriteRenderer;
     [HideInInspector] public CharacterOrientation characterOrientation;
-    [HideInInspector] public PlayerDamageable playerDamageable;
-    [HideInInspector] public PlayerHands playerHands;
+    [HideInInspector] public PlayerLassoThrower playerLassoThrower;
+
 
     // public WeaponManager weaponManager;
     // public TrailRenderer trailRenderer;
@@ -54,30 +52,25 @@ public class PlayerStateMachine : StateMachine
     [Header("Attack")]
     public bool isAttacking;
     public bool attacked;
-    public float attack1CooldownTimer;
-    public float fireCooldownTimer;
+    public float lassoCooldownTimer;
 
     [Header("InvencibilityTime")]
     public float invencibilityTime;
 
-    private void Awake() {
+    private void Awake()
+    {
         playerInput = GetComponent<PlayerInput>();
-        // playerInput.actions.FindActionMap("UI").Enable();
 
         rigidBody = GetComponent<Rigidbody2D>();
         bodySpriteRenderer = transform.Find("Visual").GetComponent<SpriteRenderer>();
-        handsSpriteRenderer= transform.Find("Hands").GetComponent<SpriteRenderer>();
+        handsSpriteRenderer = transform.Find("Hands").GetComponent<SpriteRenderer>();
         characterOrientation = GetComponent<CharacterOrientation>();
-        // weaponManager = GetComponentInChildren<WeaponManager>();
-        playerDamageable = GetComponent<PlayerDamageable>();
-        playerHands = transform.Find("Hands").GetComponent<PlayerHands>();
-        //runningCoroutines = new List<string>();
-        // trailRenderer = GetComponentInChildren<TrailRenderer>();
+        playerLassoThrower = GetComponentInChildren<PlayerLassoThrower>();
+
 
         idleState = new PlayerIdleState(this);
         moveState = new PlayerMoveState(this);
         attackState = new PlayerAttackState(this);
-        fireState = new PlayerFireState(this);
         dashState = new PlayerDashState(this);
         damageState = new PlayerDamageState(this);
         deadState = new PlayerDeadState(this);
@@ -86,35 +79,10 @@ public class PlayerStateMachine : StateMachine
         canFire = true;
         canMove = true;
         canDash = true;
-        playerDamageable.damageable = true;
-
-        // List<string> fd = new List<string>();
-        // fd.Add("nalivia");
-        // fd.Add("kuda");
-        // fd.Add("nalivia");
-        // fd.Add("nalivia");
-        // fd.Add("nalivia");
-        // fd.Add("julio");
-
-        // int i = 0;
-        // foreach(string name in fd)
-        // {
-        //     i++;
-        //     Debug.Log(name + " " + i);
-        // }
-
-        // i = 0;
-
-        // fd.Remove("nalivia");
-
-        // foreach(string name in fd)
-        // {
-        //     i++;
-        //     Debug.Log(name + " " + i);
-        // }
     }
 
-    protected override BaseState GetInitialState() {
+    protected override BaseState GetInitialState()
+    {
         return idleState;
     }
 
@@ -122,7 +90,7 @@ public class PlayerStateMachine : StateMachine
     {
         base.Update();
 
-        if(playerInput.actions["Aim"].ReadValue<float>() != 0)
+        if (playerInput.actions["Aim"].ReadValue<float>() != 0)
         {
             isAiming = true;
         }
@@ -142,9 +110,9 @@ public class PlayerStateMachine : StateMachine
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if (context.performed)
         {
-            if(canMove && !isAiming && !isDashing)
+            if (canMove && !isAiming && !isDashing)
             {
                 ChangeState(moveState);
             }
@@ -153,9 +121,9 @@ public class PlayerStateMachine : StateMachine
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if (context.performed)
         {
-            if(canAttack && !isAttacking && !isDashing)
+            if (canAttack && !isAttacking && !isDashing)
             {
                 //Debug.Log("Changing to attackState, canAttack: " + canAttack + ", isDashing: " + isDashing + ", isAttacking: " + isAttacking + ". Time: " + Time.time);
                 // attackType = 1;
@@ -164,23 +132,11 @@ public class PlayerStateMachine : StateMachine
         }
     }
 
-    public void OnFire(InputAction.CallbackContext context)
-    {
-        if(context.performed)
-        {
-            if(canFire && !isAttacking && !isDashing)
-            {
-                // attackType = 2;
-                ChangeState(fireState);
-            }
-        }
-    }
-
     public void OnDash(InputAction.CallbackContext context)
     {
-        if(context.performed)
+        if (context.performed)
         {
-            if(canDash && !isDashing && !isAttacking)
+            if (canDash && !isDashing && !isAttacking)
             {
                 //Debug.Log("Changing to dashState, canDash: " + canDash + ", isDashing: " + isDashing + ", isAttacking: " + isAttacking + ". Time: " + Time.time);
                 ChangeState(dashState);
@@ -190,27 +146,27 @@ public class PlayerStateMachine : StateMachine
 
     public IEnumerator Cooldown(string ability)
     {
-        switch(ability)
+        switch (ability)
         {
             case "dash":
-            yield return new WaitForSeconds(dashCooldownTime);
-            canDash = true;
-            break;
+                yield return new WaitForSeconds(dashCooldownTime);
+                canDash = true;
+                break;
 
             case "attack":
-            yield return new WaitForSeconds(attack1CooldownTimer);
-            canAttack = true;
-            break;
-
-            case "fire":
-            yield return new WaitForSeconds(fireCooldownTimer);
-            canFire = true;
-            break;
+                yield return new WaitForSeconds(lassoCooldownTimer);
+                canAttack = true;
+                break;
 
             default:
-            break;
+                break;
         }
-        
+
         // runningCoroutines.Remove(ability);
+    }
+
+    public void StopLassoing()
+    {
+        attacked = false;
     }
 }

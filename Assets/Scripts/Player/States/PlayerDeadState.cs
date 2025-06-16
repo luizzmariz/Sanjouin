@@ -14,7 +14,6 @@ public class PlayerDeadState : BaseState
         playerStateMachine.canMove = false;
         playerStateMachine.canAttack = false;
         playerStateMachine.canDash = false;
-        playerStateMachine.playerDamageable.damageable = false;
         
         if(GameManager.instance == null)
         {

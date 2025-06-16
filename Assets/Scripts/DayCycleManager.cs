@@ -51,6 +51,8 @@ public class DayCycleManager : MonoBehaviour
 
 
         newDayTime = dayTime;
+
+        // timeIsPassing = true;
     }
 
     void FixedUpdate()
@@ -60,7 +62,7 @@ public class DayCycleManager : MonoBehaviour
             dayTime += Time.deltaTime;
 
             CheckDayPhase();
-            RenderSettings.ambientLight = ambientColor.Evaluate(dayTime / 24);
+            // RenderSettings.ambientLight = ambientColor.Evaluate(dayTime / 24);
         }
     }
 
@@ -100,6 +102,11 @@ public class DayCycleManager : MonoBehaviour
                 CreatureSpawner.instance.SpawnEnemies();
             }
             dayPhase = DayPhase.NIGHT;
+        }
+
+        if (dayTime >= 24)
+        {
+            dayTime = dayTime % 24 + 7;
         }
     }
 }

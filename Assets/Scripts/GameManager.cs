@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     
     [Header("Game")]
     bool isInGame;
-    [HideInInspector] public CreatureSpawner waveSpawner;
+    [HideInInspector] public CreatureSpawner creatureSpawner;
     public GameObject screenMessage;
     public int messageDuration;
 
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         if(isInGame)
         {
-            waveSpawner = GameObject.Find("WaveSpawner").GetComponent<CreatureSpawner>();
+            creatureSpawner = GameObject.Find("CreatureSpawner").GetComponent<CreatureSpawner>();
             playerInput = GameObject.Find("Player").GetComponent<PlayerInput>();
             screenMessage = GameObject.Find("Canvas").transform.Find("ScreenMessage").gameObject;
         }
@@ -242,23 +242,23 @@ public class GameManager : MonoBehaviour
     IEnumerator InitializeGame()
     {
         playerInput.actions.FindActionMap("Player").Disable();
-        screenMessage.GetComponentInChildren<TMP_Text>().text = "GAME STARTING IN 3";
-        screenMessage.SetActive(true);
-        screenMessage.GetComponent<Animator>().SetBool("messageOn", true);
-        int i = 3; 
-        while(i > 0)
-        {
-            screenMessage.GetComponentInChildren<TMP_Text>().text = "GAME STARTING IN " + i;
-            yield return new WaitForSeconds(0.75f);
-            i--;
-        }
+        // screenMessage.GetComponentInChildren<TMP_Text>().text = "GAME STARTING IN 3";
+        // screenMessage.SetActive(true);
+        // screenMessage.GetComponent<Animator>().SetBool("messageOn", true);
+        // int i = 3; 
+        // while(i > 0)
+        // {
+        //     screenMessage.GetComponentInChildren<TMP_Text>().text = "GAME STARTING IN " + i;
+        //     yield return new WaitForSeconds(0.75f);
+        //     i--;
+        // }
         playerInput.actions.FindActionMap("Player").Enable();
         openMenu.Enable();
-        screenMessage.GetComponent<Animator>().SetBool("messageOn", false);
+        // screenMessage.GetComponent<Animator>().SetBool("messageOn", false);
         yield return new WaitForSeconds(0.1f);
-        screenMessage.SetActive(false);
+        // screenMessage.SetActive(false);
         
-        // StartCoroutine(waveSpawner.SpawnWave());
+        // StartCoroutine(creatureSpawner.SpawnWave());
     }
 
     public IEnumerator EndGame(bool win)
