@@ -22,7 +22,9 @@ public class CreatureUIItem : MonoBehaviour
     {
         assignedFeline = feline;
 
+        iconImage.color = feline.GetColor(feline.race);
 
+        nameText.text = feline.name;
         breedText.text = feline.race.ToString();
 
         selectButton.gameObject.SetActive(false); 
@@ -30,7 +32,7 @@ public class CreatureUIItem : MonoBehaviour
 
     private void OnSelectButtonClick()
     {
-        Debug.Log($"Criatura {assignedFeline.name} selecionada para cruzamento.");
+        // Debug.Log($"Criatura {assignedFeline.name} selecionada para cruzamento.");
         OnCreatureSelectedForCrossing?.Invoke(assignedFeline);
     }
 

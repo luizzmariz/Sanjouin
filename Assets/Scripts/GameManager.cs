@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.EventSystems;
-using TMPro;
 using System.Linq;
 
 public class GameManager : MonoBehaviour
@@ -15,7 +13,7 @@ public class GameManager : MonoBehaviour
     [Header("Game")]
     bool isInGame;
     [HideInInspector] public CreatureSpawner creatureSpawner;
-    public int messageDuration;
+    [SerializeField] GameObject inventory;
 
     [Header("Player")]
     PlayerInput playerInput;
@@ -64,6 +62,7 @@ public class GameManager : MonoBehaviour
     {
         if(isInGame)
         {
+            inventory = GameObject.Find("Canvas").transform.Find("Inventory").gameObject;
             creatureSpawner = GameObject.Find("CreatureSpawner").GetComponent<CreatureSpawner>();
             playerInput = GameObject.Find("Player").GetComponent<PlayerInput>();
         }
@@ -109,21 +108,33 @@ public class GameManager : MonoBehaviour
         {
             if(!optionsMenuIsOpen)
             {
+                if (isInGame)
+                {
+                    playerInput.actions.FindActionMap("Player").Disable();
+                    if (inventory.activeSelf)
+                    {
+                        inventory.GetComponent<InventoryUIController>().CloseInventory();
+                        return;
+                    }
+
+                    optionsMenu.GetComponent<OptionsMenu>().Start();
+                }
+                
                 optionsMenuIsOpen = true;
                 optionsMenu.SetActive(optionsMenuIsOpen);
                 if(callbackContext.control.device.description.deviceClass != "Keyboard")
                 {
                     EventSystem.current.SetSelectedGameObject(optionsMenuSelectedFirst);
                 }
-                Time.timeScale = 0;
-
-                if(isInGame)
-                {
-                    playerInput.actions.FindActionMap("Player").Disable();
-                }
+                Time.timeScale = 0;                
             }
             else
             {
+                if(isInGame)
+                {
+                    playerInput.actions.FindActionMap("Player").Enable();
+                }
+
                 optionsMenuIsOpen = false;
                 optionsMenu.SetActive(optionsMenuIsOpen);
                 if(callbackContext.control.device.description.deviceClass != "Keyboard")
@@ -131,11 +142,6 @@ public class GameManager : MonoBehaviour
                     EventSystem.current.SetSelectedGameObject(mainMenuSelectedFirst);
                 }
                 Time.timeScale = 1;
-
-                if(isInGame)
-                {
-                    playerInput.actions.FindActionMap("Player").Enable();
-                }
             }
         }
     }

@@ -143,8 +143,10 @@ public class InventoryUIController : MonoBehaviour
 
     public Image selectedFeline1Icon;
     public TextMeshProUGUI selectedFeline1Name;
+    public TextMeshProUGUI selectedFeline1Breed;
     public Image selectedFeline2Icon;
     public TextMeshProUGUI selectedFeline2Name;
+    public TextMeshProUGUI selectedFeline2Breed;
     public Button startBreedingButton; // Botão "Começar Cruzamento"
 
     void Awake()
@@ -169,12 +171,16 @@ public class InventoryUIController : MonoBehaviour
         if (selectedFeline1 == null)
         {
             selectedFeline1 = selectedFeline;
+            selectedFeline1Icon.color = selectedFeline.GetColor(selectedFeline.race);
             selectedFeline1Name.text = selectedFeline.name;
+            selectedFeline1Breed.text = selectedFeline.race.ToString();
         }
         else if (selectedFeline2 == null && selectedFeline.id != selectedFeline1.id)
         {
             selectedFeline2 = selectedFeline;
+            selectedFeline2Icon.color = selectedFeline.GetColor(selectedFeline.race);
             selectedFeline2Name.text = selectedFeline.name;
+            selectedFeline2Breed.text = selectedFeline.race.ToString();
         }
 
         startBreedingButton.interactable = (selectedFeline1 != null && selectedFeline2 != null);
@@ -184,10 +190,12 @@ public class InventoryUIController : MonoBehaviour
     {
         selectedFeline1 = null;
         selectedFeline2 = null;
-        selectedFeline1Icon.sprite = null; // Ou sprite padrão
+        selectedFeline1Icon.color = new Color32(255, 255, 255, 0); 
         selectedFeline1Name.text = "Selecione 1";
-        selectedFeline2Icon.sprite = null; // Ou sprite padrão
+        selectedFeline1Breed.text = "";
+        selectedFeline2Icon.color = new Color32(255, 255, 255, 0);
         selectedFeline2Name.text = "Selecione 2";
+        selectedFeline2Breed.text = "";
         startBreedingButton.interactable = false;
     }
 
@@ -200,15 +208,14 @@ public class InventoryUIController : MonoBehaviour
 
         Breed newBreed = BreedManager.instance.GetCrossbreedResult(selectedFeline1, selectedFeline2);
 
-        // Creature newCreature = new CreatureData();
+        CreatureData newCreature = new CreatureData(newBreed);
 
-        // CreatureInventoryManager.instance.AddCreature(newCreature);
+        CreatureInventoryManager.instance.AddCreature(newCreature);
 
-        // Remove os pais do inventário (opcional, dependendo da sua mecânica)
-        CreatureInventoryManager.instance.RemoveCreature(selectedFeline1);
-        CreatureInventoryManager.instance.RemoveCreature(selectedFeline2);
+        // CreatureInventoryManager.instance.RemoveCreature(selectedFeline1);
+        // CreatureInventoryManager.instance.RemoveCreature(selectedFeline2);
 
-        // Debug.Log($"Cruzamento bem-sucedido! Nova criatura: {newCreature.name} ({newCreature.race})");             <-------------------------
+        // Debug.Log($"Cruzamento bem-sucedido! Nova criatura: {newCreature.name} ({newCreature.race})");
 
         CloseBreedingPanel();
         UpdateInventoryUI();

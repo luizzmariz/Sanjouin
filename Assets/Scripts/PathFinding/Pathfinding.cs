@@ -140,10 +140,14 @@ public class Pathfinding : MonoBehaviour
 
 				if (openSet.Count > 300)
 				{
+					Debug.Log("problem. startNode: (" + startNode.gridX + ", " + startNode.gridY + "). targetNode: (" + targetNode.gridX + ", " + targetNode.gridY + ")");
 					pathSuccess = false;
+					string debugg = "";
+					int ind = 0;
 					foreach (Node node in openSet.GetItems())
 					{
-						Debug.Log("erfgw");
+						ind++;
+						debugg = debugg + ind + " - node (" + node.gridX + ", " + node.gridY + "), worldPosition: " + node.worldPosition + "\n";
 						GameObject insObj = Instantiate(teste, node.worldPosition, Quaternion.identity);
 						insObj.GetComponent<AutoDelete>().nodeXY = new Vector2Int(node.gridX, node.gridY);
 					}

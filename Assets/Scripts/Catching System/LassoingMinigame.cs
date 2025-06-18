@@ -14,7 +14,7 @@ public class LassoingMinigame : MonoBehaviour
     float creatureDestination;
 
     float creatureTimer;
-    [SerializeField] float timerMultiplicator = 3f;
+    public float creatureSpeedMultiplicator;
 
     float creatureSpeed;
     [SerializeField] float smoothMotion = 1f;
@@ -71,13 +71,16 @@ public class LassoingMinigame : MonoBehaviour
         creatureTimer -= Time.deltaTime;
         if (creatureTimer <= 0)
         {
-            creatureTimer = UnityEngine.Random.value * timerMultiplicator;
+            creatureTimer = UnityEngine.Random.value * creatureSpeedMultiplicator;
 
             creatureDestination = UnityEngine.Random.value;
         }
 
+        Vector3 leftPos = new Vector3(leftPivot.position.x, creature.position.y, leftPivot.position.z);
+        Vector3 rightPos = new Vector3(rightPivot.position.x, creature.position.y, rightPivot.position.z);
+
         creaturePosition = Mathf.SmoothDamp(creaturePosition, creatureDestination, ref creatureSpeed, smoothMotion);
-        creature.position = Vector3.Lerp(leftPivot.position, rightPivot.position, creaturePosition);
+        creature.position = Vector3.Lerp(leftPos, rightPos, creaturePosition);
     }
 
     void Lasso()
@@ -136,7 +139,6 @@ public class LassoingMinigame : MonoBehaviour
 
     void Win()
     {
-        Debug.Log("progressBar.localScale ended as: " + progressBar.localScale + ", and has sucessed");
         pause = true;
         minigameStarted = false;
         CatchSystem.instance.EndCatch(true);
@@ -144,7 +146,6 @@ public class LassoingMinigame : MonoBehaviour
 
     void Lose()
     {
-        Debug.Log("progressBar.localScale ended as: " + progressBar.localScale + ", and has failed");
         pause = true;
         minigameStarted = false;
         CatchSystem.instance.EndCatch(false);

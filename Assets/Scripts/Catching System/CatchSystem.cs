@@ -34,6 +34,11 @@ public class CatchSystem : MonoBehaviour
             creature.GetComponent<SimpleCreatureStateMachine>().ChangeToCatchState();
         }
 
+        float minigameDifficulty = creatureGameObject.GetComponent<Creature>().speed / 2.5f;
+        minigameDifficulty =  Mathf.Clamp(minigameDifficulty, 1.5f, 5f);
+        Debug.Log(minigameDifficulty);
+        minigame.GetComponent<LassoingMinigame>().creatureSpeedMultiplicator = minigameDifficulty;
+
         minigame.GetComponent<LassoingMinigame>().EnableMinigame();
     }
 

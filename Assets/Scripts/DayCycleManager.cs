@@ -1,5 +1,5 @@
-using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public enum DayPhase
 {
@@ -15,13 +15,13 @@ public class DayCycleManager : MonoBehaviour
     public static DayCycleManager instance = null;
 
     [Header("AmbientColor")]
+    public Light2D sunLight;
     public Gradient ambientColor;
 
     [Header("CycleRotation")]
     public bool timeIsPassing;
     public bool isDay;
     public DayPhase dayPhase;
-    // public GameObject sunLight;
 
     [Header("DayTime")]
     public float dayTime;
@@ -47,28 +47,24 @@ public class DayCycleManager : MonoBehaviour
         }
 
         dayPhase = DayPhase.MORNING;
-        dayTime = 7f;
-
 
         newDayTime = dayTime;
-
-        // timeIsPassing = true;
     }
 
     void FixedUpdate()
     {
         if (timeIsPassing)
         {
-            dayTime += Time.deltaTime;
+            newDayTime += Time.deltaTime;
 
             CheckDayPhase();
-            // RenderSettings.ambientLight = ambientColor.Evaluate(dayTime / 24);
+            sunLight.color = ambientColor.Evaluate(newDayTime / 24);
         }
     }
 
     void CheckDayPhase()
     {
-        if (dayTime >= 7 && dayTime < 12)
+        if (newDayTime >= 7 && newDayTime < 12)
         {
             if (dayPhase != DayPhase.MORNING)
             {
@@ -77,7 +73,7 @@ public class DayCycleManager : MonoBehaviour
             dayPhase = DayPhase.MORNING;
         }
 
-        if (dayTime >= 12 && dayTime < 16)
+        if (newDayTime >= 12 && newDayTime < 16)
         {
             if (dayPhase != DayPhase.AFTERNOON)
             {
@@ -86,7 +82,7 @@ public class DayCycleManager : MonoBehaviour
             dayPhase = DayPhase.AFTERNOON;
         }
 
-        if (dayTime >= 16 && dayTime < 20)
+        if (newDayTime >= 16 && newDayTime < 20)
         {
             if (dayPhase != DayPhase.EVENING)
             {
@@ -95,7 +91,7 @@ public class DayCycleManager : MonoBehaviour
             dayPhase = DayPhase.EVENING;
         }
 
-        if (dayTime >= 20 && dayTime < 24)
+        if (newDayTime >= 20 && newDayTime < 24)
         {
             if (dayPhase != DayPhase.NIGHT)
             {
@@ -104,9 +100,9 @@ public class DayCycleManager : MonoBehaviour
             dayPhase = DayPhase.NIGHT;
         }
 
-        if (dayTime >= 24)
+        if (newDayTime >= 24)
         {
-            dayTime = dayTime % 24 + 7;
+            newDayTime = newDayTime % 24 + dayTime;
         }
     }
 }

@@ -74,7 +74,10 @@ public class CreatureSpawner : MonoBehaviour
                 creatureSpawners[zone].transform);
 
                 creatureSpawned.GetComponent<BaseCreatureStateMachine>().spawnedByRegularLogic = true;
-                creatureSpawned.GetComponent<Creature>().CreateCreature(creatureSpawners[zone].GetRandomBreed());
+
+                CreatureData creatureInfo = new CreatureData(creatureSpawners[zone].GetRandomBreed());
+
+                creatureSpawned.GetComponent<Creature>().LoadCreature(creatureInfo);
 
                 creatureSpawned.name = "" + creatureSpawned.GetComponent<Creature>().race;
 
