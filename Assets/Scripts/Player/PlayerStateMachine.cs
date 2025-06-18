@@ -11,6 +11,7 @@ public class PlayerStateMachine : StateMachine
     [HideInInspector] public PlayerDashState dashState;
     [HideInInspector] public PlayerDamageState damageState;
     [HideInInspector] public PlayerDeadState deadState;
+    [HideInInspector] public PlayerInteractState interactState;
 
 
     //Global information
@@ -23,16 +24,13 @@ public class PlayerStateMachine : StateMachine
     [HideInInspector] public CharacterOrientation characterOrientation;
     [HideInInspector] public PlayerLassoThrower playerLassoThrower;
 
-
-    // public WeaponManager weaponManager;
-    // public TrailRenderer trailRenderer;
-
     [Header("Bool variables")]
     public bool canMove;
     public bool canDash;
     public bool canAttack;
     public bool canFire;
     public bool isAiming;
+    public bool isInteracting;
 
     [Header("Movement")]
     public float runningMultiplier;
@@ -74,6 +72,7 @@ public class PlayerStateMachine : StateMachine
         dashState = new PlayerDashState(this);
         damageState = new PlayerDamageState(this);
         deadState = new PlayerDeadState(this);
+        interactState = new PlayerInteractState(this);
 
         canAttack = true;
         canFire = true;
@@ -112,7 +111,7 @@ public class PlayerStateMachine : StateMachine
     {
         if (context.performed)
         {
-            if (canMove && !isAiming && !isDashing)
+            if (canMove && !isAiming && !isDashing && !isInteracting)
             {
                 ChangeState(moveState);
             }
@@ -123,7 +122,7 @@ public class PlayerStateMachine : StateMachine
     {
         if (context.performed)
         {
-            if (canAttack && !isAttacking && !isDashing)
+            if (canAttack && !isAttacking && !isDashing && !isInteracting)
             {
                 //Debug.Log("Changing to attackState, canAttack: " + canAttack + ", isDashing: " + isDashing + ", isAttacking: " + isAttacking + ". Time: " + Time.time);
                 // attackType = 1;
@@ -136,7 +135,7 @@ public class PlayerStateMachine : StateMachine
     {
         if (context.performed)
         {
-            if (canDash && !isDashing && !isAttacking)
+            if (canDash && !isDashing && !isAttacking && !isInteracting)
             {
                 //Debug.Log("Changing to dashState, canDash: " + canDash + ", isDashing: " + isDashing + ", isAttacking: " + isAttacking + ". Time: " + Time.time);
                 ChangeState(dashState);
@@ -168,5 +167,19 @@ public class PlayerStateMachine : StateMachine
     public void StopLassoing()
     {
         attacked = false;
+    }
+
+    public void StartInteracting()
+    {
+        if(!isInteracting)
+        {
+            isInteracting = true;
+            ChangeState(interactState);
+        }
+    }
+
+    public void StopInteracting()
+    {
+        isInteracting = false;
     }
 }

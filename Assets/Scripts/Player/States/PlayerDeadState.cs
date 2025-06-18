@@ -14,15 +14,6 @@ public class PlayerDeadState : BaseState
         playerStateMachine.canMove = false;
         playerStateMachine.canAttack = false;
         playerStateMachine.canDash = false;
-        
-        if(GameManager.instance == null)
-        {
-            Debug.Log("Jogador morreu, sem GameManager pra prosseguir");
-        }
-        else
-        {
-            playerStateMachine.StartCoroutine(GameManager.instance.EndGame(false));
-        }
 
         foreach(SpriteRenderer spriteRenderer in playerStateMachine.transform.GetComponentsInChildren<SpriteRenderer>())
         {

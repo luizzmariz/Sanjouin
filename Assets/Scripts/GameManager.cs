@@ -15,7 +15,6 @@ public class GameManager : MonoBehaviour
     [Header("Game")]
     bool isInGame;
     [HideInInspector] public CreatureSpawner creatureSpawner;
-    public GameObject screenMessage;
     public int messageDuration;
 
     [Header("Player")]
@@ -67,7 +66,6 @@ public class GameManager : MonoBehaviour
         {
             creatureSpawner = GameObject.Find("CreatureSpawner").GetComponent<CreatureSpawner>();
             playerInput = GameObject.Find("Player").GetComponent<PlayerInput>();
-            screenMessage = GameObject.Find("Canvas").transform.Find("ScreenMessage").gameObject;
         }
         else
         {
@@ -259,30 +257,6 @@ public class GameManager : MonoBehaviour
         // screenMessage.SetActive(false);
         
         // StartCoroutine(creatureSpawner.SpawnWave());
-    }
-
-    public IEnumerator EndGame(bool win)
-    {
-        if(win)
-        {
-            screenMessage.GetComponentInChildren<TMP_Text>().text = "VICTORY";
-        }
-        else
-        {
-            screenMessage.GetComponentInChildren<TMP_Text>().text = "DEFEAT";
-        }
-        screenMessage.SetActive(true);
-        screenMessage.GetComponent<Animator>().SetBool("messageOn", true);
-
-        yield return new WaitForSeconds(messageDuration);
-
-        screenMessage.GetComponent<Animator>().SetBool("messageOn", false);
-
-        yield return new WaitForSeconds(0.1f);
-        screenMessage.SetActive(false);
-
-        scenesToLoad.Add(SceneManager.LoadSceneAsync("Menu"));
-        StartCoroutine(LoadingScreen());
     }
 
     public void QuitGame() {

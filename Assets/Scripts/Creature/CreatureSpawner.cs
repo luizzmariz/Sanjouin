@@ -74,7 +74,7 @@ public class CreatureSpawner : MonoBehaviour
                 creatureSpawners[zone].transform);
 
                 creatureSpawned.GetComponent<BaseCreatureStateMachine>().spawnedByRegularLogic = true;
-                creatureSpawned.GetComponent<Creature>().SetBreed(creatureSpawners[zone].GetRandomBreed());
+                creatureSpawned.GetComponent<Creature>().CreateCreature(creatureSpawners[zone].GetRandomBreed());
 
                 creatureSpawned.name = "" + creatureSpawned.GetComponent<Creature>().race;
 
@@ -128,8 +128,9 @@ public class CreatureSpawner : MonoBehaviour
     public void CreatureCaptured(GameObject capturedCreature)
     {
         creaturesAlive.Remove(capturedCreature);
-        // creaturesAlive--;
-        // CheckEnemiesLeft();
+
+        CreatureData creatureInfo = new CreatureData(capturedCreature.GetComponent<Creature>());
+        CreatureInventoryManager.instance.AddCreature(creatureInfo);
     }
 
     public List<GameObject> GetAllCreaturesAlive()

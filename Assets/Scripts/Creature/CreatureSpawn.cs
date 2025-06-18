@@ -20,13 +20,13 @@ public class CreatureSpawn : MonoBehaviour
     [Serializable]
     public struct CreatureSpawnRate
     {
-        public Creature.Breed creatureBreed;
+        public Breed creatureBreed;
         public int SpawnRatePorcentage;
     }
 
-    public Creature.Breed GetRandomBreed()
+    public Breed GetRandomBreed()
     {
-        List<Creature.Breed> spawnPool = new List<Creature.Breed>();
+        List<Breed> spawnPool = new List<Breed>();
 
         foreach(CreatureSpawnRate spawnRate in spawnRates)
         {

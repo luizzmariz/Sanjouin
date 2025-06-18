@@ -138,7 +138,7 @@ public class Pathfinding : MonoBehaviour
 					}
 				}
 
-				if (openSet.Count > 150)
+				if (openSet.Count > 300)
 				{
 					pathSuccess = false;
 					foreach (Node node in openSet.GetItems())

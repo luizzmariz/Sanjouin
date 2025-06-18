@@ -34,16 +34,21 @@ public class LassoingMinigame : MonoBehaviour
 
     [Header("ProgressBar")]
     [SerializeField] Transform progressBar;
-    [SerializeField] Transform teste1;
-    [SerializeField] Transform teste2;
+
 
     [Header("Game")]
     bool pause = false;
-    [SerializeField] float failTimer = 10f;
+    [SerializeField] float failTimer = 12f;
+    float currentFailTimer;
     bool minigameStarted = false;
 
     public void EnableMinigame()
     {
+        Vector3 lassoScale = lasso.localScale;
+        lassoScale.x = lassoSize;
+        lasso.localScale = lassoScale;
+
+        currentFailTimer = failTimer;
         minigameStarted = true;
         lassoProgress = 0;
         pause = false;
@@ -104,9 +109,6 @@ public class LassoingMinigame : MonoBehaviour
         float min = lassoPosition - lassoSize / 2;
         float max = lassoPosition + lassoSize / 2;
 
-        teste1.position = new Vector3(lasso.localPosition.x - min, 0, 0);
-        teste2.position = new Vector3(lasso.localPosition.x + max, 0, 0);
-
         if (min < creaturePosition && creaturePosition < max)
         {
             creature.gameObject.GetComponent<Image>().color = new Color(1, 1, 1, 1);
@@ -117,8 +119,8 @@ public class LassoingMinigame : MonoBehaviour
             creature.gameObject.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
             lassoProgress -= lassoProgressDegradationPower * Time.deltaTime;
 
-            failTimer -= Time.deltaTime;
-            if (failTimer <= 0)
+            currentFailTimer -= Time.deltaTime;
+            if (currentFailTimer <= 0)
             {
                 Lose();
             }
@@ -134,6 +136,7 @@ public class LassoingMinigame : MonoBehaviour
 
     void Win()
     {
+        Debug.Log("progressBar.localScale ended as: " + progressBar.localScale + ", and has sucessed");
         pause = true;
         minigameStarted = false;
         CatchSystem.instance.EndCatch(true);
@@ -141,8 +144,9 @@ public class LassoingMinigame : MonoBehaviour
 
     void Lose()
     {
+        Debug.Log("progressBar.localScale ended as: " + progressBar.localScale + ", and has failed");
         pause = true;
         minigameStarted = false;
-        CatchSystem.instance.EndCatch(true);
+        CatchSystem.instance.EndCatch(false);
     }
 }

@@ -61,15 +61,23 @@ public class PlayerDashState : BaseState
 
             Vector2 moveVector = playerStateMachine.playerInput.actions["move"].ReadValue<Vector2>();
 
-            if(moveVector != Vector2.zero// && playerStateMachine.canMove <-- qual a utilidade disso? não funcionaria por que há uma linha nesse script que faz canMove = false. REAVALIAR ESSAS VARIAVEIS
-            )
+            if (playerStateMachine.isInteracting)
             {
-                playerStateMachine.ChangeState(playerStateMachine.moveState);
+                playerStateMachine.ChangeState(playerStateMachine.interactState);
             }
             else
             {
-                playerStateMachine.ChangeState(playerStateMachine.idleState);
+                if (moveVector != Vector2.zero// && playerStateMachine.canMove <-- qual a utilidade disso? não funcionaria por que há uma linha nesse script que faz canMove = false. REAVALIAR ESSAS VARIAVEIS
+                )
+                {
+                    playerStateMachine.ChangeState(playerStateMachine.moveState);
+                }
+                else
+                {
+                    playerStateMachine.ChangeState(playerStateMachine.idleState);
+                }
             }
+            
         }
     }
 
